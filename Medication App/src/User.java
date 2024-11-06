@@ -16,9 +16,10 @@ public class User {
     public void checkIfUserExists() {    //Read users.csv to see if entry for user already exists.
         System.out.println("Please enter your name.");
         Scanner userInputScanner = new Scanner(System.in);
+        //String temporaryName = userInputScanner.next();
 
         try {
-            File userFile = new File("Medication Reminder App/src/main/java/com/example/medicationreminder/util/users.csv");
+            File userFile = new File("/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App/src/users.csv");
             Scanner userFileScanner = new Scanner(userFile);
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
