@@ -5,5 +5,6 @@ public class Main {
         System.out.println("Hello and Welcome to the Medication Reminder Application");
         User genericUser = new User();
         genericUser.checkIfUserExists();
+        genericUser.manageMedicines();
     }
 }
