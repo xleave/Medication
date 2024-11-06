@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import modules.Medicine;
+
 public class User {
 
     private String name;
@@ -13,27 +14,36 @@ public class User {
     public String getName() {
         return name;
     }
+
     public String getPassword() {
         return password;
     }
 
-    public void checkIfUserExists() {    //Read users.csv to see if entry for user already exists.
+    public void checkIfUserExists() { // Read users.csv to see if entry for user already exists.
         System.out.println("Please enter your details");
         System.out.print("Name: ");
         Scanner userInputScanner = new Scanner(System.in);
         String temporaryName = userInputScanner.next();
 
+        boolean userFound = false;
+
         try {
             File userFile = new File("src/users.csv");
+            if (!userFile.exists()) {
+                System.out.println("User file does not exist. Creating a new one.");
+                userFile.createNewFile();
+            }
             Scanner userFileScanner = new Scanner(userFile);
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
+                String[] data = line.split(",");
 
-                if (line.contains(temporaryName)) {     //If user exists, load password and log in.
+                if (data.length >= 2 && data[0].equalsIgnoreCase(temporaryName)) { // If user exists, load password and
+                                                                                   // log in.
+                    userFound = true;
                     System.out.println("Hello " + temporaryName + ". Please enter your Password.");
                     System.out.print("Password: ");
                     String temporaryPassword = userInputScanner.next();
-                    String[] data = line.split(",");
                     String passwordInFile = data[1];
                     String role = data.length > 2 ? data[2] : "user";
                     if (temporaryPassword.equals(passwordInFile)) {
@@ -46,17 +56,22 @@ public class User {
                     } else {
                         System.out.println("Incorrect password.");
                         userFileScanner.close();
-                        checkIfUserExists();
+                        checkIfUserExists(); // Recursive call for re-login
                         return;
                     }
                 }
             }
             userFileScanner.close();
-            // If user not found, let them create account.
-            userCreate();
+            if (!userFound) {
+                System.out.println("User not found. Please create a new account.");
+                userCreate();
+            }
         } catch (FileNotFoundException e) {
             System.out.println("The user file could not be found! Program will now close.");
             System.exit(2);
+        } catch (IOException e) {
+            System.out.println("An error occurred while accessing the user file.");
+            e.printStackTrace();
         }
     }
 
@@ -84,9 +99,13 @@ public class User {
             e.printStackTrace();
         }
 
-        // Create a new medication file for the user.
+        // Create a new medication file for the user in the 'lists' directory.
         try {
-            File medFile = new File("src/" + name + "_medicines.csv");
+            File listsDir = new File("src/lists");
+            if (!listsDir.exists()) {
+                listsDir.mkdirs();
+            }
+            File medFile = new File("src/lists/" + name + "_medicines.csv");
             if (medFile.createNewFile()) {
                 System.out.println("Medication file created for user.");
             }
@@ -110,7 +129,7 @@ public class User {
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
                 String[] data = line.split(",");
-                if (data[0].equals(name)) {
+                if (data.length >= 2 && data[0].equalsIgnoreCase(name)) {
                     String passwordInFile = data[1];
                     String role = data.length > 2 ? data[2] : "user";
                     if (password.equals(passwordInFile)) {
@@ -122,7 +141,7 @@ public class User {
                     } else {
                         System.out.println("Incorrect password.");
                         userFileScanner.close();
-                        userLogin();
+                        userLogin(); // Recursive call for re-login
                         return;
                     }
                 }
@@ -150,26 +169,55 @@ public class User {
             System.out.println("1. Add Medicine");
             System.out.println("2. Remove Medicine");
             System.out.println("3. View Medicines");
-            System.out.println("4. Logout");
-            System.out.print("Choose an option: ");
+            if (isAdmin) {
+                System.out.println("4. Manage All Users' Medicines");
+                System.out.println("5. Logout");
+                System.out.print("Choose an option: ");
+            } else {
+                System.out.println("4. Logout");
+                System.out.print("Choose an option: ");
+            }
             String choice = scanner.next();
 
-            switch (choice) {
-                case "1":
-                    addMedicine(scanner);
-                    break;
-                case "2":
-                    removeMedicine(scanner);
-                    break;
-                case "3":
-                    viewMedicines();
-                    break;
-                case "4":
-                    isLoggedIn = false;
-                    System.out.println("Logged out successfully.");
-                    return;
-                default:
-                    System.out.println("Invalid option. Please try again.");
+            if (isAdmin) {
+                switch (choice) {
+                    case "1":
+                        addMedicine(scanner);
+                        break;
+                    case "2":
+                        removeMedicine(scanner);
+                        break;
+                    case "3":
+                        viewMedicines();
+                        break;
+                    case "4":
+                        manageAllUsersMedicines(scanner);
+                        break;
+                    case "5":
+                        isLoggedIn = false;
+                        System.out.println("Logged out successfully.");
+                        return;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
+            } else {
+                switch (choice) {
+                    case "1":
+                        addMedicine(scanner);
+                        break;
+                    case "2":
+                        removeMedicine(scanner);
+                        break;
+                    case "3":
+                        viewMedicines();
+                        break;
+                    case "4":
+                        isLoggedIn = false;
+                        System.out.println("Logged out successfully.");
+                        return;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
             }
         }
     }
@@ -192,10 +240,11 @@ public class User {
             String timeToTake = scanner.next();
 
             Medicine med = new Medicine(medName, dosage, quantity, timeToTake, patientName);
-            FileWriter fw = new FileWriter("src/" + patientName + "_medicines.csv", true);
+            FileWriter fw = new FileWriter("src/lists/" + patientName + "_medicines.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw);
-            out.println(med.getName() + "," + med.getDosage() + "," + med.getQuantity() + "," + med.getTimeToTake() + "," + med.getUserName());
+            out.println(med.getName() + "," + med.getDosage() + "," + med.getQuantity() + "," + med.getTimeToTake()
+                    + "," + med.getUserName());
             out.close();
             bw.close();
             fw.close();
@@ -203,6 +252,8 @@ public class User {
         } catch (IOException e) {
             System.out.println("An error occurred while adding medicine.");
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for quantity. Please enter a valid number.");
         }
     }
 
@@ -214,7 +265,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("src/" + patientName + "_medicines.csv");
+            File medFile = new File("src/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -227,10 +278,16 @@ public class User {
             }
             fileScanner.close();
 
+            if (medicines.isEmpty()) {
+                System.out.println("No medicines to remove.");
+                return;
+            }
+
             System.out.println("Medicines:");
             for (int i = 0; i < medicines.size(); i++) {
                 String[] data = medicines.get(i).split(",");
-                System.out.println((i + 1) + ". " + data[0] + " - " + data[1] + " - Qty: " + data[2] + " - Time: " + data[3]);
+                System.out.println(
+                        (i + 1) + ". " + data[0] + " - " + data[1] + " - Qty: " + data[2] + " - Time: " + data[3]);
             }
 
             System.out.print("Enter the number of the medicine to remove: ");
@@ -253,6 +310,8 @@ public class User {
         } catch (IOException e) {
             System.out.println("An error occurred while removing medicine.");
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
         }
     }
 
@@ -260,28 +319,62 @@ public class User {
         try {
             String patientName = this.name;
             if (isAdmin) {
-                Scanner scanner = new Scanner(System.in);
                 System.out.print("Enter patient's name to view medicines: ");
+                Scanner scanner = new Scanner(System.in);
                 patientName = scanner.next();
             }
 
-            File medFile = new File("src/" + patientName + "_medicines.csv");
+            File medFile = new File("src/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
             }
 
             Scanner fileScanner = new Scanner(medFile);
+            boolean hasMedicines = false;
             System.out.println("\nMedicines for " + patientName + ":");
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] data = line.split(",");
-                System.out.println("Name: " + data[0] + ", Dosage: " + data[1] + ", Quantity: " + data[2] + ", Time: " + data[3]);
+                if (data.length >= 4) {
+                    System.out.println("Name: " + data[0] + ", Dosage: " + data[1] + ", Quantity: " + data[2]
+                            + ", Time: " + data[3]);
+                    hasMedicines = true;
+                }
             }
             fileScanner.close();
+            if (!hasMedicines) {
+                System.out.println("No medicines to display.");
+            }
         } catch (IOException e) {
             System.out.println("An error occurred while viewing medicines.");
             e.printStackTrace();
+        }
+    }
+
+    private void manageAllUsersMedicines(Scanner scanner) {
+        System.out.println("\nAll Users' Medicine Management:");
+        System.out.println("1. View User's Medicines");
+        System.out.println("2. Add Medicine to User");
+        System.out.println("3. Remove Medicine from User");
+        System.out.println("4. Back to Main Menu");
+        System.out.print("Choose an option: ");
+        String choice = scanner.next();
+
+        switch (choice) {
+            case "1":
+                viewMedicines();
+                break;
+            case "2":
+                addMedicine(scanner);
+                break;
+            case "3":
+                removeMedicine(scanner);
+                break;
+            case "4":
+                return;
+            default:
+                System.out.println("Invalid option. Please try again.");
         }
     }
 }
