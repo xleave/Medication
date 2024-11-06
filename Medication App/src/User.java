@@ -14,17 +14,29 @@ public class User {
     }
 
     public void checkIfUserExists() {    //Read users.csv to see if entry for user already exists.
-        System.out.println("Please enter your name.");
+        System.out.println("Please enter your details");
+        System.out.print("Name:");
         Scanner userInputScanner = new Scanner(System.in);
-        //String temporaryName = userInputScanner.next();
+        String temporaryName = userInputScanner.next();
 
         try {
-            File userFile = new File("/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App/src/users.csv");
+            File userFile = new File("src/users.csv");
             Scanner userFileScanner = new Scanner(userFile);
             while (userFileScanner.hasNextLine()) {
-                String line = userFileScanner.nextLine();
-                System.out.println(line);
-            }
+                String line = userFileScanner.next();
+
+                if (line.contains(temporaryName)) {     //If user exists, load password and log in.
+                    System.out.println("Hello " + line  + ". Please enter your Password."  );
+                    System.out.print("Password:");
+                    String temporaryPassword = userInputScanner.next();
+                    String passwordInFile = userFile;
+
+                }
+
+                //if (!line.contains(temporaryName)) {  //If no user is found, let them make account.
+                    //userCreate();
+                }
+           // }
 
         } catch (FileNotFoundException e) {
             System.out.println("The user file could not be found! Program will now close.");
