@@ -23,13 +23,14 @@ public class User {
             File userFile = new File("src/users.csv");
             Scanner userFileScanner = new Scanner(userFile);
             while (userFileScanner.hasNextLine()) {
-                String line = userFileScanner.next();
+                String lineFromUserFile = userFileScanner.next();
 
-                if (line.contains(temporaryName)) {     //If user exists, load password and log in.
-                    System.out.println("Hello " + line  + ". Please enter your Password."  );
+                if (lineFromUserFile.contains(temporaryName)) {     //If user exists, load password and log in.
+                    System.out.println("Hello " + lineFromUserFile  + ". Please enter your Password."  );
                     System.out.print("Password:");
                     String temporaryPassword = userInputScanner.next();
-                    String passwordInFile = userFile;
+
+
 
                 }
 
