@@ -1,4 +1,4 @@
-package main.java.com.example.medicationreminder;
+package com.group1.medicationreminder;
 
 public class User {
 
