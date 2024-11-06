@@ -7,4 +7,5 @@
       </MTProjectMetadataState>
     </option>
   </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="corretto-17" project-jdk-type="JavaSDK" />
 </project>
