@@ -19,6 +19,10 @@ public class User {
         return password;
     }
 
+    public User (String name, String password) {
+
+    }
+
     public void checkIfUserExists() { // Read users.csv to see if entry for user already exists.
         System.out.println("Please enter your details");
         System.out.print("Name: ");

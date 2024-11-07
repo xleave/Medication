@@ -1,0 +1,37 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class LoginGUI extends JFrame {
+
+    public void displayLoginGUI() {
+        JFrame loginWindow = new JFrame("Log in.");
+        JPanel loginPanel = new JPanel();
+
+        loginWindow.setSize(500, 250);
+        loginWindow.setBackground(Color.white);
+        loginWindow.setResizable(false);
+        loginWindow.setLocationRelativeTo(null);
+        loginWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        loginPanel.setSize(500, 250);
+        loginPanel.setRequestFocusEnabled(true);
+
+        String applicationIconFile = "src/pillIcon.png";
+        ImageIcon applicationIcon = new ImageIcon(applicationIconFile);
+        JLabel applicationIconLable = new JLabel(applicationIcon);
+        applicationIconLable.setBounds(160, -50, applicationIcon.getIconWidth(), applicationIcon.getIconHeight());
+        loginPanel.setLayout(null);
+        loginPanel.add(applicationIconLable);
+
+        loginWindow.add(loginPanel);
+        loginPanel.setVisible(true);
+        loginWindow.setVisible(true);
+
+
+    }
+
+
+
+
+
+}
