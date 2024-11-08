@@ -19,7 +19,7 @@ public class User {
         return password;
     }
 
-    public User (String name, String password) {
+    public User(String name, String password) {
 
     }
 
@@ -32,7 +32,7 @@ public class User {
         boolean userFound = false;
 
         try {
-            File userFile = new File("src/users.csv");
+            File userFile = new File("Medication App/src/resources/users/users.csv");
             if (!userFile.exists()) {
                 System.out.println("User file does not exist. Creating a new one.");
                 userFile.createNewFile();
@@ -89,7 +89,7 @@ public class User {
 
         // Write new details to user file.
         try {
-            FileWriter fw = new FileWriter("src/users.csv", true);
+            FileWriter fw = new FileWriter("Medication App/src/resources/users/users.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw);
             out.println(name + "," + password + ",user");
@@ -105,11 +105,11 @@ public class User {
 
         // Create a new medication file for the user in the 'lists' directory.
         try {
-            File listsDir = new File("src/lists");
+            File listsDir = new File("Medication App/src/resources/lists");
             if (!listsDir.exists()) {
                 listsDir.mkdirs();
             }
-            File medFile = new File("src/lists/" + name + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/lists/" + name + "_medicines.csv");
             if (medFile.createNewFile()) {
                 System.out.println("Medication file created for user.");
             }
@@ -128,7 +128,7 @@ public class User {
         password = userInput.next();
         // Implement login logic similar to checkIfUserExists
         try {
-            File userFile = new File("src/users.csv");
+            File userFile = new File("Medication App/src/resources/users/users.csv");
             Scanner userFileScanner = new Scanner(userFile);
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
@@ -244,7 +244,7 @@ public class User {
             String timeToTake = scanner.next();
 
             Medicine med = new Medicine(medName, dosage, quantity, timeToTake, patientName);
-            FileWriter fw = new FileWriter("src/lists/" + patientName + "_medicines.csv", true);
+            FileWriter fw = new FileWriter("Medication App/src/resources/lists/" + patientName + "_medicines.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw);
             out.println(med.getName() + "," + med.getDosage() + "," + med.getQuantity() + "," + med.getTimeToTake()
@@ -269,7 +269,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("src/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -328,7 +328,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("src/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;

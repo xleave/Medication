@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Medication App/src/resources/users/users.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/GUI Backup" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/gui/GUI Backup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/LoginGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/gui/LoginGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/lists/Xumin_medicines.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/users.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +38,14 @@
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2oUUahDF3zF02rWun7PR5ZqxMqw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Application.Main.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
     "Repository.Attach.Annotations": "false",
@@ -42,7 +55,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/minec/Desktop/CE320/Group_Project/Medication App",
+    "last_opened_file_path": "C:/Users/minec/Desktop/CE320/Medication App/Medication App.iml",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,6 +70,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\minec\Desktop\CE320\Medication App\src\resources\users" />
+      <recent name="C:\Users\minec\Desktop\CE320\Medication App\src\gui" />
       <recent name="C:\Users\minec\Desktop\CE320\Group_Project\Medication Reminder App\src\main\java\com\example\medicationreminder" />
     </key>
   </component>
@@ -79,6 +94,9 @@
       <workItem from="1730923713923" duration="97000" />
       <workItem from="1730923963652" duration="4226000" />
       <workItem from="1730928260667" duration="17000" />
+      <workItem from="1730939139044" duration="184000" />
+      <workItem from="1731092668660" duration="352000" />
+      <workItem from="1731094747320" duration="2895000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />

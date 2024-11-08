@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginGUI extends JFrame {
+public class gui.LoginGUI extends JFrame {
 
     public void displayLoginGUI() {
         JFrame loginWindow = new JFrame("Log in.");
