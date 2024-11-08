@@ -30,7 +30,7 @@ public class User {
         String temporaryName = userInputScanner.next();
 
         boolean userFound = false;
-
+//Path references may cause problems, please note that if you get an error, delete the Medication App/ paragraph.
         try {
             File userFile = new File("Medication App/src/resources/users/users.csv");
             if (!userFile.exists()) {
