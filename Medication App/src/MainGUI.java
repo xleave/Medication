@@ -13,7 +13,7 @@ public class MainGUI extends JFrame {
         //Font formatting
         Font applicationFont;
         try {
-            applicationFont = Font.createFont(Font.TRUETYPE_FONT, new File("/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App/src/EB_Garamond,Roboto_Condensed/Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
+            applicationFont = Font.createFont(Font.TRUETYPE_FONT, new File("Medication App/src/EB_Garamond,Roboto_Condensed/Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
 
@@ -79,6 +79,27 @@ public class MainGUI extends JFrame {
         horizontalSpacer2.setVisible(true);
 
 
+        JMenuBar jmbar = new JMenuBar();
+        JMenu jmHomeMenu = new JMenu("Home");
+        JMenu jmMedicnes= new JMenu("Medications");
+        JMenu jmLog = new JMenu("Log");
+        JMenuItem jmihomepage = new JMenuItem("Main Page");
+        JMenuItem jmiadd = new JMenuItem("Add Medicines");
+        JMenuItem jmiedit = new JMenuItem("Edit Medicines");
+        JMenuItem jmilog = new JMenuItem("Help");
+        jmbar.add(jmHomeMenu);
+        jmbar.add(jmMedicnes);
+        jmbar.add(jmLog);
+        jmHomeMenu.add(jmihomepage);
+        jmMedicnes.add(jmiedit);
+        jmMedicnes.add(jmiadd);
+        jmLog.add(jmilog);
+        this.setJMenuBar(jmbar);
+        JPanel menuPanel = new JPanel();
+        menuPanel.add(jmbar);
+        menuPanel.setBounds(0, 90, 1000, 50);
+        menuPanel.setVisible(true);
+
         //Adding and rendering.
         mainPanel.add(horizontalSpacer1);
         mainPanel.add(applicationTitle);
@@ -86,13 +107,14 @@ public class MainGUI extends JFrame {
         mainPanel.add(dateTimeTitle);
         mainPanel.add(currentDateTitle);
         mainPanel.add(submenuTitle);
+        mainPanel.add(menuPanel);
         mainPanel.add(horizontalSpacer2);
         mainPanel.add(navigationPanel);
         mainPanel.setVisible(true);
         mainWindow.add(mainPanel);
 
-
-
     }
+
+
 }
 
