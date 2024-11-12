@@ -4,6 +4,13 @@ public class Main {
 
     public static void main(String[] args) {
 
+        /*
+        //The below code is just an example of using TTS. once all the GUI is ready we can integrate all these to make voice alerts.
+        TextToSpeech tts = new TextToSpeech();
+        tts.speak("It's time to take your medication.");
+        tts.close();
+        */
+
 
         LoginGUI loginGUI = new LoginGUI();
 
