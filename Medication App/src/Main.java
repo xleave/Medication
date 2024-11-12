@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-
+        /*
         LoginGUI loginGUI = new LoginGUI();
 
 
@@ -16,8 +16,10 @@ public class Main {
         User genericUser = new User(username,password);
         genericUser.checkIfUserExists();
         genericUser.manageMedicines();
+        */
 
-
+        MainGUI mainGUI = new MainGUI();
+        mainGUI.displayMainGUI();
 
 
     }
