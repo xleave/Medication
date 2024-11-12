@@ -1,14 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Scanner;
 import java.time.LocalDate;
 
 public class MainGUI extends JFrame {
 
-    public void displayMainGUI() {
+    public JLayeredPane baseLayerPanel;
+
+    public void displayMainGUI()  {
 
         //Font formatting
         Font applicationFont;
@@ -56,9 +58,9 @@ public class MainGUI extends JFrame {
         mainWindow.setSize(1000, 750);
         mainWindow.setBackground(Color.white);
         mainWindow.setResizable(false);
-        mainWindow.setLocationRelativeTo(null);
         mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        mainWindow.setVisible(true);
+        mainWindow.setLayout(null);
+        mainWindow.setLocationRelativeTo(null);
 
         //Main Panel
         mainPanel.setSize(1000, 750);
@@ -77,29 +79,77 @@ public class MainGUI extends JFrame {
         horizontalSpacer2.setBackground(Color.BLACK);
         horizontalSpacer2.setVisible(true);
 
+        //Separate screens within the app that get displayed on menu selection.
+        baseLayerPanel = new JLayeredPane();
+        baseLayerPanel.setBounds(0, 50, 1000, 750);
+        mainWindow.getContentPane().add(baseLayerPanel);
+
+        //Screen 1
+        JPanel medicationPanel = new JPanel();
+        medicationPanel.setBackground(Color.green);
+        medicationPanel.setBounds(0, 50, 1000, 750);
+        baseLayerPanel.add(medicationPanel);
+
+        //Screen 2
+        JPanel logPanel = new JPanel();
+        logPanel.setBackground(Color.blue);
+        logPanel.setBounds(0, 50, 1000, 750);
+        baseLayerPanel.add(logPanel);
+
+        //Screen 3
+        JPanel helpPanel = new JPanel();
+        helpPanel.setBackground(Color.pink);
+        helpPanel.setBounds(0, 50, 1000, 750);
+        baseLayerPanel.add(helpPanel);
+
         //Navigation.
         JMenuBar applicationMenu = new JMenuBar();
-        JMenu homeOption = new JMenu("Home");
-        JMenu medicationOption = new JMenu("Medications");
-        JMenu logOption = new JMenu("Logs");
-        JMenu helpOption = new JMenu("Help");
 
-        JMenuItem goHome = new JMenuItem("Main Page");
-        JMenuItem addMedicines = new JMenuItem("Add Medicines");
-        JMenuItem editMedicines = new JMenuItem("Edit Medicines");
-        JMenuItem viewLogs = new JMenuItem("View Logs");
-        JMenuItem getHelp = new JMenuItem("Help");
-        JMenuItem viewAbout = new JMenuItem("About");
+        applicationMenu.setBounds(10, 100, 980, 75);
+        applicationMenu.setBackground(Color.darkGray);
+        JMenu homeMenu = new JMenu("Home");
+        JMenu medicationMenu = new JMenu("Medications");
+        JMenu logMenu = new JMenu("Logs");
+        JMenu helpMenu = new JMenu("Help");
 
-        homeOption.add(goHome);
-        medicationOption.add(addMedicines);
-        medicationOption.add(editMedicines);
-        logOption.add(viewLogs);
-        helpOption.add(getHelp);
-        helpOption.add(viewAbout);
+        JMenuItem mainPageItem = new JMenuItem("Main Page");
+        JMenuItem addMedicationItem = new JMenuItem("Add Medication");
+        JMenuItem editMedicicationItem = new JMenuItem("Edit Medications");
+        JMenuItem removeMedicicationItem = new JMenuItem("Remove Medications");
+        JMenuItem viewLogsItem = new JMenuItem("View Logs");
+        JMenuItem helpItem = new JMenuItem("Help");
+        JMenuItem aboutItem = new JMenuItem("About");
 
-        applicationMenu.setBounds(0, 90, 1000, 50);
-        applicationMenu.setVisible(true);
+        medicationMenu.add(addMedicationItem);
+        medicationMenu.add(editMedicicationItem);
+        medicationMenu.add(removeMedicicationItem);
+        logMenu.add(viewLogsItem);
+        helpMenu.add(helpItem);
+        helpMenu.add(aboutItem);
+
+        applicationMenu.add(homeMenu);
+        applicationMenu.add(medicationMenu);
+        applicationMenu.add(logMenu);
+        applicationMenu.add(helpMenu);
+
+        mainWindow.setJMenuBar(applicationMenu);
+
+        ActionListener menuListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String actionPerformed = e.getActionCommand();
+                switch (actionPerformed) {
+                    case "Home":
+                        System.out.println("Home item Clicked");
+                }
+            }
+        };
+
+        //Buttons
+        homeMenu.add(mainPageItem);
+        mainPageItem.setActionCommand("Home");
+        mainPageItem.addActionListener(menuListener);
+
 
         //Adding and rendering.
         mainPanel.add(horizontalSpacer1);
@@ -109,11 +159,18 @@ public class MainGUI extends JFrame {
         mainPanel.add(currentDateTitle);
         mainPanel.add(submenuTitle);
         mainPanel.add(horizontalSpacer2);
-        mainPanel.add(applicationMenu);
-        setJMenuBar(applicationMenu);
 
+
+        mainWindow.setVisible(true);      //Somewhat problematic?
         mainPanel.setVisible(true);
         mainWindow.add(mainPanel);
+
+    }
+    private void switchWindows(JPanel nextPanel) {
+        baseLayerPanel.removeAll();
+        baseLayerPanel.add(nextPanel);
+        baseLayerPanel.repaint();
+        baseLayerPanel.revalidate();
 
 
     }
