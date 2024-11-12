@@ -14,15 +14,35 @@ public class LoginGUI extends JFrame {
         return nameFieldContents;
     }
 
+    public LoginGUI() {
+        displayLoginGUI();
+    }
     public String getPasswordFieldContents() {
         return passwordFieldContents;
     }
 
     public void displayLoginGUI() {
-        JFrame loginWindow = new JFrame("Log in");
-        JPanel loginPanel = new JPanel();
+        System.out.println("Login GUI");
+        JPanel jp = new JPanel();
+        jp.setLayout(new BoxLayout(jp,BoxLayout.Y_AXIS));
 
-        //Window
+        JTextField usernameField = new JTextField(15);
+        JPasswordField passwordField1 = new JPasswordField(15);
+        jp.add(new JLabel("Username Input :"));
+        jp.add(usernameField);
+        jp.add(Box.createVerticalStrut(10));
+        jp.add(new JLabel("Password Input :"));
+        jp.add(passwordField1);
+        int result = JOptionPane.showConfirmDialog(null,jp, "Log In ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if(result == JOptionPane.OK_OPTION){
+            nameFieldContents = usernameField.getText();
+            passwordFieldContents = new String(passwordField1.getPassword());
+        }else{
+            System.out.println("Login Cancelled");
+            System.exit(0);
+        }
+
+         /**
         loginWindow.setSize(500, 250);
         loginWindow.setBackground(Color.white);
         loginWindow.setResizable(false);
@@ -67,6 +87,7 @@ public class LoginGUI extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent exitEvent) {
+                System.out.println("Exit button clicked");
                 System.exit(3);
 
             }
@@ -80,8 +101,15 @@ public class LoginGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent loginEvent) {
 
-                getNameFieldContents();
-                getPasswordFieldContents();
+                nameFieldContents = nameField.getText();
+                passwordFieldContents = new String(passwordField.getPassword());
+
+                System.out.println("Login Button clicked");
+                //System.out.println("Usermname :" + nameFieldContents);
+                //System.out.println("Password :" + passwordFieldContents);
+
+                //getNameFieldContents();
+                //getPasswordFieldContents();
 
             }
         });
@@ -90,6 +118,7 @@ public class LoginGUI extends JFrame {
         loginWindow.add(loginPanel);
         loginPanel.setVisible(true);
         loginWindow.setVisible(true);
+        **/
 
     }
 
