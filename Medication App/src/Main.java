@@ -4,10 +4,16 @@ public class Main {
 
 
         LoginGUI loginGUI = new LoginGUI();
-        loginGUI.displayLoginGUI();
+
+
+        String username = loginGUI.getNameFieldContents();
+        String password = loginGUI.getPasswordFieldContents();
+        System.out.println("username from main : " + username);
+        System.out.println("password from main : " + password);
+        //loginGUI.displayLoginGUI();
 
         System.out.println("Hello and Welcome to the Medication Reminder Application");
-        User genericUser = new User(loginGUI.getNameFieldContents(), loginGUI.getPasswordFieldContents());
+        User genericUser = new User(username,password);
         genericUser.checkIfUserExists();
         genericUser.manageMedicines();
 
