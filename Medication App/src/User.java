@@ -1,9 +1,9 @@
+
+// User.java
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.*;
-// import javax.sound.sampled.*;
-
 import modules.*;
 
 public class User {
@@ -13,9 +13,8 @@ public class User {
     private boolean isAdmin = false;
     private boolean isLoggedIn = false;
     private Scheduler scheduler;
-    private String overdoseAlertDirectory = "Medication App/src/resources/medicications"; 
-    private String historyDirectory = "Medication App/src/resources/medication_history"; 
-    private List<String> medicineIntakeHistory = new ArrayList<>(); 
+    private String overdoseAlertDirectory = "Medication App/src/resources/medications";
+    private String historyDirectory = "Medication App/src/resources/medication_history";
 
     public String getName() {
         return name;
@@ -28,7 +27,8 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.scheduler = new Scheduler();
+        // Initialize Scheduler with username and history directory
+        this.scheduler = new Scheduler(name, historyDirectory);
     }
 
     public void checkIfUserExists() {
@@ -73,6 +73,8 @@ public class User {
                         userFileScanner.close();
                         // Load user medicines into scheduler
                         loadMedicines();
+                        // Load medicine intake history
+                        // 通过 Scheduler 和 HistoryTracker 处理
                         return;
                     } else {
                         System.out.println("Incorrect password.");
@@ -126,13 +128,13 @@ public class User {
             e.printStackTrace();
         }
 
-        // Create a new medication file for the user in the 'lists' directory.
+        // Create a new medication file for the user in the 'medications' directory.
         try {
-            File listsDir = new File("Medication App/src/resources/lists");
-            if (!listsDir.exists()) {
-                listsDir.mkdirs();
+            File medDir = new File("Medication App/src/resources/medications");
+            if (!medDir.exists()) {
+                medDir.mkdirs();
             }
-            File medFile = new File(listsDir, name + "_medicines.csv");
+            File medFile = new File(medDir, name + "_medications.csv");
             if (medFile.createNewFile()) {
                 System.out.println("Medication file created for user.");
             }
@@ -172,6 +174,8 @@ public class User {
                         userFileScanner.close();
                         // Load user medicines into scheduler
                         loadMedicines();
+                        // Load medicine intake history
+                        // 通过 Scheduler 和 HistoryTracker 处理
                         return;
                     } else {
                         System.out.println("Incorrect password.");
@@ -300,12 +304,12 @@ public class User {
             scheduler.addMedicine(med);
 
             // Ensure parent directory exists
-            File listsDir = new File("Medication App/src/resources/lists");
-            if (!listsDir.exists()) {
-                listsDir.mkdirs();
+            File medDir = new File("Medication App/src/resources/medications");
+            if (!medDir.exists()) {
+                medDir.mkdirs();
             }
 
-            FileWriter fw = new FileWriter(new File(listsDir, patientName + "_medicines.csv"), true);
+            FileWriter fw = new FileWriter(new File(medDir, patientName + "_medications.csv"), true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw);
             out.println(med.getName() + "," + med.getDosage() + "," + med.getQuantity() + "," + med.getTimeToTake()
@@ -330,7 +334,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/medications/" + patientName + "_medications.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -358,12 +362,17 @@ public class User {
             System.out.print("Enter the number of the medicine to remove: ");
             int index = Integer.parseInt(scanner.next()) - 1;
             if (index >= 0 && index < medicines.size()) {
+                String[] data = medicines.get(index).split(",");
+                Medicine med = scheduler.getMedicineByName(data[0]);
+                if (med != null) {
+                    scheduler.removeMedicine(med);
+                }
                 medicines.remove(index);
                 FileWriter fw = new FileWriter(medFile, false);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw);
-                for (String med : medicines) {
-                    out.println(med);
+                for (String medLine : medicines) {
+                    out.println(medLine);
                 }
                 out.close();
                 bw.close();
@@ -389,7 +398,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/medications/" + patientName + "_medications.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -445,10 +454,12 @@ public class User {
 
     public void setOverdoseAlertDirectory(String directory) {
         this.overdoseAlertDirectory = directory;
+        scheduler.setOverdoseAlertDirectory(directory);
     }
 
     public void setHistoryDirectory(String directory) {
         this.historyDirectory = directory;
+        scheduler.setHistoryDirectory(directory);
     }
 
     private void takeMedicine(Scanner scanner) {
@@ -457,18 +468,15 @@ public class User {
         // Find the medicine in the scheduler
         Medicine med = scheduler.getMedicineByName(medName);
         if (med != null) {
-            // Before labelling medication, check for overdose if another dose is taken
+            // Before labeling medication, check for overdose if another dose is taken
             if (med.willOverDose()) {
                 System.out.println("Warning: Taking this medicine now will exceed the maximum daily dose.");
                 System.out.println("You are not allowed to take more of this medicine today.");
-                // Prepare to send the email (currently creating an empty file as a placeholder)
+                // Prepare overdose alert
                 prepareOverdoseAlert(med);
             } else {
                 scheduler.takeMedicine(med);
                 System.out.println("Medicine " + medName + " has been marked as taken.");
-
-                // Record medication history
-                logMedicineIntake(med);
             }
         } else {
             System.out.println("Medicine not found in your schedule.");
@@ -476,93 +484,25 @@ public class User {
     }
 
     private void prepareOverdoseAlert(Medicine medicine) {
-        try {
-            // Make sure the output directory exists
-            File directory = new File(overdoseAlertDirectory);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Create an empty file with the name of the drug and the current time.
-            String filename = "overdose_alert_" + medicine.getName() + "_"
-                    + LocalDateTime.now().toString().replace(":", "-") + ".txt";
-            File alertFile = new File(directory, filename);
-            if (alertFile.createNewFile()) {
-                System.out.println("Overdose alert prepared at " + alertFile.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while preparing overdose alert.");
-            e.printStackTrace();
-        }
+        scheduler.prepareOverdoseAlert(medicine);
     }
 
     private void logMedicineIntake(Medicine medicine) {
-        try {
-            // Make sure the history directory exists
-            File directory = new File(historyDirectory);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Create or open a user's history file (named after the user name)
-            File historyFile = new File(directory, name + "_history.csv");
-            FileWriter fw = new FileWriter(historyFile, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw);
-
-            // Record format: time, drug name, dosage, quantity.
-            String record = LocalDateTime.now() + "," + medicine.getName() + "," + medicine.getDosage() + ","
-                    + medicine.getQuantity();
-            out.println(record);
-
-            // Add records to the in-memory history list
-            medicineIntakeHistory.add(record);
-
-            out.close();
-            bw.close();
-            fw.close();
-            System.out.println("Medicine intake logged.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while logging medicine intake.");
-            e.printStackTrace();
-        }
+        // Already processed by HistoryTracker, don't need to process here.
     }
 
     private void loadMedicineIntakeHistory() {
-        try {
-            File historyFile = new File(historyDirectory, name + "_history.csv");
-            if (!historyFile.exists()) {
-                System.out.println("No medicine intake history found for user.");
-                return;
-            }
-            Scanner fileScanner = new Scanner(historyFile);
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                medicineIntakeHistory.add(line);
-            }
-            fileScanner.close();
-            System.out.println("Medicine intake history loaded.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while loading medicine intake history.");
-            e.printStackTrace();
-        }
+        // Already handled by Scheduler and HistoryTracker, no need to handle it here.
     }
 
-    private void viewMedicineIntakeHistory() {
-        if (medicineIntakeHistory.isEmpty()) {
-            System.out.println("No medicine intake history to display.");
-        } else {
-            System.out.println("Medicine Intake History:");
-            for (String record : medicineIntakeHistory) {
-                System.out.println(record);
-            }
-        }
+    public void viewMedicineIntakeHistory() {
+        scheduler.viewHistory();
     }
 
     // Load medicines from file into scheduler
     private void loadMedicines() {
         try {
-            File medFile = new File("Medication App/src/resources/lists/" + name + "_medicines.csv");
+            File medFile = new File("Medication App/src/resources/medications/" + name + "_medications.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -583,19 +523,5 @@ public class User {
             e.printStackTrace();
         }
     }
-
-    // // Use Windows built-in speech to remind
-    // private void speak(String text) {
-    // try {
-    // String command = "PowerShell -Command \"Add-Type –AssemblyName System.Speech;
-    // " +
-    // "$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
-    // "$speak.Speak('" + text + "');\"";
-    // Runtime.getRuntime().exec(command);
-    // } catch (IOException e) {
-    // System.out.println("An error occurred while attempting to speak.");
-    // e.printStackTrace();
-    // }
-    // }
 
 }
