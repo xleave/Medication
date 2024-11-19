@@ -1,9 +1,21 @@
+import gui.LoginGUI;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        /*
+
         LoginGUI loginGUI = new LoginGUI();
+
+        loginGUI.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
 
 
         String username = loginGUI.getNameFieldContents();
@@ -16,10 +28,11 @@ public class Main {
         User genericUser = new User(username,password);
         genericUser.checkIfUserExists();
         genericUser.manageMedicines();
-        */
 
-        MainGUI mainGUI = new MainGUI();
-        mainGUI.displayMainGUI();
+
+        //MainGUI mainGUI = new MainGUI();
+        //mainGUI.displayMainGUI();
+
 
 
     }
