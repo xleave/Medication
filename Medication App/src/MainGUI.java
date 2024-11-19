@@ -8,14 +8,32 @@ import java.time.LocalDate;
 
 public class MainGUI extends JFrame {
 
-    public JLayeredPane baseLayerPanel;
+    //Public JFrames, JPanels and JComponents
+    JFrame mainWindow = new JFrame("Medication Reminder App");
+    JPanel staticPanel = new JPanel();
+    JPanel contentPanel = new JPanel();
+    JPanel homePanel = new JPanel();
+    JPanel medicationPanel = new JPanel();
+    JPanel logPanel = new JPanel();
+    JPanel helpPanel = new JPanel();
+    JPanel aboutPanel = new JPanel();
+    CardLayout cardLayout = new CardLayout();
 
-    public void displayMainGUI()  {
+    public void reRenderJFrame() {
+        mainWindow.revalidate();
+        mainWindow.repaint();
+    }
 
-        //Font formatting
+    public void loadOtherJPanel(String name) {
+        cardLayout.show(contentPanel, name);
+    }
+
+
+    public void displayMainGUI() {
+        //Drawing the static elements.
         Font applicationFont;
         try {
-            applicationFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\spars\\OneDrive\\Desktop\\Extreme Folder\\Group_Project\\Medication App\\src\\EB_Garamond,Roboto_Condensed\\Roboto_Condensed\\RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
+            applicationFont = Font.createFont(Font.TRUETYPE_FONT, new File("/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App/src/EB_Garamond,Roboto_Condensed/Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
 
@@ -24,12 +42,20 @@ public class MainGUI extends JFrame {
             throw new RuntimeException(e);
         }
 
-        //Windows, Panels, Areas.
-        JFrame mainWindow = new JFrame("Medication Reminder App");
-        JPanel mainPanel = new JPanel();
+        //Window
+        mainWindow.setSize(1000, 750);
+        mainWindow.setLocationRelativeTo(null);
+        mainWindow.setLayout(null);
 
+        //Separators
         JSeparator horizontalSpacer1 = new JSeparator(SwingConstants.HORIZONTAL);
         JSeparator horizontalSpacer2 = new JSeparator(SwingConstants.HORIZONTAL);
+
+        //User Info
+        JLabel userInfoTitle = new JLabel("User: test user :)");
+        userInfoTitle.setBounds(0, 0, 1000, 15);
+        userInfoTitle.setFont(applicationFont);
+        userInfoTitle.setVisible(true);
 
         //Title and Subtitle
         JLabel applicationTitle = new JLabel("Medication Reminder App");
@@ -37,40 +63,26 @@ public class MainGUI extends JFrame {
         applicationTitle.setFont(applicationFont);
         applicationTitle.setVisible(true);
 
-        //User Info
-        JLabel userInfoTitle = new JLabel("User: " );
-        userInfoTitle.setBounds(0, 0 , 1000, 15);
-        userInfoTitle.setFont(applicationFont);
-        userInfoTitle.setVisible(true);
-
         //Date and Time
         JLabel dateTimeTitle = new JLabel("Date and Time:");
         dateTimeTitle.setBounds(900, 0, 1000, 15);
         dateTimeTitle.setFont(applicationFont);
         dateTimeTitle.setVisible(true);
 
+        //Date and Time Formatting
         LocalDate currentDateTime = LocalDate.now();
         JLabel currentDateTitle = new JLabel(currentDateTime.toString());
         currentDateTitle.setBounds(900, 15, 1000, 15);
         currentDateTitle.setVisible(true);
 
-        //Window
-        mainWindow.setSize(1000, 750);
-        mainWindow.setBackground(Color.white);
-        mainWindow.setResizable(false);
-        mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        mainWindow.setLayout(null);
-        mainWindow.setLocationRelativeTo(null);
-
         //Main Panel
-        mainPanel.setSize(1000, 750);
-        mainPanel.setBackground(Color.white);
+        staticPanel.setSize(1000, 80);
 
         horizontalSpacer1.setBounds(10, 50, 980, 20);
         horizontalSpacer1.setBackground(Color.BLACK);
         horizontalSpacer1.setVisible(true);
 
-        JLabel submenuTitle = new JLabel("Home");
+        JLabel submenuTitle = new JLabel();
         submenuTitle.setBounds(500, 40, 1000, 50);
         submenuTitle.setFont(applicationFont);
         submenuTitle.setVisible(true);
@@ -79,102 +91,102 @@ public class MainGUI extends JFrame {
         horizontalSpacer2.setBackground(Color.BLACK);
         horizontalSpacer2.setVisible(true);
 
-        //Separate screens within the app that get displayed on menu selection.
-        baseLayerPanel = new JLayeredPane();
-        baseLayerPanel.setBounds(0, 50, 1000, 750);
-        mainWindow.getContentPane().add(baseLayerPanel);
+        //Buttons
+        JButton homePanelButton = new JButton("Home");
+        JButton medicationsPanelButton = new JButton("Medications");
+        JButton historyPanelButton = new JButton("Medication History");
+        JButton helpPanelButton = new JButton("Help");
+        JButton aboutPanelButton = new JButton("About");
 
-        //Screen 1
-        JPanel medicationPanel = new JPanel();
-        medicationPanel.setBackground(Color.green);
-        medicationPanel.setBounds(0, 50, 1000, 750);
-        baseLayerPanel.add(medicationPanel);
+        homePanelButton.setFont(applicationFont);
+        medicationsPanelButton.setFont(applicationFont);
+        historyPanelButton.setFont(applicationFont);
+        helpPanelButton.setFont(applicationFont);
+        aboutPanelButton.setFont(applicationFont);
 
-        //Screen 2
-        JPanel logPanel = new JPanel();
-        logPanel.setBackground(Color.blue);
-        logPanel.setBounds(0, 50, 1000, 750);
-        baseLayerPanel.add(logPanel);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));;
+        buttonPanel.setBounds(200, 40, 600, 50);
+        buttonPanel.add(homePanelButton);
+        buttonPanel.add(medicationsPanelButton);
+        buttonPanel.add(historyPanelButton);
+        buttonPanel.add(helpPanelButton);
+        buttonPanel.add(aboutPanelButton);
 
-        //Screen 3
-        JPanel helpPanel = new JPanel();
-        helpPanel.setBackground(Color.pink);
-        helpPanel.setBounds(0, 50, 1000, 750);
-        baseLayerPanel.add(helpPanel);
+        //Content Panel - Where each screen of the app displays.
+        contentPanel.setLayout(cardLayout);
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        contentPanel.setBounds(10, 100, 980, 600);
 
-        //Navigation.
-        JMenuBar applicationMenu = new JMenuBar();
+        contentPanel.add(homePanel, "1");
+        contentPanel.add(medicationPanel, "2");
+        contentPanel.add(logPanel, "3");
+        contentPanel.add(helpPanel, "4");
+        contentPanel.add(aboutPanel, "5");
 
-        applicationMenu.setBounds(10, 100, 980, 75);
-        applicationMenu.setBackground(Color.darkGray);
-        JMenu homeMenu = new JMenu("Home");
-        JMenu medicationMenu = new JMenu("Medications");
-        JMenu logMenu = new JMenu("Logs");
-        JMenu helpMenu = new JMenu("Help");
+        //Button ActionListener
+        homePanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent moveToHomePanel) {
+                cardLayout.show(contentPanel, "1");
+                reRenderJFrame();
+            }
+        });
 
-        JMenuItem mainPageItem = new JMenuItem("Main Page");
-        JMenuItem addMedicationItem = new JMenuItem("Add Medication");
-        JMenuItem editMedicicationItem = new JMenuItem("Edit Medications");
-        JMenuItem removeMedicicationItem = new JMenuItem("Remove Medications");
-        JMenuItem viewLogsItem = new JMenuItem("View Logs");
-        JMenuItem helpItem = new JMenuItem("Help");
-        JMenuItem aboutItem = new JMenuItem("About");
+        medicationsPanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent moveToMedicationPanel) {
+                cardLayout.show(contentPanel, "2" );
+                JPanel newMedicationPanel = new MedicationGUI();
+                contentPanel.add(newMedicationPanel, "medication");
+                loadOtherJPanel("medication");
+                reRenderJFrame();
+            }
+        });
 
-        medicationMenu.add(addMedicationItem);
-        medicationMenu.add(editMedicicationItem);
-        medicationMenu.add(removeMedicicationItem);
-        logMenu.add(viewLogsItem);
-        helpMenu.add(helpItem);
-        helpMenu.add(aboutItem);
+        historyPanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent moveToLogPanel) {
+                cardLayout.show(contentPanel, "3" );
+                reRenderJFrame();
+            }
+        });
 
-        applicationMenu.add(homeMenu);
-        applicationMenu.add(medicationMenu);
-        applicationMenu.add(logMenu);
-        applicationMenu.add(helpMenu);
+        helpPanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent moveToHelpPanel) {
+                cardLayout.show(contentPanel, "4");
+                reRenderJFrame();
+            }
+        });
 
-        mainWindow.setJMenuBar(applicationMenu);
-
-        ActionListener menuListener = new ActionListener() {
+        aboutPanelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String actionPerformed = e.getActionCommand();
-                switch (actionPerformed) {
-                    case "Home":
-                        System.out.println("Home item Clicked");
-                }
+                cardLayout.show(contentPanel,"5");
+                JPanel newAboutGUI = new AboutGUI();
+                contentPanel.add(newAboutGUI, "about");
+                loadOtherJPanel("about");
+                reRenderJFrame();
             }
-        };
+        });
 
-        //Buttons
-        homeMenu.add(mainPageItem);
-        mainPageItem.setActionCommand("Home");
-        mainPageItem.addActionListener(menuListener);
+        //Adding all items to JPanel and JFrame.
+        mainWindow.add(horizontalSpacer1);
+        mainWindow.add(userInfoTitle);
+        mainWindow.add(applicationTitle);
+        mainWindow.add(dateTimeTitle);
+        mainWindow.add(currentDateTitle);
+        mainWindow.add(submenuTitle);
+        mainWindow.add(horizontalSpacer2);
+        mainWindow.add(buttonPanel);
 
-
-        //Adding and rendering.
-        mainPanel.add(horizontalSpacer1);
-        mainPanel.add(applicationTitle);
-        mainPanel.add(userInfoTitle);
-        mainPanel.add(dateTimeTitle);
-        mainPanel.add(currentDateTitle);
-        mainPanel.add(submenuTitle);
-        mainPanel.add(horizontalSpacer2);
+        mainWindow.add(contentPanel);
 
 
-        mainWindow.setVisible(true);      //Somewhat problematic?
-        mainPanel.setVisible(true);
-        mainWindow.add(mainPanel);
-
+        mainWindow.setVisible(true);
+        staticPanel.setVisible(true);
+        contentPanel.setVisible(true);
+        mainWindow.add(staticPanel);
     }
-    private void switchWindows(JPanel nextPanel) {
-        baseLayerPanel.removeAll();
-        baseLayerPanel.add(nextPanel);
-        baseLayerPanel.repaint();
-        baseLayerPanel.revalidate();
-
-
-    }
-
-
 }
-
