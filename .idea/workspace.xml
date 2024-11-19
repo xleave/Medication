@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:xl24773]&#10;&#10;1. Submit the changes to User.java and Medicine.java when applying all the aforementioned features.&#10;&#10;Extreme warning: If you get a serious bug after this commit, please roll back to the minimum hash value (0602b3353b226f9d960557489a3963a68e495ed4), delete the relevant module can work normally, or hash value ( da677291ca91fe9c0f87949ec1e41efb80988ddd) of the farthest stable version,&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in.">
+    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel.">
+      <change afterPath="$PROJECT_DIR$/Medication App/src/javax.activation.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Medication App/src/javax.mail.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/lists/admin_medicines.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/src/TextToSpeech.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/TextToSpeech.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/src/modules/HistoryTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/modules/HistoryTracker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/src/modules/Scheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/modules/Scheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/Medication App.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,45 +37,65 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/minec/Desktop/CE320/Medication App/Medication App.iml&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/CE320/Group_Project/Group_Project/Medication App/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "JAVA"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\CE320\Group_Project\Group_Project\Medication App\src" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\minec\Desktop\CE320\Medication App\src\resources\icons" />
       <recent name="C:\Users\minec\Desktop\CE320\Medication App\src\resources\users" />
       <recent name="C:\Users\minec\Desktop\CE320\Medication App\src\gui" />
       <recent name="C:\Users\minec\Desktop\CE320\Group_Project\Medication Reminder App\src\main\java\com\example\medicationreminder" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Medication App" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -94,13 +113,12 @@
       <workItem from="1730939139044" duration="184000" />
       <workItem from="1731092668660" duration="352000" />
       <workItem from="1731094747320" duration="6288000" />
-      <workItem from="1731102657634" duration="2474000" />
-      <workItem from="1731105262936" duration="624000" />
-      <workItem from="1731106265124" duration="531000" />
-      <workItem from="1731354493245" duration="779000" />
-      <workItem from="1731848765055" duration="132000" />
-      <workItem from="1731848975780" duration="2043000" />
-      <workItem from="1731861932039" duration="2127000" />
+      <workItem from="1731102657634" duration="2344000" />
+      <workItem from="1731275515540" duration="147000" />
+      <workItem from="1731345799374" duration="12982000" />
+      <workItem from="1731417719092" duration="5806000" />
+      <workItem from="1731956856770" duration="1337000" />
+      <workItem from="1732022301886" duration="1811000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />
@@ -150,13 +168,13 @@
       <option name="project" value="LOCAL" />
       <updated>1731104562992</updated>
     </task>
-    <task id="LOCAL-00007" summary="&#10;[Driver:xl24773]&#10;&#10;1. Submit the changes to User.java and Medicine.java when applying all the aforementioned features.&#10;&#10;Extreme warning: If you get a serious bug after this commit, please roll back to the minimum hash value (0602b3353b226f9d960557489a3963a68e495ed4), delete the relevant module can work normally, or hash value ( da677291ca91fe9c0f87949ec1e41efb80988ddd) of the farthest stable version,&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in.">
+    <task id="LOCAL-00007" summary="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel.">
       <option name="closed" value="true" />
-      <created>1731105100150</created>
+      <created>1731357144198</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1731105100150</updated>
+      <updated>1731357144198</updated>
     </task>
     <option name="localTasksCounter" value="8" />
     <servers />
@@ -182,7 +200,22 @@
     <MESSAGE value="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;1. Try to add a medication history module&#10;2. Prepare for adding drug overdose feature&#10;3. Prepare for trying to add email warnings.&#10;4. Prepare for trying to add a medication schedule.&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
     <MESSAGE value="&#10;[Driver:xl24773]&#10;&#10;1. Initial deployment to detect drug overdose function in preparation&#10;2. Preparation for trying to add email warnings (interface has been reserved).&#10;3. Preparation for attempting to add a medication schedule&#10;4. Further fixes to the drug history module.&#10;&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
     <MESSAGE value="&#10;[Driver:xl24773]&#10;&#10;1. Prepare for trying to add a medication schedule.&#10;2. Further improve the function of drug overdose detection and fix bugs.&#10;3. Try to add email warnings in preparation (already reserved interface).&#10;4. Further fixes to the drug history module.&#10;&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
-    <MESSAGE value="&#10;[Driver:xl24773]&#10;&#10;1. Submit the changes to User.java and Medicine.java when applying all the aforementioned features.&#10;&#10;Extreme warning: If you get a serious bug after this commit, please roll back to the minimum hash value (0602b3353b226f9d960557489a3963a68e495ed4), delete the relevant module can work normally, or hash value ( da677291ca91fe9c0f87949ec1e41efb80988ddd) of the farthest stable version,&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
-    <option name="LAST_COMMIT_MESSAGE" value="&#10;[Driver:xl24773]&#10;&#10;1. Submit the changes to User.java and Medicine.java when applying all the aforementioned features.&#10;&#10;Extreme warning: If you get a serious bug after this commit, please roll back to the minimum hash value (0602b3353b226f9d960557489a3963a68e495ed4), delete the relevant module can work normally, or hash value ( da677291ca91fe9c0f87949ec1e41efb80988ddd) of the farthest stable version,&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
+    <MESSAGE value="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java</url>
+          <line>16</line>
+          <properties class="modules.OverdosePrevention" method="alertOverdose">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
