@@ -30,74 +30,10 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.scheduler = new Scheduler();
+        this.scheduler = new Scheduler(name, historyDirectory);
+//        // Read users.csv to see if entry for user already exists.
     }
 
-//    public void checkIfUserExists() {
-//        // Read users.csv to see if entry for user already exists.
-//        System.out.println("Please enter your details");
-//        System.out.print("Name: ");
-//        Scanner userInputScanner = new Scanner(System.in);
-//        String temporaryName = userInputScanner.next();
-//
-//        boolean userFound = false;
-//
-//        try {
-//            // Ensure parent directory exists
-//            File userDir = new File("Medication App/src/resources/users");
-//            if (!userDir.exists()) {
-//                userDir.mkdirs();
-//            }
-//
-//            File userFile = new File(userDir, "users.csv");
-//            if (!userFile.exists()) {
-//                System.out.println("User file does not exist. Creating a new one.");
-//                userFile.createNewFile();
-//            }
-//            Scanner userFileScanner = new Scanner(userFile);
-//            while (userFileScanner.hasNextLine()) {
-//                String line = userFileScanner.nextLine();
-//                String[] data = line.split(",");
-//
-//                if (data.length >= 2 && data[0].equalsIgnoreCase(temporaryName)) {
-//                    // If user exists, load password and log in.
-//                    userFound = true;
-//                    System.out.println("Hello " + temporaryName + ". Please enter your Password.");
-//                    System.out.print("Password: ");
-//                    String temporaryPassword = userInputScanner.next();
-//                    String passwordInFile = data[1];
-//                    String role = data.length > 2 ? data[2] : "user";
-//                    if (temporaryPassword.equals(passwordInFile)) {
-//                        System.out.println("Login successful.");
-//                        this.name = temporaryName;
-//                        this.isAdmin = role.equalsIgnoreCase("admin");
-//                        this.isLoggedIn = true;
-//                        userFileScanner.close();
-//                        // Load user medicines into scheduler
-//                        loadMedicines();
-//                        return;
-//                    } else {
-//                        System.out.println("Incorrect password.");
-//                        userFileScanner.close();
-//                        checkIfUserExists(); // Recursive call for re-login
-//                        return;
-//                    }
-//                }
-//            }
-//            userFileScanner.close();
-//            if (!userFound) {
-//                System.out.println("User not found. Please create a new account.");
-//                userCreate();
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.out.println("The user file could not be found! Program will now close.");
-//            e.printStackTrace();
-//            System.exit(2);
-//        } catch (IOException e) {
-//            System.out.println("An error occurred while accessing the user file.");
-//            e.printStackTrace();
-//        }
-//    }
 
     public void checkIfUserExists() {
         // Read users.csv to see if entry for user already exists.
