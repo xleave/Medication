@@ -1,7 +1,9 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -41,6 +43,16 @@ public class MainGUI extends JFrame {
             System.out.println("Font could not be found!");
             throw new RuntimeException(e);
         }
+
+        BufferedImage applicationImage;
+        try {
+            applicationImage = ImageIO.read(new File("/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App GUI/src/App Icon.png"));
+
+        } catch (IOException imageFileNotFound) {
+            throw new RuntimeException(imageFileNotFound);
+        }
+
+        //mainWindow.
 
         //Window
         mainWindow.setSize(1000, 750);
@@ -97,12 +109,14 @@ public class MainGUI extends JFrame {
         JButton historyPanelButton = new JButton("Medication History");
         JButton helpPanelButton = new JButton("Help");
         JButton aboutPanelButton = new JButton("About");
+        JButton settingsPanelButton = new JButton("Settings");
 
         homePanelButton.setFont(applicationFont);
         medicationsPanelButton.setFont(applicationFont);
         historyPanelButton.setFont(applicationFont);
         helpPanelButton.setFont(applicationFont);
         aboutPanelButton.setFont(applicationFont);
+        settingsPanelButton.setFont(applicationFont);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));;
@@ -112,6 +126,7 @@ public class MainGUI extends JFrame {
         buttonPanel.add(historyPanelButton);
         buttonPanel.add(helpPanelButton);
         buttonPanel.add(aboutPanelButton);
+        buttonPanel.add(settingsPanelButton);
 
         //Content Panel - Where each screen of the app displays.
         contentPanel.setLayout(cardLayout);
@@ -129,6 +144,9 @@ public class MainGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent moveToHomePanel) {
                 cardLayout.show(contentPanel, "1");
+                JPanel newHomePanel = new HomeGUI();
+                contentPanel.add(newHomePanel, "home");
+                loadOtherJPanel("home");
                 reRenderJFrame();
             }
         });
