@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.*;
 // import javax.sound.sampled.*;
@@ -407,8 +406,8 @@ public class User {
         }
     }
 
-    public void setOverdoseAlertDirectory(String directory) {
-        this.overdoseAlertDirectory = directory;
+    public void setOverdoseAlertDirectory(String directory, Medicine medicine) {
+            OverdosePrevention.alertOverdose(medicine);
     }
 
     public void setHistoryDirectory(String directory) {
@@ -425,6 +424,7 @@ public class User {
             if (med.willOverDose()) {
                 System.out.println("Warning: Taking this medicine now will exceed the maximum daily dose.");
                 System.out.println("You are not allowed to take more of this medicine today.");
+                setOverdoseAlertDirectory("default/directory", med);
                 // Prepare to send the email (currently creating an empty file as a placeholder)
                 prepareOverdoseAlert(med);
             } else {

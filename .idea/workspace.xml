@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/modules/OverdosePrevention.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/modules/OverdosePrevention.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/Medication App.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App GUI/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/Medication App/src/resources/users/users.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +123,7 @@
       <workItem from="1732032457294" duration="166000" />
       <workItem from="1732034044524" duration="120000" />
       <workItem from="1732455809149" duration="285000" />
-      <workItem from="1732629935701" duration="1175000" />
+      <workItem from="1732629935701" duration="1788000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />
