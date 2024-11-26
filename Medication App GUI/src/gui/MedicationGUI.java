@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import modules.User;
 
 public class MedicationGUI extends JPanel {
 
@@ -14,7 +15,8 @@ public class MedicationGUI extends JPanel {
 
     public Object[][] loadMedicationData() {
         try {
-            BufferedReader medicationDataBufferedReader = new BufferedReader(new FileReader("/Users/marley/Documents/fuckmenu/src/pizzacunt"));
+            BufferedReader medicationDataBufferedReader = new BufferedReader(
+                    new FileReader("/Users/marley/Documents/fuckmenu/src/pizzacunt"));
             ArrayList<String> medicationList = new ArrayList<>();
             String tempString = "";
             while ((tempString = medicationDataBufferedReader.readLine()) != null) {
@@ -30,7 +32,6 @@ public class MedicationGUI extends JPanel {
             medicationDataBufferedReader.close();
             return tableData;
 
-
         } catch (FileNotFoundException medicationFileNotFound) {
             System.out.println("The Medication Data File Couldn't be found!");
             throw new RuntimeException(medicationFileNotFound);
@@ -40,13 +41,12 @@ public class MedicationGUI extends JPanel {
         }
     }
 
-
-
     public MedicationGUI() {
 
         Font applicationFont;
         try {
-            applicationFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/EB_Garamond,Roboto_Condensed/Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
+            applicationFont = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
 
@@ -61,7 +61,6 @@ public class MedicationGUI extends JPanel {
         JPanel medicationPanelContents = new JPanel();
         medicationPanelContents.setPreferredSize(new Dimension(980, 600));
         medicationPanelContents.setLayout(null);
-
 
         JLabel medicationSubmenuHeading = new JLabel("MEDICATIONS");
         medicationPanelContents.setBounds(470, -20, 100, 50);
@@ -80,12 +79,11 @@ public class MedicationGUI extends JPanel {
         removeMedicationButton.setBounds(20, 400, 200, 50);
         medicationPanelContents.add(removeMedicationButton);
 
-        //Medications Table
-        tableColumns = new String[] {"Name", "Dosage", "Quantity", "Take at:", "Daily amount:"};
+        // Medications Table
+        tableColumns = new String[] { "Name", "Dosage", "Quantity", "Take at:", "Daily amount:" };
         medicationsTable = new JTable(tableData, tableColumns);
         tableScrollPane = new JScrollPane();
         tableScrollPane.add(medicationsTable);
-
 
         medicationPanelContents.add(tableScrollPane);
         medicationPanel.add(medicationPanelContents);

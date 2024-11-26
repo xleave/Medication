@@ -1,11 +1,10 @@
+package modules;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 // import javax.sound.sampled.*;
 
-import modules.*;
-
-import javax.swing.*;
 
 public class User {
 
@@ -29,131 +28,109 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.scheduler = new Scheduler(name, historyDirectory);
-//        // Read users.csv to see if entry for user already exists.
+        // Initialize scheduler or other components if needed
     }
 
-
     public void checkIfUserExists() {
-        // Read users.csv to see if entry for user already exists.
-        System.out.println("Please enter your details");
-        System.out.print("Name: ");
-        String temporaryName = name;
-        String temporaryPassword = password;
-
+        // Check if user exists
         boolean userFound = false;
-
         try {
-            // Ensure the parent directory exists
+            // Ensure parent directory exists
             File userDir = new File("Medication App/src/resources/users");
             if (!userDir.exists()) {
                 userDir.mkdirs();
             }
 
             File userFile = new File(userDir, "users.csv");
-            System.out.println("Using file path: " + userFile.getAbsolutePath());
             if (!userFile.exists()) {
-                System.out.println("User file does not exist. Creating a new one.");
                 userFile.createNewFile();
             }
             Scanner userFileScanner = new Scanner(userFile);
-            System.out.println("Current users and passwords in the file:");   //this is just for beta testing
+
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
-                String[] data = line.split(",");
-                if (data.length >= 2) {
-                    System.out.println("User: " + data[0] + ", Password: " + data[1]);
-                }
-            }
-
-            userFileScanner = new Scanner(userFile);
-            while (userFileScanner.hasNextLine()) {
-                String line = userFileScanner.nextLine();
-                String[] data = line.split(",");
-
-                if (data.length >= 2 && data[0].equalsIgnoreCase(temporaryName)) {
-                    // If user exists, load password and log in
+                String[] userLine = line.split(",");
+                if (name.equals(userLine[0]) && password.equals(userLine[1])) {
                     userFound = true;
-                    if (temporaryPassword.equals(data[1])) {
-                        JOptionPane.showMessageDialog(null, "Login successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        this.name = temporaryName;
-                        this.isLoggedIn = true;
-                        userFileScanner.close();
-                        loadMedicines();  // Load user's medicines
-                        return;
+                    isLoggedIn = true;
+                    // Check if user is admin
+                    if (userLine.length > 2 && userLine[2].equals("admin")) {
+                        isAdmin = true;
                     } else {
-                        JOptionPane.showMessageDialog(null, "Incorrect password. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-                        userFileScanner.close();
-                        //checkIfUserExists();  // Retry login
-                        return;
+                        isAdmin = false;
                     }
+                    System.out.println("modules.User found and logged in.");
+                    break;
+                } else if (name.equals(userLine[0]) && !password.equals(userLine[1])) {
+                    System.out.println("Password incorrect");
+                    isLoggedIn = false;
+                    break;
                 }
             }
 
             userFileScanner.close();
             if (!userFound) {
-                System.out.println("User not found. Please create a new account.");
-                // Prompt the user to create a new account
+                System.out.println("modules.User not found. Creating new user.");
                 userCreate();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("The user file could not be found! Program will now close.");
-            e.printStackTrace();
-            System.exit(2);
+            System.out.println("modules.User file not found. Creating user file.");
+            try {
+                File userDir = new File("Medication App/src/resources/users");
+                if (!userDir.exists()) {
+                    userDir.mkdirs();
+                }
+                File userFile = new File(userDir, "users.csv");
+                userFile.createNewFile();
+                userCreate();
+            } catch (IOException ex) {
+                System.out.println("Error creating users.csv file.");
+                ex.printStackTrace();
+            }
         } catch (IOException e) {
-            System.out.println("An error occurred while accessing the user file.");
+            System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
 
     public void userCreate() {
-        // Get user input from LoginGUI (assuming `name` and `password` have been set)
-        String newName = name;  // Get the name from the LoginGUI input field
-        String newPassword = password;  // Get the password from the LoginGUI input field
-
-        // Ensure the parent directory exists
+        // Create a new user
         try {
             File userDir = new File("Medication App/src/resources/users");
             if (!userDir.exists()) {
                 userDir.mkdirs();
             }
 
-            // Open the users.csv file in append mode and write the new user data
-            FileWriter fw = new FileWriter(new File(userDir, "users.csv"), true);
+            File userFile = new File(userDir, "users.csv");
+            FileWriter fw = new FileWriter(userFile, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw);
-            out.println(newName + "," + newPassword + ",user");  // Add new user to the CSV file
-            out.close();
+            bw.write(name + "," + password + "\n");
             bw.close();
-            fw.close();
-
-            JOptionPane.showMessageDialog(null, "Account created successfully. Please log in.", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-            // Now login with the new user
-            checkIfUserExists();  // Check if user can log in with new account
+            System.out.println("New user created and logged in.");
+            isLoggedIn = true;
+            isAdmin = false;  // New users are not admin by default
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error creating account.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("An error occurred.");
             e.printStackTrace();
         }
 
-        // Optionally, create a new medication file for the user in the 'lists' directory
+        // Create new medication file for user
         try {
-            File listsDir = new File("Medication App/src/resources/lists");
-            if (!listsDir.exists()) {
-                listsDir.mkdirs();
+            File listDir = new File("Medication App/src/resources/lists");
+            if (!listDir.exists()) {
+                listDir.mkdirs();
             }
 
-            // Create a new medication file for the user
-            File medFile = new File(listsDir, newName + "_medicines.csv");
-            if (medFile.createNewFile()) {
-                JOptionPane.showMessageDialog(null, "Medication file created for user.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            File userMedFile = new File(listDir, name + "_medicine_list.dat");
+            if (!userMedFile.exists()) {
+                userMedFile.createNewFile();
+                System.out.println("Medication file created for user.");
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "An error occurred while creating the medication file.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("An error occurred while creating medication file.");
             e.printStackTrace();
         }
     }
-
 
     // Medicine Management Methods
 
@@ -382,9 +359,9 @@ public class User {
 
     private void manageAllUsersMedicines(Scanner scanner) {
         System.out.println("\nAll Users' Medicine Management:");
-        System.out.println("1. View User's Medicines");
-        System.out.println("2. Add Medicine to User");
-        System.out.println("3. Remove Medicine from User");
+        System.out.println("1. View modules.User's Medicines");
+        System.out.println("2. Add Medicine to modules.User");
+        System.out.println("3. Remove Medicine from modules.User");
         System.out.println("4. Back to Main Menu");
         System.out.print("Choose an option: ");
         String choice = scanner.next();

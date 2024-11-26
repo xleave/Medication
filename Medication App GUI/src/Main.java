@@ -1,24 +1,23 @@
 import gui.*;
+import modules.User;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        // Create Login GUI
+        LoginGUI loginGUI = new LoginGUI();
 
-//        LoginGUI loginGUI = new LoginGUI();
-//        loginGUI.displayLoginGUI();
-//
-//        String username = loginGUI.getNameFieldContents();
-//        String password = loginGUI.getPasswordFieldContents();
-//
-//        User genericUser = new User(username,password);
-//        genericUser.checkIfUserExists();
-//        genericUser.manageMedicines();
+        // Get user input from Login GUI
+        String username = loginGUI.getNameFieldContents();
+        String password = loginGUI.getPasswordFieldContents();
 
+        // Create modules.User object and check if user exists
+        User genericUser = new User(username, password);
+        genericUser.checkIfUserExists();
 
-        MainGUI mainGUI = new MainGUI();
-        mainGUI.displayMainGUI();
-
-
+        // Launch Main GUI with the user information
+        MainGUI mainGUI = new MainGUI(genericUser);
+        mainGUI.displayMainGUI(); // Call the method to display the GUI
     }
 }

@@ -1,10 +1,7 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import modules.User;
 public class LoginGUI extends JFrame {
 
     private String nameFieldContents;
@@ -14,29 +11,28 @@ public class LoginGUI extends JFrame {
         return nameFieldContents;
     }
 
-    public LoginGUI() {
-        displayLoginGUI();
-    }
     public String getPasswordFieldContents() {
         return passwordFieldContents;
     }
 
+    public LoginGUI() {
+        displayLoginGUI();
+    }
+
     public void displayLoginGUI() {
-        System.out.println("Login GUI");
         JPanel jp = new JPanel();
-        jp.setLayout(new BoxLayout(jp,BoxLayout.Y_AXIS));
+        jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
 
         JTextField usernameField = new JTextField(15);
         JPasswordField passwordField1 = new JPasswordField(15);
-        jp.add(new JLabel("Username Input :"));
+
+        jp.add(new JLabel("Username Input:"));
         jp.add(usernameField);
         jp.add(Box.createVerticalStrut(10));
-        jp.add(new JLabel("Password Input :"));
+        jp.add(new JLabel("Password Input:"));
         jp.add(passwordField1);
 
-        String[] options = {"Sign In","Cancel"};
-
-        //UIManager.put(JOptionPane.OK_OPTION,"Log In");
+        String[] options = { "Sign In", "Cancel" };
 
         int result = JOptionPane.showOptionDialog(
                 null,
@@ -46,17 +42,14 @@ public class LoginGUI extends JFrame {
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 options,
-                options[0]
-        );
+                options[0]);
 
-        if (result == 0) {  // "Sign In" button clicked
+        if (result == 0) { // "Sign In" button clicked
             nameFieldContents = usernameField.getText();
             passwordFieldContents = new String(passwordField1.getPassword());
-        } else if (result == 1) {  // "Cancel" button clicked
+        } else if (result == 1) { // "Cancel" button clicked
             System.out.println("Login Cancelled");
             System.exit(0);
         }
     }
 }
-
-

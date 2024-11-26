@@ -66,7 +66,7 @@ public class Scheduler {
         historyTracker.logReminder(medicine);
     }
 
-    // User takes a dose of medicine
+    // modules.User takes a dose of medicine
     public void takeMedicine(Medicine medicine) {
         medicine.addTakenTime(LocalDateTime.now());
         historyTracker.logTakenMedicine(medicine);

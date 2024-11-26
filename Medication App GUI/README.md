@@ -10,14 +10,14 @@ Welcome to the **Medication Reminder Application**, a Java-based console applica
 - [Directory Structure](#directory-structure)
 - [Usage](#usage)
   - [Running the Application](#running-the-application)
-  - [User Operations](#user-operations)
+  - [modules.User Operations](#user-operations)
   - [Admin Operations](#admin-operations)
 - [Creating an Admin Account](#creating-an-admin-account)
 - [Example Usage](#example-usage)
 
 ## Features
 
-- **User Registration & Login:** Securely create and log into user accounts.
+- **modules.User Registration & Login:** Securely create and log into user accounts.
 - **Admin Privileges:** Administrators can manage all users' medications.
 - **Medication Management:** Add, remove, and view medications.
 - **Organized Data Storage:** Stores user and medication data in CSV files within a structured directory.
@@ -59,7 +59,7 @@ medication-reminder-app/
 │   ├── lists/                 # Stores medication CSV files
 │   ├── modules/
 │   │   └── Medicine.java      # Medicine class definition
-│   ├── User.java              # User management and medication operations
+│   ├── modules.User.java              # modules.User management and medication operations
 │   └── Main.java              # Entry point of the application
 ├── bin/                       # Compiled Java classes
 ├── users.csv                  # Stores user credentials and roles
@@ -80,7 +80,7 @@ After compiling, run the application using the following command:
 java -cp bin Main
 ```
 
-### User Operations
+### modules.User Operations
 
 Upon running the application, users can perform the following operations:
 
@@ -171,7 +171,7 @@ Choose an option:
 
 ## Example Usage
 
-### Registering a New User
+### Registering a New modules.User
 
 ```text
 Please enter your details
@@ -190,7 +190,7 @@ Medicine Management:
 Choose an option:
 ```
 
-### Adding a Medicine as a Regular User
+### Adding a Medicine as a Regular modules.User
 
 ```text
 Choose an option: 1
@@ -206,9 +206,9 @@ Medicine added successfully.
 ```text
 Choose an option: 4
 All Users' Medicine Management:
-1. View User's Medicines
-2. Add Medicine to User
-3. Remove Medicine from User
+1. View modules.User's Medicines
+2. Add Medicine to modules.User
+3. Remove Medicine from modules.User
 4. Back to Main Menu
 Choose an option:
 ```
