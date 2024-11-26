@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/modules/OverdosePrevention.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/modules/OverdosePrevention.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Medication App/Medication App.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" afterDir="false" />
     </list>
@@ -122,7 +123,7 @@
       <workItem from="1732032457294" duration="166000" />
       <workItem from="1732034044524" duration="120000" />
       <workItem from="1732455809149" duration="285000" />
-      <workItem from="1732629935701" duration="681000" />
+      <workItem from="1732629935701" duration="1175000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />
@@ -215,20 +216,5 @@
     <MESSAGE value="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel." />
     <MESSAGE value="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project" />
     <option name="LAST_COMMIT_MESSAGE" value="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java</url>
-          <line>16</line>
-          <properties class="modules.OverdosePrevention" method="alertOverdose">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
