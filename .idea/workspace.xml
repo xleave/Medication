@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App GUI/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/Medication App/src/resources/users/users.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App GUI/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App GUI/src/User.java" afterDir="false" />
-    </list>
+    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,10 +39,11 @@
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/CE320/Group_Project/Group_Project/Medication App GUI",
+    "last_opened_file_path": "C:/Users/minec/Desktop/CE320/Medication App GUI",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -92,8 +88,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
       </set>
     </attachedChunks>
   </component>
@@ -124,6 +120,7 @@
       <workItem from="1732034044524" duration="120000" />
       <workItem from="1732455809149" duration="285000" />
       <workItem from="1732629935701" duration="1788000" />
+      <workItem from="1732656539744" duration="169000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />
