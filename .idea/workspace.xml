@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel.">
-      <change afterPath="$PROJECT_DIR$/Medication App/src/javax.activation.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Medication App/src/javax.mail.jar" afterDir="false" />
+    <list default="true" id="808b3c0b-391d-41d3-b02e-42f775271b36" name="Changes" comment="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Medication App/Medication App.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/Medication App/src/resources/users/users.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java" beforeDir="false" afterPath="$PROJECT_DIR$/Medication App/src/modules/OverdosePrevention.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +46,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/CE320/Group_Project/Group_Project/Medication App/src",
+    "last_opened_file_path": "E:/CE320/Group_Project/Group_Project/Medication App GUI",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -118,7 +115,14 @@
       <workItem from="1731345799374" duration="12982000" />
       <workItem from="1731417719092" duration="5806000" />
       <workItem from="1731956856770" duration="1337000" />
-      <workItem from="1732022301886" duration="1811000" />
+      <workItem from="1732022301886" duration="2546000" />
+      <workItem from="1732029254932" duration="6000" />
+      <workItem from="1732031798121" duration="342000" />
+      <workItem from="1732032167526" duration="20000" />
+      <workItem from="1732032457294" duration="166000" />
+      <workItem from="1732034044524" duration="120000" />
+      <workItem from="1732455809149" duration="285000" />
+      <workItem from="1732629935701" duration="681000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;[Driver:xl24773]&#10;[Navigator:mh22512]&#10;Fix structural errors, add Maven, and initially try to add a voice module.">
       <option name="closed" value="true" />
@@ -176,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731357144198</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project">
+      <option name="closed" value="true" />
+      <created>1732029183809</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1732029183809</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,7 +213,8 @@
     <MESSAGE value="&#10;[Driver:xl24773]&#10;&#10;1. Initial deployment to detect drug overdose function in preparation&#10;2. Preparation for trying to add email warnings (interface has been reserved).&#10;3. Preparation for attempting to add a medication schedule&#10;4. Further fixes to the drug history module.&#10;&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
     <MESSAGE value="&#10;[Driver:xl24773]&#10;&#10;1. Prepare for trying to add a medication schedule.&#10;2. Further improve the function of drug overdose detection and fix bugs.&#10;3. Try to add email warnings in preparation (already reserved interface).&#10;4. Further fixes to the drug history module.&#10;&#10;&#10;Note: No changes have been made to the gui section.&#10;&#10;Known bug:Can't load the history file in the directory correctly after logging back in." />
     <MESSAGE value="&#10;[Driver:qy24014]&#10;[Navigator:mh22512]&#10;&#10;1.Add the Jmenubar in the panel." />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;[Driver:qy24014]&#10;[Navigator:xl24773]&#10;&#10;1.Add the overdose email alert to the project" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
