@@ -13,8 +13,8 @@ public class User {
     private boolean isAdmin = false;
     private boolean isLoggedIn = false;
     private Scheduler scheduler;
-    private String overdoseAlertDirectory = "Medication App/src/resources/medicications"; 
-    private String historyDirectory = "Medication App/src/resources/medication_history"; 
+    private String overdoseAlertDirectory = "src/resources/medicications";
+    private String historyDirectory = "src/resources/medication_history";
     private List<String> medicineIntakeHistory = new ArrayList<>(); 
 
     public String getName() {
@@ -36,7 +36,7 @@ public class User {
         boolean userFound = false;
         try {
             // Ensure parent directory exists
-            File userDir = new File("Medication App/src/resources/users");
+            File userDir = new File("src/resources/users");
             if (!userDir.exists()) {
                 userDir.mkdirs();
             }
@@ -76,7 +76,7 @@ public class User {
         } catch (FileNotFoundException e) {
             System.out.println("modules.User file not found. Creating user file.");
             try {
-                File userDir = new File("Medication App/src/resources/users");
+                File userDir = new File("src/resources/users");
                 if (!userDir.exists()) {
                     userDir.mkdirs();
                 }
@@ -96,7 +96,7 @@ public class User {
     public void userCreate() {
         // Create a new user
         try {
-            File userDir = new File("Medication App/src/resources/users");
+            File userDir = new File("src/resources/users");
             if (!userDir.exists()) {
                 userDir.mkdirs();
             }
@@ -116,7 +116,7 @@ public class User {
 
         // Create new medication file for user
         try {
-            File listDir = new File("Medication App/src/resources/lists");
+            File listDir = new File("src/resources/lists");
             if (!listDir.exists()) {
                 listDir.mkdirs();
             }
@@ -240,7 +240,7 @@ public class User {
             scheduler.addMedicine(med);
 
             // Ensure parent directory exists
-            File listsDir = new File("Medication App/src/resources/lists");
+            File listsDir = new File("src/resources/lists");
             if (!listsDir.exists()) {
                 listsDir.mkdirs();
             }
@@ -270,7 +270,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("src/resources/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -329,7 +329,7 @@ public class User {
                 patientName = scanner.next();
             }
 
-            File medFile = new File("Medication App/src/resources/lists/" + patientName + "_medicines.csv");
+            File medFile = new File("src/resources/lists/" + patientName + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
@@ -503,7 +503,7 @@ public class User {
     // Load medicines from file into scheduler
     private void loadMedicines() {
         try {
-            File medFile = new File("Medication App/src/resources/lists/" + name + "_medicines.csv");
+            File medFile = new File("src/resources/lists/" + name + "_medicines.csv");
             if (!medFile.exists()) {
                 System.out.println("No medicines found for user.");
                 return;
