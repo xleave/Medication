@@ -126,7 +126,7 @@ public class MainGUI {
         // Initialize panels and pass user object
         homePanel = new HomeGUI(currentUser);
         // Assume MedicationGUI, LogGUI, HelpGUI, SettingsGUI are defined similarly
-        // medicationPanel = new MedicationGUI();
+        medicationPanel = new MedicationGUI();
         // logPanel = new LogGUI();
         // helpPanel = new HelpGUI();
         // settingsPanel = new SettingsGUI();

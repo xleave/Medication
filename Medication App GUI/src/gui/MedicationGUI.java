@@ -2,44 +2,46 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import modules.User;
 
 public class MedicationGUI extends JPanel {
 
-    JScrollPane tableScrollPane;
-    JTable medicationsTable;
-    String[] tableColumns;
-    Object[][] tableData;
+//    JScrollPane tableScrollPane;
+//    JTable medicationsTable;
+//    String[] tableColumns;
+//    Object[][] tableData;
 
-    public Object[][] loadMedicationData() {
-        try {
-            BufferedReader medicationDataBufferedReader = new BufferedReader(
-                    new FileReader("/Users/marley/Documents/fuckmenu/src/pizzacunt"));
-            ArrayList<String> medicationList = new ArrayList<>();
-            String tempString = "";
-            while ((tempString = medicationDataBufferedReader.readLine()) != null) {
-                medicationList.add(tempString);
-                System.out.println(tempString);
-            }
-
-            int dataCounter = medicationList.get(0).split(",").length;
-            Object[][] medicationDataForTable = new Object[medicationList.size()][dataCounter];
-            for (int dataCounter2 = 0; dataCounter2 < medicationList.size(); dataCounter2++) {
-                medicationDataForTable[dataCounter2] = medicationList.get(dataCounter2).split(",");
-            }
-            medicationDataBufferedReader.close();
-            return tableData;
-
-        } catch (FileNotFoundException medicationFileNotFound) {
-            System.out.println("The Medication Data File Couldn't be found!");
-            throw new RuntimeException(medicationFileNotFound);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public Object[][] loadMedicationData() {
+//        try {
+//            BufferedReader medicationDataBufferedReader = new BufferedReader(
+//                    new FileReader("/Users/marley/Documents/fuckmenu/src/pizzacunt"));
+//            ArrayList<String> medicationList = new ArrayList<>();
+//            String tempString = "";
+//            while ((tempString = medicationDataBufferedReader.readLine()) != null) {
+//                medicationList.add(tempString);
+//                System.out.println(tempString);
+//            }
+//
+//            int dataCounter = medicationList.get(0).split(",").length;
+//            Object[][] medicationDataForTable = new Object[medicationList.size()][dataCounter];
+//            for (int dataCounter2 = 0; dataCounter2 < medicationList.size(); dataCounter2++) {
+//                medicationDataForTable[dataCounter2] = medicationList.get(dataCounter2).split(",");
+//            }
+//            medicationDataBufferedReader.close();
+//            return tableData;
+//
+//        } catch (FileNotFoundException medicationFileNotFound) {
+//            System.out.println("The Medication Data File Couldn't be found!");
+//            throw new RuntimeException(medicationFileNotFound);
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public MedicationGUI() {
 
@@ -69,6 +71,12 @@ public class MedicationGUI extends JPanel {
 
         JButton addMedicationButton = new JButton("Add Medication");
         addMedicationButton.setBounds(20, 200, 200, 50);
+        addMedicationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddMedicationPopupGUI addMedicationPopupGUI = new AddMedicationPopupGUI();
+            }
+        });
         medicationPanelContents.add(addMedicationButton);
 
         JButton editMedicationButton = new JButton("Edit Medication");
@@ -79,13 +87,15 @@ public class MedicationGUI extends JPanel {
         removeMedicationButton.setBounds(20, 400, 200, 50);
         medicationPanelContents.add(removeMedicationButton);
 
-        // Medications Table
-        tableColumns = new String[] { "Name", "Dosage", "Quantity", "Take at:", "Daily amount:" };
-        medicationsTable = new JTable(tableData, tableColumns);
-        tableScrollPane = new JScrollPane();
-        tableScrollPane.add(medicationsTable);
 
-        medicationPanelContents.add(tableScrollPane);
+
+        // Medications Table
+//        tableColumns = new String[] { "Name", "Dosage", "Quantity", "Take at:", "Daily amount:" };
+//        medicationsTable = new JTable(tableData, tableColumns);
+//        tableScrollPane = new JScrollPane();
+//        tableScrollPane.add(medicationsTable);
+
+ //     medicationPanelContents.add(tableScrollPane);
         medicationPanel.add(medicationPanelContents);
         add(medicationPanel);
 
