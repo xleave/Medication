@@ -128,7 +128,7 @@ public class MainGUI {
         // Assume MedicationGUI, LogGUI, HelpGUI, SettingsGUI are defined similarly
         medicationPanel = new MedicationGUI();
         // logPanel = new LogGUI();
-        // helpPanel = new HelpGUI();
+        helpPanel = new HelpGUI();
         // settingsPanel = new SettingsGUI();
         aboutPanel = new AboutGUI(); // Initialize AboutGUI panel
 
