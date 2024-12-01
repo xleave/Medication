@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="/Medication App/src/resources/lists/Xumin_medicines.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Medication App/Medication App/src/resources/lists/Marley_medicines.csv">
           <value>
             <Attribute>
@@ -115,7 +122,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/src/resources/medications/marley_medications.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/src/resources/medications/test1_medications.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/src/resources/medications/testuser2_medications.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

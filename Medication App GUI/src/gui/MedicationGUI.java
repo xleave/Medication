@@ -10,7 +10,10 @@ import modules.User;
 
 public class MedicationGUI extends JPanel {
 
-    public MedicationGUI() {
+    private User currentUser;
+
+    public MedicationGUI(User user) {
+        this.currentUser = user;
 
         Font applicationFont;
         try {
@@ -54,8 +57,13 @@ public class MedicationGUI extends JPanel {
         removeMedicationButton.setBounds(20, 350, 200, 50);
         medicationPanelContents.add(removeMedicationButton);
 
+        JLabel userMedicationLabel = new JLabel(currentUser.getName() + "'s Current Medications");
+        userMedicationLabel.setFont(applicationFont);
+        userMedicationLabel.setBounds(500, 60 , 200, 50);
+        medicationPanelContents.add(userMedicationLabel);
+
         //Table
-        String medicationFile = "/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App GUI/src/resources/medications/test1_medications.csv";
+        String medicationFile = "src/resources/medications/" + currentUser.getName() + "_medications.csv";
         String[] medicationTableHeaders = {"Name", "Dosage", "Quantity", "Time", "Take Daily", "Maximum Daily"};
 
         try {
@@ -64,10 +72,8 @@ public class MedicationGUI extends JPanel {
             String temporaryString = "";
             while ((temporaryString = medicationFileReader.readLine()) != null) {
                 medicationList.add(temporaryString);
-                System.out.println(temporaryString);
             }
 
-            //ANYTHING ABOVE THIS LINE WORKS - ANYTHING BELOW IS UNKNOWN.
             Object[][] medicationTableData = new Object[medicationList.size()][6];
             for(int medicationListIndex = 0; medicationListIndex < medicationList.size(); medicationListIndex++) {
                 medicationTableData[medicationListIndex] = medicationList.get(medicationListIndex).split(",");
@@ -83,7 +89,9 @@ public class MedicationGUI extends JPanel {
             medicationPanel.add(medicationPanelContents);
             add(medicationPanel);
 
-            //Error handling.
+            //Testing user functions ffrom GUI.
+            System.out.println(currentUser.getName());
+
 
         } catch (FileNotFoundException medicationFileNotFound) {
             System.out.println("The medication file for this user could not be found! Please check the path and try again.");

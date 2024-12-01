@@ -122,12 +122,12 @@ public class User {
 
         // Create new medication file for user
         try {
-            File listDir = new File("src/resources/lists");
-            if (!listDir.exists()) {
-                listDir.mkdirs();
+            File medicationDir = new File("src/resources/medications");
+            if (!medicationDir.exists()) {
+                medicationDir.mkdirs();
             }
 
-            File userMedFile = new File(listDir, name + "_medicine_list.dat");
+            File userMedFile = new File(medicationDir, name + "_medications.csv");
             if (!userMedFile.exists()) {
                 userMedFile.createNewFile();
             }
