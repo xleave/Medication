@@ -55,21 +55,45 @@ public class MedicationGUI extends JPanel {
         medicationPanelContents.add(removeMedicationButton);
 
         //Table
+        String medicationFile = "/Users/marley/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Work - NAS/Year 3/CE320 Large Scale Software Systems/Group_Project/Medication App GUI/src/resources/medications/test1_medications.csv";
         String[] medicationTableHeaders = {"Name", "Dosage", "Quantity", "Time", "Take Daily", "Maximum Daily"};
-        String[][] medicationTableData = {
-                {"Paracetomol", "500mg", "2", "9am", "8", "8"}
-                };
 
-        JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);
-        medicationTable.setBounds(400, 400, 600, 350);
+        try {
+            BufferedReader medicationFileReader = new BufferedReader(new FileReader(medicationFile));
+            ArrayList<String> medicationList = new ArrayList<>();
+            String temporaryString = "";
+            while ((temporaryString = medicationFileReader.readLine()) != null) {
+                medicationList.add(temporaryString);
+                System.out.println(temporaryString);
+            }
 
-        JScrollPane tableScrollPane = new JScrollPane(medicationTable);
-        tableScrollPane.setBounds(300, 100, 600, 350);
-        medicationPanelContents.add(tableScrollPane);
+            //ANYTHING ABOVE THIS LINE WORKS - ANYTHING BELOW IS UNKNOWN.
+            Object[][] medicationTableData = new Object[medicationList.size()][6];
+            for(int medicationListIndex = 0; medicationListIndex < medicationList.size(); medicationListIndex++) {
+                medicationTableData[medicationListIndex] = medicationList.get(medicationListIndex).split(",");
+            }
 
+            JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);
+            medicationTable.setBounds(400, 400, 600, 350);
 
-        medicationPanel.add(medicationPanelContents);
-        add(medicationPanel);
+            JScrollPane tableScrollPane = new JScrollPane(medicationTable);
+            tableScrollPane.setBounds(300, 100, 600, 350);
+            medicationPanelContents.add(tableScrollPane);
+
+            medicationPanel.add(medicationPanelContents);
+            add(medicationPanel);
+
+            //Error handling.
+
+        } catch (FileNotFoundException medicationFileNotFound) {
+            System.out.println("The medication file for this user could not be found! Please check the path and try again.");
+            System.exit(3);
+            throw new RuntimeException(medicationFileNotFound);
+
+        } catch (IOException medicationFileCannotBeRead) {
+            throw new RuntimeException(medicationFileCannotBeRead);
+        }
+
 
     }
 }
