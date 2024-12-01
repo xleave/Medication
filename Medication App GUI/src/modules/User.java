@@ -25,6 +25,10 @@ public class User {
         return password;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
     public User(String name, String password) {
         this.name = name;
         this.password = password;
@@ -49,32 +53,33 @@ public class User {
 
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
-                String[] userLine = line.split(",");
-                if (name.equals(userLine[0]) && password.equals(userLine[1])) {
-                    userFound = true;
-                    isLoggedIn = true;
-                    // Check if user is admin
-                    if (userLine.length > 2 && userLine[2].equals("admin")) {
-                        isAdmin = true;
-                    } else {
-                        isAdmin = false;
+                String[] userDetails = line.split(",");
+                if (userDetails.length >= 3) {
+                    String existingName = userDetails[0];
+                    String existingPassword = userDetails[1];
+                    String existingPrivilege = userDetails[2];
+                    if (existingName.equals(this.name)) {
+                        userFound = true;
+                        if (existingPassword.equals(this.password)) {
+                            System.out.println("User authenticated successfully.");
+                            isLoggedIn = true;
+                            isAdmin = existingPrivilege.equalsIgnoreCase("admin");
+                        } else {
+                            System.out.println("Incorrect password.");
+                            System.exit(0);
+                        }
+                        break;
                     }
-                    System.out.println("modules.User found and logged in.");
-                    break;
-                } else if (name.equals(userLine[0]) && !password.equals(userLine[1])) {
-                    System.out.println("Password incorrect");
-                    isLoggedIn = false;
-                    break;
                 }
             }
 
             userFileScanner.close();
             if (!userFound) {
-                System.out.println("modules.User not found. Creating new user.");
+                System.out.println("User not found. Creating new user.");
                 userCreate();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("modules.User file not found. Creating user file.");
+            System.out.println("User file not found. Creating user file.");
             try {
                 File userDir = new File("src/resources/users");
                 if (!userDir.exists()) {
@@ -84,7 +89,7 @@ public class User {
                 userFile.createNewFile();
                 userCreate();
             } catch (IOException ex) {
-                System.out.println("Error creating users.csv file.");
+                System.out.println("An error occurred while creating the user file.");
                 ex.printStackTrace();
             }
         } catch (IOException e) {
@@ -104,11 +109,12 @@ public class User {
             File userFile = new File(userDir, "users.csv");
             FileWriter fw = new FileWriter(userFile, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(name + "," + password + "\n");
+            // New users are not admin by default
+            bw.write(name + "," + password + "," + "user" + "\n");
             bw.close();
             System.out.println("New user created and logged in.");
             isLoggedIn = true;
-            isAdmin = false;  // New users are not admin by default
+            isAdmin = false;
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -124,7 +130,6 @@ public class User {
             File userMedFile = new File(listDir, name + "_medicine_list.dat");
             if (!userMedFile.exists()) {
                 userMedFile.createNewFile();
-                System.out.println("Medication file created for user.");
             }
         } catch (IOException e) {
             System.out.println("An error occurred while creating medication file.");
