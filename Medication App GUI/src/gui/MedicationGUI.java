@@ -10,39 +10,6 @@ import modules.User;
 
 public class MedicationGUI extends JPanel {
 
-//    JScrollPane tableScrollPane;
-//    JTable medicationsTable;
-//    String[] tableColumns;
-//    Object[][] tableData;
-
-//    public Object[][] loadMedicationData() {
-//        try {
-//            BufferedReader medicationDataBufferedReader = new BufferedReader(
-//                    new FileReader("/Users/marley/Documents/fuckmenu/src/pizzacunt"));
-//            ArrayList<String> medicationList = new ArrayList<>();
-//            String tempString = "";
-//            while ((tempString = medicationDataBufferedReader.readLine()) != null) {
-//                medicationList.add(tempString);
-//                System.out.println(tempString);
-//            }
-//
-//            int dataCounter = medicationList.get(0).split(",").length;
-//            Object[][] medicationDataForTable = new Object[medicationList.size()][dataCounter];
-//            for (int dataCounter2 = 0; dataCounter2 < medicationList.size(); dataCounter2++) {
-//                medicationDataForTable[dataCounter2] = medicationList.get(dataCounter2).split(",");
-//            }
-//            medicationDataBufferedReader.close();
-//            return tableData;
-//
-//        } catch (FileNotFoundException medicationFileNotFound) {
-//            System.out.println("The Medication Data File Couldn't be found!");
-//            throw new RuntimeException(medicationFileNotFound);
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     public MedicationGUI() {
 
         Font applicationFont;
@@ -70,7 +37,7 @@ public class MedicationGUI extends JPanel {
         medicationPanelContents.add(medicationSubmenuHeading);
 
         JButton addMedicationButton = new JButton("Add Medication");
-        addMedicationButton.setBounds(20, 200, 200, 50);
+        addMedicationButton.setBounds(20, 150, 200, 50);
         addMedicationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,22 +47,27 @@ public class MedicationGUI extends JPanel {
         medicationPanelContents.add(addMedicationButton);
 
         JButton editMedicationButton = new JButton("Edit Medication");
-        editMedicationButton.setBounds(20, 300, 200, 50);
+        editMedicationButton.setBounds(20, 250, 200, 50);
         medicationPanelContents.add(editMedicationButton);
 
         JButton removeMedicationButton = new JButton("Remove Medication");
-        removeMedicationButton.setBounds(20, 400, 200, 50);
+        removeMedicationButton.setBounds(20, 350, 200, 50);
         medicationPanelContents.add(removeMedicationButton);
 
+        //Table
+        String[] medicationTableHeaders = {"Name", "Dosage", "Quantity", "Time", "Take Daily", "Maximum Daily"};
+        String[][] medicationTableData = {
+                {"Paracetomol", "500mg", "2", "9am", "8", "8"}
+                };
+
+        JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);
+        medicationTable.setBounds(400, 400, 600, 350);
+
+        JScrollPane tableScrollPane = new JScrollPane(medicationTable);
+        tableScrollPane.setBounds(300, 100, 600, 350);
+        medicationPanelContents.add(tableScrollPane);
 
 
-        // Medications Table
-//        tableColumns = new String[] { "Name", "Dosage", "Quantity", "Take at:", "Daily amount:" };
-//        medicationsTable = new JTable(tableData, tableColumns);
-//        tableScrollPane = new JScrollPane();
-//        tableScrollPane.add(medicationsTable);
-
- //     medicationPanelContents.add(tableScrollPane);
         medicationPanel.add(medicationPanelContents);
         add(medicationPanel);
 
