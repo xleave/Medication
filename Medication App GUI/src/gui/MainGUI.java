@@ -112,13 +112,12 @@ public class MainGUI {
         buttonPanel.add(historyPanelButton);
         buttonPanel.add(helpPanelButton);
         buttonPanel.add(aboutPanelButton);
-        buttonPanel.add(settingsPanelButton);
-
         // If the current user is an administrator, add an administrator management button
         if (currentUser.isAdmin()) {
             buttonPanel.add(adminManagePanelButton);
         }
-
+        buttonPanel.add(settingsPanelButton);
+        
         // Add components to the static panel
         staticPanel.add(userInfoTitle);
         staticPanel.add(applicationTitle);
@@ -148,7 +147,6 @@ public class MainGUI {
         contentPanel.add(helpPanel, "4");
         contentPanel.add(aboutPanel, "5");
         // contentPanel.add(settingsPanel, "6");
-
         // If the current user is an administrator, add an administrator admin panel
         if (currentUser.isAdmin()) {
             contentPanel.add(adminManagePanel, "7");
