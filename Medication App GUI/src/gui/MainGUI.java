@@ -1,5 +1,4 @@
 package gui;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import modules.User;
+import modules.*;
 
 public class MainGUI {
 
@@ -24,7 +23,7 @@ public class MainGUI {
     private JPanel helpPanel = new JPanel();
     private AboutGUI aboutPanel; // Changed from JPanel to AboutGUI
     private CardLayout cardLayout = new CardLayout();
-
+    private JPanel adminManagePanel;// Added: AdminManageGUI panel
     private User currentUser; // Store current logged-in user
 
     public MainGUI(User user) {
@@ -93,7 +92,10 @@ public class MainGUI {
         JButton aboutPanelButton = new JButton("About");
         JButton settingsPanelButton = new JButton("Settings");
 
-        // Set fonts for buttons
+        // Added: Administrator Management Button
+        JButton adminManagePanelButton = new JButton("Admin Manage");
+
+        // Setting the button font
         homePanelButton.setFont(applicationFont);
         medicationsPanelButton.setFont(applicationFont);
         historyPanelButton.setFont(applicationFont);
@@ -103,7 +105,7 @@ public class MainGUI {
 
         // Button panel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 6));
+        buttonPanel.setLayout(new GridLayout(1, 7)); // Modify to accommodate new buttons
         buttonPanel.setBounds(10, 50, 980, 30);
         buttonPanel.add(homePanelButton);
         buttonPanel.add(medicationsPanelButton);
@@ -112,7 +114,12 @@ public class MainGUI {
         buttonPanel.add(aboutPanelButton);
         buttonPanel.add(settingsPanelButton);
 
-        // Add components to static panel
+        // If the current user is an administrator, add an administrator management button
+        if (currentUser.isAdmin()) {
+            buttonPanel.add(adminManagePanelButton);
+        }
+
+        // Add components to the static panel
         staticPanel.add(userInfoTitle);
         staticPanel.add(applicationTitle);
         staticPanel.add(dateTimeTitle);
@@ -124,15 +131,17 @@ public class MainGUI {
         contentPanel.setBounds(10, 100, 980, 600);
 
         // Initialize panels and pass user object
-        homePanel = new HomeGUI(currentUser);
-        // Assume MedicationGUI, LogGUI, HelpGUI, SettingsGUI are defined similarly
-        medicationPanel = new MedicationGUI();
-        // logPanel = new LogGUI();
-        helpPanel = new HelpGUI();
-        // settingsPanel = new SettingsGUI();
+        homePanel = new HomeGUI(currentUser);// Assume MedicationGUI, LogGUI, HelpGUI, SettingsGUI are defined similarly
+        medicationPanel = new MedicationGUI();// logPanel = new LogGUI();
+        helpPanel = new HelpGUI();// settingsPanel = new SettingsGUI();
         aboutPanel = new AboutGUI(); // Initialize AboutGUI panel
 
-        // Add panels to content panel
+        // New: Initialize Administrator Management Panel
+        if (currentUser.isAdmin()) {
+            adminManagePanel = new AdminManageGUI(currentUser);
+        }
+
+        // Add the panel to the content panel
         contentPanel.add(homePanel, "1");
         contentPanel.add(medicationPanel, "2");
         contentPanel.add(logPanel, "3");
@@ -140,7 +149,12 @@ public class MainGUI {
         contentPanel.add(aboutPanel, "5");
         // contentPanel.add(settingsPanel, "6");
 
-        // Button action listeners
+        // If the current user is an administrator, add an administrator admin panel
+        if (currentUser.isAdmin()) {
+            contentPanel.add(adminManagePanel, "7");
+        }
+
+        // Button Event Listener
         homePanelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -182,7 +196,13 @@ public class MainGUI {
                 cardLayout.show(contentPanel, "6");
             }
         });
-
+        // Added: Administrator management button event listener
+        adminManagePanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(contentPanel, "7");
+            }
+        });
         // Add panels to main window
         mainWindow.add(staticPanel);
         mainWindow.add(contentPanel);
