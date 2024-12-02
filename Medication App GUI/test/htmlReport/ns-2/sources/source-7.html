@@ -1,0 +1,474 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MainGUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">gui</a>
+</div>
+
+<h1>Coverage Summary for Class: MainGUI (gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.7%
+  </span>
+  <span class="absValue">
+    (89/92)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MainGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$5</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$6</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MainGUI$7</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.2%
+  </span>
+  <span class="absValue">
+    (103/106)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package gui;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.*;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;import java.time.LocalDate;
+&nbsp;import services.*;
+&nbsp;
+&nbsp;public class MainGUI {
+&nbsp;
+&nbsp;    // Main window frame
+<b class="fc">&nbsp;    private JFrame mainWindow = new JFrame(&quot;Medication Reminder App&quot;);</b>
+&nbsp;
+&nbsp;    // Panels and layouts
+<b class="fc">&nbsp;    private JPanel staticPanel = new JPanel();</b>
+<b class="fc">&nbsp;    private JPanel contentPanel = new JPanel();</b>
+&nbsp;    private HomeGUI homePanel;
+<b class="fc">&nbsp;    private JPanel medicationPanel = new JPanel();</b>
+<b class="fc">&nbsp;    private JPanel logPanel = new JPanel();</b>
+<b class="fc">&nbsp;    private JPanel helpPanel = new JPanel();</b>
+&nbsp;    private AboutGUI aboutPanel; // Changed from JPanel to AboutGUI
+<b class="fc">&nbsp;    private CardLayout cardLayout = new CardLayout();</b>
+&nbsp;    private JPanel adminManagePanel;// Added: AdminManageGUI panel
+&nbsp;    private User currentUser; // Store current logged-in user
+&nbsp;
+<b class="fc">&nbsp;    public MainGUI(User user) {</b>
+<b class="fc">&nbsp;        this.currentUser = user;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void displayMainGUI() {
+&nbsp;        // Set up fonts
+&nbsp;        Font applicationFont;
+&nbsp;        try {
+<b class="fc">&nbsp;            applicationFont = Font</b>
+<b class="fc">&nbsp;                    .createFont(Font.TRUETYPE_FONT,</b>
+&nbsp;                            new File(&quot;src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf&quot;))
+<b class="fc">&nbsp;                    .deriveFont(16f);</b>
+<b class="fc">&nbsp;            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<b class="fc">&nbsp;            ge.registerFont(applicationFont);</b>
+&nbsp;        } catch (IOException | FontFormatException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;Font could not be found!&quot;);</b>
+<b class="nc">&nbsp;            applicationFont = new Font(&quot;Arial&quot;, Font.PLAIN, 16);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Set up application icon
+&nbsp;        BufferedImage applicationImage;
+&nbsp;        try {
+<b class="fc">&nbsp;            applicationImage = ImageIO.read(new File(&quot;src/resources/icons/App Icon.png&quot;));</b>
+<b class="fc">&nbsp;            mainWindow.setIconImage(applicationImage);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;Application icon not found!&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Set up main window
+<b class="fc">&nbsp;        mainWindow.setSize(1000, 750);</b>
+<b class="fc">&nbsp;        mainWindow.setLocationRelativeTo(null);</b>
+<b class="fc">&nbsp;        mainWindow.setLayout(null);</b>
+<b class="fc">&nbsp;        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+&nbsp;
+&nbsp;        // User info label
+<b class="fc">&nbsp;        JLabel userInfoTitle = new JLabel(&quot;User: &quot; + currentUser.getName());</b>
+<b class="fc">&nbsp;        userInfoTitle.setBounds(10, 10, 200, 15);</b>
+<b class="fc">&nbsp;        userInfoTitle.setFont(applicationFont);</b>
+&nbsp;
+&nbsp;        // Application title
+<b class="fc">&nbsp;        JLabel applicationTitle = new JLabel(&quot;Medication Reminder App&quot;);</b>
+<b class="fc">&nbsp;        applicationTitle.setBounds(400, 0, 400, 50);</b>
+<b class="fc">&nbsp;        applicationTitle.setFont(applicationFont);</b>
+&nbsp;
+&nbsp;        // Date and time labels
+<b class="fc">&nbsp;        JLabel dateTimeTitle = new JLabel(&quot;Date and Time:&quot;);</b>
+<b class="fc">&nbsp;        dateTimeTitle.setBounds(800, 0, 200, 15);</b>
+<b class="fc">&nbsp;        dateTimeTitle.setFont(applicationFont);</b>
+&nbsp;
+<b class="fc">&nbsp;        LocalDate currentDateTime = LocalDate.now();</b>
+<b class="fc">&nbsp;        JLabel currentDateTitle = new JLabel(currentDateTime.toString());</b>
+<b class="fc">&nbsp;        currentDateTitle.setBounds(800, 15, 200, 15);</b>
+<b class="fc">&nbsp;        currentDateTitle.setFont(applicationFont);</b>
+&nbsp;
+&nbsp;        // Static panel setup
+<b class="fc">&nbsp;        staticPanel.setBounds(0, 0, 1000, 80);</b>
+<b class="fc">&nbsp;        staticPanel.setLayout(null);</b>
+&nbsp;
+&nbsp;        // Buttons
+<b class="fc">&nbsp;        JButton homePanelButton = new JButton(&quot;Home&quot;);</b>
+<b class="fc">&nbsp;        JButton medicationsPanelButton = new JButton(&quot;Medications&quot;);</b>
+<b class="fc">&nbsp;        JButton historyPanelButton = new JButton(&quot;Medication History&quot;);</b>
+<b class="fc">&nbsp;        JButton helpPanelButton = new JButton(&quot;Help&quot;);</b>
+<b class="fc">&nbsp;        JButton aboutPanelButton = new JButton(&quot;About&quot;);</b>
+<b class="fc">&nbsp;        JButton settingsPanelButton = new JButton(&quot;Settings&quot;);</b>
+&nbsp;
+&nbsp;        // Added: Administrator Management Button
+<b class="fc">&nbsp;        JButton adminManagePanelButton = new JButton(&quot;Admin Manage&quot;);</b>
+&nbsp;
+&nbsp;        // Setting the button font
+<b class="fc">&nbsp;        homePanelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        medicationsPanelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        historyPanelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        helpPanelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        aboutPanelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        settingsPanelButton.setFont(applicationFont);</b>
+&nbsp;
+&nbsp;        // Button panel
+<b class="fc">&nbsp;        JPanel buttonPanel = new JPanel();</b>
+<b class="fc">&nbsp;        buttonPanel.setLayout(new GridLayout(1, 7)); // Modify to accommodate new buttons</b>
+<b class="fc">&nbsp;        buttonPanel.setBounds(10, 50, 980, 30);</b>
+<b class="fc">&nbsp;        buttonPanel.add(homePanelButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(medicationsPanelButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(historyPanelButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(helpPanelButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(aboutPanelButton);</b>
+&nbsp;        // If the current user is an administrator, add an administrator management button
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+<b class="fc">&nbsp;            buttonPanel.add(adminManagePanelButton);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        buttonPanel.add(settingsPanelButton);</b>
+&nbsp;        
+&nbsp;        // Add components to the static panel
+<b class="fc">&nbsp;        staticPanel.add(userInfoTitle);</b>
+<b class="fc">&nbsp;        staticPanel.add(applicationTitle);</b>
+<b class="fc">&nbsp;        staticPanel.add(dateTimeTitle);</b>
+<b class="fc">&nbsp;        staticPanel.add(currentDateTitle);</b>
+<b class="fc">&nbsp;        staticPanel.add(buttonPanel);</b>
+&nbsp;
+&nbsp;        // Content panel setup
+<b class="fc">&nbsp;        contentPanel.setLayout(cardLayout);</b>
+<b class="fc">&nbsp;        contentPanel.setBounds(10, 100, 980, 600);</b>
+&nbsp;
+&nbsp;        // Initialize panels and pass user object
+<b class="fc">&nbsp;        homePanel = new HomeGUI(currentUser);// Assume MedicationGUI, LogGUI, HelpGUI, SettingsGUI are defined similarly</b>
+<b class="fc">&nbsp;        medicationPanel = new MedicationGUI(currentUser);// logPanel = new LogGUI();</b>
+<b class="fc">&nbsp;        helpPanel = new HelpGUI();// settingsPanel = new SettingsGUI();</b>
+<b class="fc">&nbsp;        aboutPanel = new AboutGUI(); // Initialize AboutGUI panel</b>
+&nbsp;
+&nbsp;        // New: Initialize Administrator Management Panel
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+<b class="fc">&nbsp;            adminManagePanel = new AdminManageGUI(currentUser);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Add the panel to the content panel
+<b class="fc">&nbsp;        contentPanel.add(homePanel, &quot;1&quot;);</b>
+<b class="fc">&nbsp;        contentPanel.add(medicationPanel, &quot;2&quot;);</b>
+<b class="fc">&nbsp;        contentPanel.add(logPanel, &quot;3&quot;);</b>
+<b class="fc">&nbsp;        contentPanel.add(helpPanel, &quot;4&quot;);</b>
+<b class="fc">&nbsp;        contentPanel.add(aboutPanel, &quot;5&quot;);</b>
+&nbsp;        // contentPanel.add(settingsPanel, &quot;6&quot;);
+&nbsp;        // If the current user is an administrator, add an administrator admin panel
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+<b class="fc">&nbsp;            contentPanel.add(adminManagePanel, &quot;7&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Button Event Listener
+<b class="fc">&nbsp;        homePanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;1&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        medicationsPanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;2&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        historyPanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;3&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        helpPanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;4&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        aboutPanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;5&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        settingsPanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;6&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;        // Added: Administrator management button event listener
+<b class="fc">&nbsp;        adminManagePanelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                cardLayout.show(contentPanel, &quot;7&quot;);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;        // Add panels to main window
+<b class="fc">&nbsp;        mainWindow.add(staticPanel);</b>
+<b class="fc">&nbsp;        mainWindow.add(contentPanel);</b>
+&nbsp;
+<b class="fc">&nbsp;        mainWindow.setVisible(true);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-02 16:28</div>
+</div>
+</body>
+</html>

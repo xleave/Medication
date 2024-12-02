@@ -1,4 +1,4 @@
-package modules;
+package services;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -409,8 +409,8 @@ public class User {
 //                setOverdoseAlertDirectory("default/directory", med);
                 // Prepare to send the email (currently creating an empty file as a placeholder)
                 prepareOverdoseAlert(med);
-                OverdosePrevention overdosePrevention = new OverdosePrevention();
-                overdosePrevention.alertOverdose(med);
+//                OverdosePrevention overdosePrevention = new OverdosePrevention();
+//                overdosePrevention.alertOverdose(med);
             } else {
                 scheduler.takeMedicine(med);
                 System.out.println("Medicine " + medName + " has been marked as taken.");

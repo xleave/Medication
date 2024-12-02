@@ -1,5 +1,5 @@
 import gui.*;
-import modules.User;
+import services.User;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package modules;
+package services;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class Medicine {
 
 
     public boolean willOverDose() {
-        // 计算如果再服用一次，是否会超过最大日剂量
+
         int dosesToday = 0;
         LocalDateTime now = LocalDateTime.now();
         for (LocalDateTime time : takenTimes) {
@@ -119,7 +119,7 @@ public class Medicine {
                 dosesToday++;
             }
         }
-        // 判断如果再服用一次，是否会超过最大日剂量
+        // Determine if the maximum daily dose will be exceeded if another dose is taken
         return (dosesToday + 1) > maxDailyDose;
     }
     

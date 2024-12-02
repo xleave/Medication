@@ -5,11 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
-import modules.User;
+import services.User;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 public class AdminManageGUI extends JPanel {
 
