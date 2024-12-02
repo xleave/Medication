@@ -3,6 +3,7 @@ package services;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class MedicationManage {
 
@@ -50,5 +51,74 @@ public class MedicationManage {
         // Remove trailing comma
         medicationInfo.setLength(medicationInfo.length() - 1);
         return medicationInfo.toString();
+    }
+
+    public static Object[][] getAdminMedicationData() {
+        ArrayList<Object[]> medicationDataList = new ArrayList<>();
+
+        File medicationDir = new File("src/resources/medications");
+        File[] medicationFiles = medicationDir.listFiles((dir, name) -> name.endsWith("_medications.csv"));
+
+        if (medicationFiles != null) {
+            for (File medFile : medicationFiles) {
+                String fileName = medFile.getName();
+                String userName = fileName.substring(0, fileName.indexOf("_medications.csv"));
+                readMedicationFile(medFile, medicationDataList, userName);
+            }
+        }
+
+        return medicationDataList.toArray(new Object[0][]);
+    }
+
+    public static Object[][] getUserMedicationData(User currentUser) {
+        String medicationFile = "src/resources/medications/" + currentUser.getName() + "_medications.csv";
+        ArrayList<String> medicationList = new ArrayList<>();
+
+        try {
+            BufferedReader medicationFileReader = new BufferedReader(new FileReader(medicationFile));
+            String temporaryString;
+            while ((temporaryString = medicationFileReader.readLine()) != null) {
+                medicationList.add(temporaryString);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("The medication file for this user could not be found! Please check the path and try again.");
+        } catch (IOException e) {
+            System.out.println("Error reading medication file.");
+        }
+
+        Object[][] medicationTableData = new Object[medicationList.size()][6];
+        for (int i = 0; i < medicationList.size(); i++) {
+            String[] medData = medicationList.get(i).split(",");
+            if (medData.length > 6) {
+                System.arraycopy(medData, 0, medicationTableData[i], 0, 6);
+            } else {
+                System.arraycopy(medData, 0, medicationTableData[i], 0, medData.length);
+                for (int j = medData.length; j < 6; j++) {
+                    medicationTableData[i][j] = "";
+                }
+            }
+        }
+        return medicationTableData;
+    }
+
+    private static void readMedicationFile(File medFile, ArrayList<Object[]> medicationDataList, String userName) {
+        try {
+            BufferedReader medicationFileReader = new BufferedReader(new FileReader(medFile));
+            String line;
+            while ((line = medicationFileReader.readLine()) != null) {
+                String[] medData = line.split(",");
+                Object[] rowData = new Object[7];
+                rowData[0] = userName;
+                int copyLength = Math.min(medData.length, 6);
+                System.arraycopy(medData, 0, rowData, 1, copyLength);
+                for (int i = 1 + copyLength; i < 7; i++) {
+                    rowData[i] = "";
+                }
+                medicationDataList.add(rowData);
+            }
+            medicationFileReader.close();
+        } catch (IOException e) {
+            System.out.println("Error reading user " + userName + " 's medication file.");
+        }
     }
 }
