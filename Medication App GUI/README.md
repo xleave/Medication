@@ -4,16 +4,23 @@ Welcome to the **Medication Reminder Application**, a Java-based console applica
 
 ## Table of Contents
 
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Directory Structure](#directory-structure)
-- [Usage](#usage)
-  - [Running the Application](#running-the-application)
-  - [modules.User Operations](#user-operations)
-  - [Admin Operations](#admin-operations)
-- [Creating an Admin Account](#creating-an-admin-account)
-- [Example Usage](#example-usage)
+- [Medication Reminder Application](#medication-reminder-application)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Directory Structure](#directory-structure)
+  - [Usage](#usage)
+    - [Running the Application](#running-the-application)
+    - [modules.User Operations](#modulesuser-operations)
+      - [Example](#example)
+    - [Admin Operations](#admin-operations)
+    - [Example](#example-1)
+  - [Creating an Admin Account](#creating-an-admin-account)
+  - [Example Usage](#example-usage)
+    - [Registering a New modules.User](#registering-a-new-modulesuser)
+    - [Adding a Medicine as a Regular modules.User](#adding-a-medicine-as-a-regular-modulesuser)
+    - [Managing All Users' Medicines as Admin](#managing-all-users-medicines-as-admin)
 
 ## Features
 
@@ -54,20 +61,53 @@ Welcome to the **Medication Reminder Application**, a Java-based console applica
 ## Directory Structure
 
 ```markdown
-medication-reminder-app/
-├── src/
-│   ├── lists/                 # Stores medication CSV files
-│   ├── modules/
-│   │   └── Medicine.java      # Medicine class definition
-│   ├── modules.User.java              # modules.User management and medication operations
-│   └── Main.java              # Entry point of the application
-├── bin/                       # Compiled Java classes
-├── users.csv                  # Stores user credentials and roles
-└── 
 
-README.md
-
-                  # Project documentation
+src
+├── Main.java
+├── gui
+│   ├── AboutGUI.java
+│   ├── AddMedicationPopupGUI.java
+│   ├── AdminManageGUI.java
+│   ├── HelpGUI.java
+│   ├── HomeGUI.java
+│   ├── LoginGUI.java
+│   ├── MainGUI.java
+│   ├── MedicationGUI.java
+│   └── SettingGUI.java
+├── modules
+│   ├── HistoryTracker.java
+│   ├── Medicine.java
+│   ├── OverdosePrevention.java
+│   ├── Scheduler.java
+│   ├── TextToSpeech.java
+│   └── User.java
+└── resources
+    ├── fonts
+    │   └── RobotoCondensed-VariableFont_wght.ttf
+    ├── icons
+    │   ├── App Icon.jpeg
+    │   ├── App Icon.png
+    │   └── pillIcon.png
+    ├── jar_files
+    │   ├── cmu_time_awb.jar
+    │   ├── cmu_us_kal.jar
+    │   ├── cmudict04.jar
+    │   ├── cmulex.jar
+    │   ├── cmutimelex.jar
+    │   ├── en_us.jar
+    │   ├── freetts-jsapi10.jar
+    │   ├── freetts.jar
+    │   ├── javax.activation.jar
+    │   ├── javax.mail.jar
+    │   ├── jsapi.jar
+    │   └── mbrola.jar
+    ├── medications
+    │   ├── Xleave_medications.csv
+    │   ├── Xumin_medications.csv
+    │   ├── marley_medications.csv
+    │   └── test1_medications.csv
+    └── users
+        └── users.csv
 ```
 
 ## Usage
