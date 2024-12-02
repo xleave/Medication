@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import services.User;
+import services.AdminManage;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -13,9 +14,11 @@ import javax.swing.table.TableCellRenderer;
 public class AdminManageGUI extends JPanel {
 
     private User currentUser;
+    private AdminManage adminManage;
 
     public AdminManageGUI(User user) {
         this.currentUser = user;
+        this.adminManage = new AdminManage(currentUser);
         initialize();
     }
 
@@ -28,10 +31,10 @@ public class AdminManageGUI extends JPanel {
         this.add(titleLabel, BorderLayout.NORTH);
 
         // Get a list of all users
-        ArrayList<String[]> userList = getAllUsers();
+        ArrayList<String[]> userList = adminManage.getAllUsers();
 
         // Create user forms
-        String[] columnNames = { "Username", "Privilege", "Action" };
+        String[] columnNames = {"Username", "Privilege", "Action"};
         Object[][] data = new Object[userList.size()][3];
 
         for (int i = 0; i < userList.size(); i++) {
@@ -53,7 +56,8 @@ public class AdminManageGUI extends JPanel {
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
                         // Delete user
-                        deleteUser(userName);
+                        adminManage.deleteUser(userName);
+                        refreshInterface();
                     }
                 }
             });
@@ -63,77 +67,17 @@ public class AdminManageGUI extends JPanel {
         UserTableModel model = new UserTableModel(data, columnNames);
         JTable userTable = new JTable(model);
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
+        userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), adminManage, this));
 
         JScrollPane tableScrollPane = new JScrollPane(userTable);
         this.add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private ArrayList<String[]> getAllUsers() {
-        ArrayList<String[]> userList = new ArrayList<>();
-        try {
-            File userFile = new File("src/resources/users/users.csv");
-            BufferedReader br = new BufferedReader(new FileReader(userFile));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] userDetails = line.split(",");
-                if (userDetails.length >= 3) {
-                    // Do not show the current administrator himself
-                    if (!userDetails[0].equals(currentUser.getName())) {
-                        userList.add(userDetails);
-                    }
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return userList;
-    }
-
-    private void deleteUser(String userName) {
-        try {
-            // Remove users from users.csv
-            File userFile = new File("src/resources/users/users.csv");
-            File tempFile = new File("src/resources/users/users_temp.csv");
-
-            BufferedReader reader = new BufferedReader(new FileReader(userFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.startsWith(userName + ",")) {
-                    continue;
-                }
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            // Delete the original file and rename the temporary file
-            if (!userFile.delete()) {
-                System.out.println("Failed to delete the original user file.");
-            }
-            if (!tempFile.renameTo(userFile)) {
-                System.out.println("Failed to rename the temp user file.");
-            }
-
-            // Delete the user's medication file
-            File medicationFile = new File("src/resources/medications/" + userName + "_medications.csv");
-            if (medicationFile.exists()) {
-                medicationFile.delete();
-            }
-
-            // Refresh the interface
-            removeAll();
-            initialize();
-            revalidate();
-            repaint();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void refreshInterface() {
+        removeAll();
+        initialize();
+        revalidate();
+        repaint();
     }
 
     // Customize the form model
@@ -192,7 +136,7 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
@@ -209,29 +153,32 @@ public class AdminManageGUI extends JPanel {
     class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String userName;
+        private AdminManage adminManage;
+        private AdminManageGUI adminManageGUI;
 
-        public ButtonEditor(JCheckBox checkBox) {
+        public ButtonEditor(JCheckBox checkBox, AdminManage adminManage, AdminManageGUI adminManageGUI) {
             super(checkBox);
+            this.adminManage = adminManage;
+            this.adminManageGUI = adminManageGUI;
             button = new JButton();
             button.setOpaque(true);
 
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
-                    // Button Editor
                     int confirm = JOptionPane.showConfirmDialog(null,
                             "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // Delete user
-                        deleteUser(userName);
+                        adminManage.deleteUser(userName);
+                        adminManageGUI.refreshInterface();
                     }
                 }
             });
         }
 
         public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
+                                                     boolean isSelected, int row, int column) {
             userName = (String) table.getValueAt(row, 0);
             button.setText((value != null) ? "Delete" : "");
             return button;
