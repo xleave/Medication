@@ -1,5 +1,5 @@
 // OverdosePrevention.java
-package modules;
+package services;
 
 import java.util.Properties;
 import com.sun.mail.util.MailSSLSocketFactory;
