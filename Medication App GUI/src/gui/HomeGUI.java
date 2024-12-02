@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import modules.User;
+
 public class HomeGUI extends JPanel {
 
-    private modules.User currentUser;
+    private services.User currentUser;
 
-    public HomeGUI(modules.User user) {
+    public HomeGUI(services.User user) {
 
         this.currentUser = user;
 

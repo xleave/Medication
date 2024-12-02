@@ -12,19 +12,19 @@ Welcome to the **Medication Reminder Application**, a Java-based console applica
   - [Directory Structure](#directory-structure)
   - [Usage](#usage)
     - [Running the Application](#running-the-application)
-    - [modules.User Operations](#modulesuser-operations)
+    - [services.User Operations](#modulesuser-operations)
       - [Example](#example)
     - [Admin Operations](#admin-operations)
     - [Example](#example-1)
   - [Creating an Admin Account](#creating-an-admin-account)
   - [Example Usage](#example-usage)
-    - [Registering a New modules.User](#registering-a-new-modulesuser)
-    - [Adding a Medicine as a Regular modules.User](#adding-a-medicine-as-a-regular-modulesuser)
+    - [Registering a New services.User](#registering-a-new-modulesuser)
+    - [Adding a Medicine as a Regular services.User](#adding-a-medicine-as-a-regular-modulesuser)
     - [Managing All Users' Medicines as Admin](#managing-all-users-medicines-as-admin)
 
 ## Features
 
-- **modules.User Registration & Login:** Securely create and log into user accounts.
+- **services.User Registration & Login:** Securely create and log into user accounts.
 - **Admin Privileges:** Administrators can manage all users' medications.
 - **Medication Management:** Add, remove, and view medications.
 - **Organized Data Storage:** Stores user and medication data in CSV files within a structured directory.
@@ -51,7 +51,7 @@ Welcome to the **Medication Reminder Application**, a Java-based console applica
 3. **Compile the Java Files:**
 
    ```bash
-   javac -d bin src/*.java src/modules/*.java
+   javac -d bin src/*.java src/services/*.java
    ```
 
 4. **Ensure Directory Structure:**
@@ -74,7 +74,7 @@ src
 │   ├── MainGUI.java
 │   ├── MedicationGUI.java
 │   └── SettingGUI.java
-├── modules
+├── services
 │   ├── HistoryTracker.java
 │   ├── Medicine.java
 │   ├── OverdosePrevention.java
@@ -120,7 +120,7 @@ After compiling, run the application using the following command:
 java -cp bin Main
 ```
 
-### modules.User Operations
+### services.User Operations
 
 Upon running the application, users can perform the following operations:
 
@@ -211,7 +211,7 @@ Choose an option:
 
 ## Example Usage
 
-### Registering a New modules.User
+### Registering a New services.User
 
 ```text
 Please enter your details
@@ -230,7 +230,7 @@ Medicine Management:
 Choose an option:
 ```
 
-### Adding a Medicine as a Regular modules.User
+### Adding a Medicine as a Regular services.User
 
 ```text
 Choose an option: 1
@@ -246,9 +246,9 @@ Medicine added successfully.
 ```text
 Choose an option: 4
 All Users' Medicine Management:
-1. View modules.User's Medicines
-2. Add Medicine to modules.User
-3. Remove Medicine from modules.User
+1. View services.User's Medicines
+2. Add Medicine to services.User
+3. Remove Medicine from services.User
 4. Back to Main Menu
 Choose an option:
 ```

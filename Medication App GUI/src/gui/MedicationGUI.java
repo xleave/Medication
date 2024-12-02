@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
-import modules.User;
+import services.User;
 
 public class MedicationGUI extends JPanel {
 

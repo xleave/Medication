@@ -1,0 +1,343 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AddMedicationPopupGUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">gui</a>
+</div>
+
+<h1>Coverage Summary for Class: AddMedicationPopupGUI (gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AddMedicationPopupGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (48/50)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AddMedicationPopupGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (10/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.3%
+  </span>
+  <span class="absValue">
+    (23/29)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AddMedicationPopupGUI$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    54.2%
+  </span>
+  <span class="absValue">
+    (13/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (72/81)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package gui;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.io.*;
+&nbsp;import services.User;
+&nbsp;
+&nbsp;public class AddMedicationPopupGUI extends JPanel {
+&nbsp;
+&nbsp;    private User currentUser;
+&nbsp;    private JTextField userNameTextBox; // Declare userNameTextBox as a member variable.
+<b class="fc">&nbsp;    public AddMedicationPopupGUI(User user) {</b>
+&nbsp;
+<b class="fc">&nbsp;        this.currentUser = user;</b>
+&nbsp;
+&nbsp;        Font applicationFont;
+&nbsp;        try {
+<b class="fc">&nbsp;            applicationFont = Font.createFont(Font.TRUETYPE_FONT,</b>
+<b class="fc">&nbsp;                    new File(&quot;src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf&quot;)).deriveFont(16f);</b>
+<b class="fc">&nbsp;            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<b class="fc">&nbsp;            ge.registerFont(applicationFont);</b>
+&nbsp;
+&nbsp;        } catch (IOException | FontFormatException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;Font could not be found!&quot;);</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        JFrame addMedicationFrame = new JFrame(&quot;Add Medication&quot;);</b>
+<b class="fc">&nbsp;        addMedicationFrame.setSize(400, 650);</b>
+&nbsp;
+<b class="fc">&nbsp;        JPanel addMedicationPanelContents = new JPanel();</b>
+<b class="fc">&nbsp;        addMedicationPanelContents.setLayout(null);</b>
+&nbsp;
+<b class="fc">&nbsp;        JLabel addMedicationTitle = new JLabel(&quot;Add New Medication&quot;);</b>
+<b class="fc">&nbsp;        addMedicationTitle.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        addMedicationTitle.setBounds(125, 10, 200, 30);</b>
+<b class="fc">&nbsp;        addMedicationPanelContents.add(addMedicationTitle);</b>
+&nbsp;
+<b class="fc">&nbsp;        int yPosition = 60; // Initial y-coordinate</b>
+&nbsp;
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+<b class="fc">&nbsp;            JLabel userNameLabel = new JLabel(&quot;Username&quot;);</b>
+<b class="fc">&nbsp;            userNameLabel.setBounds(20, yPosition, 250, 20);</b>
+<b class="fc">&nbsp;            addMedicationPanelContents.add(userNameLabel);</b>
+&nbsp;
+<b class="fc">&nbsp;            yPosition += 25;</b>
+&nbsp;
+<b class="fc">&nbsp;            userNameTextBox = new JTextField(); // Initialize the userNameTextBox</b>
+<b class="fc">&nbsp;            userNameTextBox.setBounds(20, yPosition, 250, 20);</b>
+<b class="fc">&nbsp;            addMedicationPanelContents.add(userNameTextBox);</b>
+&nbsp;
+<b class="fc">&nbsp;            yPosition += 35;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Enter field labels and text boxes
+<b class="fc">&nbsp;        String[] inputFieldHeaders = { &quot;Medication Name&quot;, &quot;Dosage&quot;, &quot;Quantity&quot;, &quot;Time to be taken at&quot;, &quot;How often?&quot;,</b>
+&nbsp;                &quot;Maximum daily&quot; };
+<b class="fc">&nbsp;        JTextField[] textFields = new JTextField[inputFieldHeaders.length];</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; inputFieldHeaders.length; i++) {</b>
+<b class="fc">&nbsp;            JLabel inputFieldHeader = new JLabel(inputFieldHeaders[i]);</b>
+<b class="fc">&nbsp;            inputFieldHeader.setBounds(20, yPosition, 250, 20);</b>
+<b class="fc">&nbsp;            addMedicationPanelContents.add(inputFieldHeader);</b>
+&nbsp;
+<b class="fc">&nbsp;            yPosition += 25;</b>
+&nbsp;
+<b class="fc">&nbsp;            JTextField textField = new JTextField();</b>
+<b class="fc">&nbsp;            textField.setBounds(20, yPosition, 250, 20);</b>
+<b class="fc">&nbsp;            addMedicationPanelContents.add(textField);</b>
+&nbsp;
+<b class="fc">&nbsp;            textFields[i] = textField;</b>
+&nbsp;
+<b class="fc">&nbsp;            yPosition += 35;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        JButton cancelButton = new JButton(&quot;Cancel&quot;);</b>
+<b class="fc">&nbsp;        cancelButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        cancelButton.setBounds(80, yPosition, 100, 30);</b>
+<b class="fc">&nbsp;        addMedicationPanelContents.add(cancelButton);</b>
+&nbsp;
+<b class="fc">&nbsp;        JButton acceptButton = new JButton(&quot;Add Medicine&quot;);</b>
+<b class="fc">&nbsp;        acceptButton.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        acceptButton.setBounds(190, yPosition, 150, 30);</b>
+<b class="fc">&nbsp;        addMedicationPanelContents.add(acceptButton);</b>
+&nbsp;
+<b class="fc">&nbsp;        acceptButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                String targetUserName = currentUser.getName();</b>
+&nbsp;
+<b class="pc">&nbsp;                if (currentUser.isAdmin()) {</b>
+&nbsp;                    // Get the username entered by the administrator
+<b class="pc">&nbsp;                    if (userNameTextBox != null) {</b>
+<b class="fc">&nbsp;                        targetUserName = userNameTextBox.getText().trim();</b>
+<b class="pc">&nbsp;                        if (targetUserName.isEmpty()) {</b>
+<b class="nc">&nbsp;                            JOptionPane.showMessageDialog(acceptButton, &quot;Please enter a user name.&quot;, &quot;incorrect&quot;,</b>
+&nbsp;                                    JOptionPane.ERROR_MESSAGE);
+&nbsp;                            return;
+&nbsp;                            }
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            JOptionPane.showMessageDialog(acceptButton, &quot;User name field not initialized&quot;, &quot;incorrect&quot;,</b>
+&nbsp;                        JOptionPane.ERROR_MESSAGE);
+&nbsp;                            return;
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;
+&nbsp;                // Get drug information
+<b class="fc">&nbsp;                String medicationName = textFields[0].getText().trim();</b>
+<b class="fc">&nbsp;                String dosage = textFields[1].getText().trim();</b>
+<b class="fc">&nbsp;                String quantity = textFields[2].getText().trim();</b>
+<b class="fc">&nbsp;                String timeToTake = textFields[3].getText().trim();</b>
+<b class="fc">&nbsp;                String howOften = textFields[4].getText().trim();</b>
+<b class="fc">&nbsp;                String maximumDaily = textFields[5].getText().trim();</b>
+&nbsp;
+&nbsp;                // Get drug information
+<b class="pc">&nbsp;                if (medicationName.isEmpty() || dosage.isEmpty() || quantity.isEmpty() || timeToTake.isEmpty()</b>
+<b class="pc">&nbsp;                        || howOften.isEmpty() || maximumDaily.isEmpty()) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(acceptButton, &quot;Please fill in all fields.&quot;, &quot;Error&quot;,</b>
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                // Save medication information to the corresponding user&#39;s medication file
+<b class="fc">&nbsp;                String medicationFilePath = &quot;src/resources/medications/&quot; + targetUserName + &quot;_medications.csv&quot;;</b>
+<b class="fc">&nbsp;                File medicationFile = new File(medicationFilePath);</b>
+&nbsp;                try {
+&nbsp;                    // Check if the user&#39;s medication file exists
+<b class="pc">&nbsp;                    if (!medicationFile.exists()) {</b>
+<b class="nc">&nbsp;                        medicationFile.createNewFile();</b>
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    FileWriter fw = new FileWriter(medicationFile, true);</b>
+<b class="fc">&nbsp;                    BufferedWriter bw = new BufferedWriter(fw);</b>
+<b class="fc">&nbsp;                    PrintWriter out = new PrintWriter(bw);</b>
+&nbsp;
+&nbsp;                    // Write drug information
+<b class="fc">&nbsp;                    out.println(medicationName + &quot;,&quot; + dosage + &quot;,&quot; + quantity + &quot;,&quot; + timeToTake + &quot;,&quot; + howOften + &quot;,&quot;</b>
+&nbsp;                            + maximumDaily);
+&nbsp;                    out.close();
+&nbsp;
+<b class="fc">&nbsp;                    JOptionPane.showMessageDialog(acceptButton, &quot;Medication has been added.&quot;, &quot;Success&quot;,</b>
+&nbsp;                            JOptionPane.INFORMATION_MESSAGE);
+<b class="fc">&nbsp;                    addMedicationFrame.dispose();</b>
+&nbsp;
+&nbsp;                } catch (IOException ex) {
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(acceptButton, &quot;An error occurred while saving medication.&quot;, &quot;Error&quot;,</b>
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+<b class="nc">&nbsp;                    ex.printStackTrace();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        cancelButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                addMedicationFrame.dispose();</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        addMedicationFrame.add(addMedicationPanelContents);</b>
+<b class="fc">&nbsp;        addMedicationFrame.setVisible(true);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-02 16:28</div>
+</div>
+</body>
+</html>

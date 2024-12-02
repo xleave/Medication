@@ -1,7 +1,7 @@
 package gui;
 
 import javax.swing.*;
-import modules.User;
+
 public class LoginGUI extends JFrame {
 
     private String nameFieldContents;

@@ -1,0 +1,329 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MedicationGUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">gui</a>
+</div>
+
+<h1>Coverage Summary for Class: MedicationGUI (gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MedicationGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (8/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.8%
+  </span>
+  <span class="absValue">
+    (57/88)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MedicationGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (8/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.6%
+  </span>
+  <span class="absValue">
+    (59/90)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package gui;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.*;
+&nbsp;import java.io.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import services.User;
+&nbsp;
+&nbsp;public class MedicationGUI extends JPanel {
+&nbsp;
+&nbsp;    private User currentUser;
+&nbsp;    private JScrollPane tableScrollPane; // Add new member variables
+&nbsp;
+<b class="fc">&nbsp;    public MedicationGUI(User user) {</b>
+<b class="fc">&nbsp;        this.currentUser = user;</b>
+&nbsp;
+&nbsp;        Font applicationFont;
+&nbsp;        try {
+<b class="fc">&nbsp;            applicationFont = Font.createFont(Font.TRUETYPE_FONT,</b>
+<b class="fc">&nbsp;                    new File(&quot;src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf&quot;)).deriveFont(16f);</b>
+<b class="fc">&nbsp;            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<b class="fc">&nbsp;            ge.registerFont(applicationFont);</b>
+&nbsp;
+&nbsp;        } catch (IOException | FontFormatException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;Font could not be found!&quot;);</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        JPanel medicationPanel = new JPanel(new BorderLayout());</b>
+<b class="fc">&nbsp;        medicationPanel.setPreferredSize(new Dimension(980, 600));</b>
+&nbsp;
+<b class="fc">&nbsp;        JPanel medicationPanelContents = new JPanel();</b>
+<b class="fc">&nbsp;        medicationPanelContents.setPreferredSize(new Dimension(980, 600));</b>
+<b class="fc">&nbsp;        medicationPanelContents.setLayout(null);</b>
+&nbsp;
+<b class="fc">&nbsp;        JLabel medicationSubmenuHeading = new JLabel(&quot;MEDICATIONS&quot;);</b>
+<b class="fc">&nbsp;        medicationSubmenuHeading.setBounds(470, -20, 200, 50);</b>
+<b class="fc">&nbsp;        medicationSubmenuHeading.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        medicationPanelContents.add(medicationSubmenuHeading);</b>
+&nbsp;
+&nbsp;        // Button Settings
+<b class="fc">&nbsp;        JButton addMedicationButton = new JButton(&quot;Add Medication&quot;);</b>
+<b class="fc">&nbsp;        addMedicationButton.setBounds(20, 150, 200, 50);</b>
+<b class="fc">&nbsp;        medicationPanelContents.add(addMedicationButton);</b>
+&nbsp;
+<b class="fc">&nbsp;        JButton editMedicationButton = new JButton(&quot;Edit Medication&quot;);</b>
+<b class="fc">&nbsp;        editMedicationButton.setBounds(20, 250, 200, 50);</b>
+<b class="fc">&nbsp;        medicationPanelContents.add(editMedicationButton);</b>
+&nbsp;
+<b class="fc">&nbsp;        JButton removeMedicationButton = new JButton(&quot;Remove Medication&quot;);</b>
+<b class="fc">&nbsp;        removeMedicationButton.setBounds(20, 350, 200, 50);</b>
+<b class="fc">&nbsp;        medicationPanelContents.add(removeMedicationButton);</b>
+&nbsp;
+&nbsp;        JLabel userMedicationLabel;
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+<b class="fc">&nbsp;            userMedicationLabel = new JLabel(&quot;All Users&#39; Medications&quot;);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            userMedicationLabel = new JLabel(currentUser.getName() + &quot;&#39;s Current Medications&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        userMedicationLabel.setFont(applicationFont);</b>
+<b class="fc">&nbsp;        userMedicationLabel.setBounds(500, 60, 300, 50);</b>
+<b class="fc">&nbsp;        medicationPanelContents.add(userMedicationLabel);</b>
+&nbsp;
+<b class="fc">&nbsp;        addMedicationButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="fc">&nbsp;                AddMedicationPopupGUI addMedicationPopupGUI = new AddMedicationPopupGUI(currentUser);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+&nbsp;        // Determine if the current user is an administrator
+<b class="pc">&nbsp;        if (currentUser.isAdmin()) {</b>
+&nbsp;            // Display medication information for all users
+<b class="fc">&nbsp;            String[] medicationTableHeaders = { &quot;User&quot;, &quot;Name&quot;, &quot;Dosage&quot;, &quot;Quantity&quot;, &quot;Time&quot;, &quot;Take Daily&quot;,</b>
+&nbsp;                    &quot;Maximum Daily&quot; };
+<b class="fc">&nbsp;            ArrayList&lt;Object[]&gt; medicationDataList = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;            // Iterate over all users
+<b class="fc">&nbsp;            File medicationDir = new File(&quot;src/resources/medications&quot;);</b>
+<b class="fc">&nbsp;            File[] medicationFiles = medicationDir.listFiles((dir, name) -&gt; name.endsWith(&quot;_medications.csv&quot;));</b>
+&nbsp;
+<b class="pc">&nbsp;            if (medicationFiles != null) {</b>
+<b class="fc">&nbsp;                for (File medFile : medicationFiles) {</b>
+<b class="fc">&nbsp;                    String fileName = medFile.getName();</b>
+<b class="fc">&nbsp;                    String userName = fileName.substring(0, fileName.indexOf(&quot;_medications.csv&quot;));</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        BufferedReader medicationFileReader = new BufferedReader(new FileReader(medFile));</b>
+&nbsp;                        String line;
+<b class="fc">&nbsp;                        while ((line = medicationFileReader.readLine()) != null) {</b>
+<b class="fc">&nbsp;                            String[] medData = line.split(&quot;,&quot;);</b>
+&nbsp;                            // Prefix the data with the username
+<b class="fc">&nbsp;                            Object[] rowData = new Object[7];</b>
+<b class="fc">&nbsp;                            rowData[0] = userName;</b>
+&nbsp;
+&nbsp;                            // Make sure don&#39;t exceed the length of rowData
+<b class="fc">&nbsp;                            int copyLength = Math.min(medData.length, 6);</b>
+<b class="fc">&nbsp;                            System.arraycopy(medData, 0, rowData, 1, copyLength);</b>
+&nbsp;
+&nbsp;                            // If medData.length &lt; 6, fill remaining positions with empty string
+<b class="pc">&nbsp;                            for (int i = 1 + copyLength; i &lt; 7; i++) {</b>
+<b class="nc">&nbsp;                                rowData[i] = &quot;&quot;;</b>
+&nbsp;                            }
+&nbsp;
+<b class="fc">&nbsp;                            medicationDataList.add(rowData);</b>
+&nbsp;                        }
+&nbsp;                        medicationFileReader.close();
+&nbsp;                    } catch (IOException e) {
+<b class="nc">&nbsp;                        System.out.println(&quot;Error reading user &quot; + userName + &quot; &#39;s medication file.&quot;);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Object[][] medicationTableData = medicationDataList.toArray(new Object[0][]);</b>
+&nbsp;
+<b class="fc">&nbsp;            JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);</b>
+<b class="fc">&nbsp;            medicationTable.setBounds(400, 400, 600, 350);</b>
+&nbsp;
+<b class="fc">&nbsp;            JScrollPane tableScrollPane = new JScrollPane(medicationTable);</b>
+<b class="fc">&nbsp;            tableScrollPane.setBounds(300, 100, 600, 350);</b>
+<b class="fc">&nbsp;            medicationPanelContents.add(tableScrollPane);</b>
+&nbsp;
+&nbsp;        } else {
+&nbsp;            // Original logic to display current user&#39;s medication information
+<b class="nc">&nbsp;            String medicationFile = &quot;src/resources/medications/&quot; + currentUser.getName() + &quot;_medications.csv&quot;;</b>
+<b class="nc">&nbsp;            String[] medicationTableHeaders = { &quot;Name&quot;, &quot;Dosage&quot;, &quot;Quantity&quot;, &quot;Time&quot;, &quot;Take Daily&quot;,</b>
+&nbsp;                    &quot;Maximum Daily&quot; };
+&nbsp;
+&nbsp;            try {
+<b class="nc">&nbsp;                BufferedReader medicationFileReader = new BufferedReader(new FileReader(medicationFile));</b>
+<b class="nc">&nbsp;                ArrayList&lt;String&gt; medicationList = new ArrayList&lt;&gt;();</b>
+&nbsp;                String temporaryString;
+<b class="nc">&nbsp;                while ((temporaryString = medicationFileReader.readLine()) != null) {</b>
+<b class="nc">&nbsp;                    medicationList.add(temporaryString);</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                Object[][] medicationTableData = new Object[medicationList.size()][6];</b>
+<b class="nc">&nbsp;                for (int medicationListIndex = 0; medicationListIndex &lt; medicationList.size(); medicationListIndex++) {</b>
+<b class="nc">&nbsp;                    String[] medData = medicationList.get(medicationListIndex).split(&quot;,&quot;);</b>
+&nbsp;                    // Ensure that the length of the medicationTableData is not exceeded.
+<b class="nc">&nbsp;                    if (medData.length &gt; 6) {</b>
+<b class="nc">&nbsp;                        System.arraycopy(medData, 0, medicationTableData[medicationListIndex], 0, 6);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        System.arraycopy(medData, 0, medicationTableData[medicationListIndex], 0, medData.length);</b>
+&nbsp;                        // Fill the remaining positions with empty strings
+<b class="nc">&nbsp;                        for (int i = medData.length; i &lt; 6; i++) {</b>
+<b class="nc">&nbsp;                            medicationTableData[medicationListIndex][i] = &quot;&quot;;</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);</b>
+<b class="nc">&nbsp;                medicationTable.setBounds(400, 400, 600, 350);</b>
+&nbsp;
+<b class="nc">&nbsp;                JScrollPane tableScrollPane = new JScrollPane(medicationTable);</b>
+<b class="nc">&nbsp;                tableScrollPane.setBounds(300, 100, 600, 350);</b>
+<b class="nc">&nbsp;                medicationPanelContents.add(tableScrollPane);</b>
+&nbsp;
+&nbsp;            } catch (FileNotFoundException medicationFileNotFound) {
+<b class="nc">&nbsp;                System.out.println(</b>
+&nbsp;                        &quot;The medication file for this user could not be found! Please check the path and try again.&quot;);
+&nbsp;                // Create an empty form to avoid the program crashing
+<b class="nc">&nbsp;                Object[][] medicationTableData = new Object[0][6];</b>
+<b class="nc">&nbsp;                JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);</b>
+<b class="nc">&nbsp;                JScrollPane tableScrollPane = new JScrollPane(medicationTable);</b>
+<b class="nc">&nbsp;                tableScrollPane.setBounds(300, 100, 600, 350);</b>
+<b class="nc">&nbsp;                medicationPanelContents.add(tableScrollPane);</b>
+&nbsp;            } catch (IOException medicationFileCannotBeRead) {
+<b class="nc">&nbsp;                System.out.println(&quot;Error reading medication file.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        medicationPanel.add(medicationPanelContents);</b>
+<b class="fc">&nbsp;        add(medicationPanel);</b>
+&nbsp;
+&nbsp;        // Test user functions
+<b class="fc">&nbsp;        System.out.println(currentUser.getName());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-02 16:28</div>
+</div>
+</body>
+</html>
