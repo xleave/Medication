@@ -39,7 +39,7 @@ public class MedicationGUI extends JPanel {
         medicationSubmenuHeading.setFont(applicationFont);
         medicationPanelContents.add(medicationSubmenuHeading);
 
-        // 按钮设置
+        // Button Settings
         JButton addMedicationButton = new JButton("Add Medication");
         addMedicationButton.setBounds(20, 150, 200, 50);
         medicationPanelContents.add(addMedicationButton);
@@ -69,14 +69,14 @@ public class MedicationGUI extends JPanel {
             }
         });
 
-        // 判断当前用户是否是管理员
+        // Determine if the current user is an administrator
         if (currentUser.isAdmin()) {
-            // 显示所有用户的用药信息
+            // Display medication information for all users
             String[] medicationTableHeaders = { "User", "Name", "Dosage", "Quantity", "Time", "Take Daily",
                     "Maximum Daily" };
             ArrayList<Object[]> medicationDataList = new ArrayList<>();
 
-            // 遍历所有用户
+            // Iterate over all users
             File medicationDir = new File("src/resources/medications");
             File[] medicationFiles = medicationDir.listFiles((dir, name) -> name.endsWith("_medications.csv"));
 
@@ -89,15 +89,15 @@ public class MedicationGUI extends JPanel {
                         String line;
                         while ((line = medicationFileReader.readLine()) != null) {
                             String[] medData = line.split(",");
-                            // 在数据前面加上用户名
+                            // Prefix the data with the username
                             Object[] rowData = new Object[7];
                             rowData[0] = userName;
 
-                            // 确保不会超出 rowData 的长度
+                            // Make sure don't exceed the length of rowData
                             int copyLength = Math.min(medData.length, 6);
                             System.arraycopy(medData, 0, rowData, 1, copyLength);
 
-                            // 如果 medData.length < 6，填充剩余的位置为空字符串
+                            // If medData.length < 6, fill remaining positions with empty string
                             for (int i = 1 + copyLength; i < 7; i++) {
                                 rowData[i] = "";
                             }
@@ -106,7 +106,7 @@ public class MedicationGUI extends JPanel {
                         }
                         medicationFileReader.close();
                     } catch (IOException e) {
-                        System.out.println("读取用户 " + userName + " 的用药文件时出错。");
+                        System.out.println("Error reading user " + userName + " 's medication file.");
                     }
                 }
             }
@@ -121,7 +121,7 @@ public class MedicationGUI extends JPanel {
             medicationPanelContents.add(tableScrollPane);
 
         } else {
-            // 原有逻辑，显示当前用户的用药信息
+            // Original logic to display current user's medication information
             String medicationFile = "src/resources/medications/" + currentUser.getName() + "_medications.csv";
             String[] medicationTableHeaders = { "Name", "Dosage", "Quantity", "Time", "Take Daily",
                     "Maximum Daily" };
@@ -137,12 +137,12 @@ public class MedicationGUI extends JPanel {
                 Object[][] medicationTableData = new Object[medicationList.size()][6];
                 for (int medicationListIndex = 0; medicationListIndex < medicationList.size(); medicationListIndex++) {
                     String[] medData = medicationList.get(medicationListIndex).split(",");
-                    // 确保不会超出 medicationTableData 的长度
+                    // Ensure that the length of the medicationTableData is not exceeded.
                     if (medData.length > 6) {
                         System.arraycopy(medData, 0, medicationTableData[medicationListIndex], 0, 6);
                     } else {
                         System.arraycopy(medData, 0, medicationTableData[medicationListIndex], 0, medData.length);
-                        // 填充剩余的位置为空字符串
+                        // Fill the remaining positions with empty strings
                         for (int i = medData.length; i < 6; i++) {
                             medicationTableData[medicationListIndex][i] = "";
                         }
@@ -159,21 +159,21 @@ public class MedicationGUI extends JPanel {
             } catch (FileNotFoundException medicationFileNotFound) {
                 System.out.println(
                         "The medication file for this user could not be found! Please check the path and try again.");
-                // 创建一个空的表格，避免程序崩溃
+                // Create an empty form to avoid the program crashing
                 Object[][] medicationTableData = new Object[0][6];
                 JTable medicationTable = new JTable(medicationTableData, medicationTableHeaders);
                 JScrollPane tableScrollPane = new JScrollPane(medicationTable);
                 tableScrollPane.setBounds(300, 100, 600, 350);
                 medicationPanelContents.add(tableScrollPane);
             } catch (IOException medicationFileCannotBeRead) {
-                System.out.println("读取用药文件时出错。");
+                System.out.println("Error reading medication file.");
             }
         }
 
         medicationPanel.add(medicationPanelContents);
         add(medicationPanel);
 
-        // 测试用户功能
+        // Test user functions
         System.out.println(currentUser.getName());
     }
 }

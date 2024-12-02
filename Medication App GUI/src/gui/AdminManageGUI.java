@@ -28,10 +28,10 @@ public class AdminManageGUI extends JPanel {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         this.add(titleLabel, BorderLayout.NORTH);
 
-        // 获取所有用户列表
+        // Get a list of all users
         ArrayList<String[]> userList = getAllUsers();
 
-        // 创建用户表格
+        // Create user forms
         String[] columnNames = { "Username", "Privilege", "Action" };
         Object[][] data = new Object[userList.size()][3];
 
@@ -39,7 +39,7 @@ public class AdminManageGUI extends JPanel {
             data[i][0] = userList.get(i)[0];
             data[i][1] = userList.get(i)[2];
 
-            // 创建“删除”按钮
+            // Create a “Delete” button.
             JButton deleteButton = new JButton("Delete");
             data[i][2] = deleteButton;
 
@@ -48,19 +48,19 @@ public class AdminManageGUI extends JPanel {
             deleteButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // 弹出确认对话框
+                    // Confirmation dialog pops up
                     int confirm = JOptionPane.showConfirmDialog(null,
                             "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // 删除用户
+                        // Delete user
                         deleteUser(userName);
                     }
                 }
             });
         }
 
-        // 使用自定义的表格模型
+        // Use a customized table model
         UserTableModel model = new UserTableModel(data, columnNames);
         JTable userTable = new JTable(model);
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
@@ -79,7 +79,7 @@ public class AdminManageGUI extends JPanel {
             while ((line = br.readLine()) != null) {
                 String[] userDetails = line.split(",");
                 if (userDetails.length >= 3) {
-                    // 不显示当前管理员自己
+                    // Do not show the current administrator himself
                     if (!userDetails[0].equals(currentUser.getName())) {
                         userList.add(userDetails);
                     }
@@ -94,7 +94,7 @@ public class AdminManageGUI extends JPanel {
 
     private void deleteUser(String userName) {
         try {
-            // 从 users.csv 中删除用户
+            // Remove users from users.csv
             File userFile = new File("src/resources/users/users.csv");
             File tempFile = new File("src/resources/users/users_temp.csv");
 
@@ -112,7 +112,7 @@ public class AdminManageGUI extends JPanel {
             writer.close();
             reader.close();
 
-            // 删除原文件，重命名临时文件
+            // Delete the original file and rename the temporary file
             if (!userFile.delete()) {
                 System.out.println("Failed to delete the original user file.");
             }
@@ -120,13 +120,13 @@ public class AdminManageGUI extends JPanel {
                 System.out.println("Failed to rename the temp user file.");
             }
 
-            // 删除用户的药品文件
+            // Delete the user's medication file
             File medicationFile = new File("src/resources/medications/" + userName + "_medications.csv");
             if (medicationFile.exists()) {
                 medicationFile.delete();
             }
 
-            // 刷新界面
+            // Refresh the interface
             removeAll();
             initialize();
             revalidate();
@@ -137,7 +137,7 @@ public class AdminManageGUI extends JPanel {
         }
     }
 
-    // 自定义表格模型
+    // Customize the form model
     class UserTableModel extends AbstractTableModel {
 
         private String[] columnNames;
@@ -170,7 +170,7 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            return col == 2; // 仅操作列可编辑
+            return col == 2; // Only the action column is editable
         }
 
         @Override
@@ -185,7 +185,7 @@ public class AdminManageGUI extends JPanel {
         }
     }
 
-    // 按钮渲染器
+    // Button Renderer
     class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
             setOpaque(true);
@@ -206,7 +206,7 @@ public class AdminManageGUI extends JPanel {
         }
     }
 
-    // 按钮编辑器
+    // Button Editor
     class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String userName;
@@ -219,12 +219,12 @@ public class AdminManageGUI extends JPanel {
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
-                    // 弹出确认对话框
+                    // Button Editor
                     int confirm = JOptionPane.showConfirmDialog(null,
                             "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // 删除用户
+                        // Delete user
                         deleteUser(userName);
                     }
                 }

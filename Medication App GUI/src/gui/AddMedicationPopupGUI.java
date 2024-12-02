@@ -10,7 +10,7 @@ import modules.User;
 public class AddMedicationPopupGUI extends JPanel {
 
     private User currentUser;
-    private JTextField userNameTextBox; // 将 userNameTextBox 声明为成员变量
+    private JTextField userNameTextBox; // Declare userNameTextBox as a member variable.
     public AddMedicationPopupGUI(User user) {
 
         this.currentUser = user;
@@ -38,7 +38,7 @@ public class AddMedicationPopupGUI extends JPanel {
         addMedicationTitle.setBounds(125, 10, 200, 30);
         addMedicationPanelContents.add(addMedicationTitle);
 
-        int yPosition = 60; // 初始 y 坐标
+        int yPosition = 60; // Initial y-coordinate
 
         if (currentUser.isAdmin()) {
             JLabel userNameLabel = new JLabel("Username");
@@ -47,14 +47,14 @@ public class AddMedicationPopupGUI extends JPanel {
 
             yPosition += 25;
 
-            userNameTextBox = new JTextField(); // 初始化成员变量
+            userNameTextBox = new JTextField(); // Initialize the userNameTextBox
             userNameTextBox.setBounds(20, yPosition, 250, 20);
             addMedicationPanelContents.add(userNameTextBox);
 
             yPosition += 35;
         }
 
-        // 输入字段标签和文本框
+        // Enter field labels and text boxes
         String[] inputFieldHeaders = { "Medication Name", "Dosage", "Quantity", "Time to be taken at", "How often?",
                 "Maximum daily" };
         JTextField[] textFields = new JTextField[inputFieldHeaders.length];
@@ -91,22 +91,22 @@ public class AddMedicationPopupGUI extends JPanel {
                 String targetUserName = currentUser.getName();
 
                 if (currentUser.isAdmin()) {
-                    // 获取管理员输入的用户名
+                    // Get the username entered by the administrator
                     if (userNameTextBox != null) {
                         targetUserName = userNameTextBox.getText().trim();
                         if (targetUserName.isEmpty()) {
-                            JOptionPane.showMessageDialog(acceptButton, "请输入用户名。", "错误",
+                            JOptionPane.showMessageDialog(acceptButton, "Please enter a user name.", "incorrect",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                             }
                         } else {
-                            JOptionPane.showMessageDialog(acceptButton, "用户名字段未初始化。", "错误",
+                            JOptionPane.showMessageDialog(acceptButton, "User name field not initialized", "incorrect",
                         JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                     }
 
-                // 获取药品信息
+                // Get drug information
                 String medicationName = textFields[0].getText().trim();
                 String dosage = textFields[1].getText().trim();
                 String quantity = textFields[2].getText().trim();
@@ -114,7 +114,7 @@ public class AddMedicationPopupGUI extends JPanel {
                 String howOften = textFields[4].getText().trim();
                 String maximumDaily = textFields[5].getText().trim();
 
-                // 验证输入
+                // Get drug information
                 if (medicationName.isEmpty() || dosage.isEmpty() || quantity.isEmpty() || timeToTake.isEmpty()
                         || howOften.isEmpty() || maximumDaily.isEmpty()) {
                     JOptionPane.showMessageDialog(acceptButton, "Please fill in all fields.", "Error",
@@ -122,11 +122,11 @@ public class AddMedicationPopupGUI extends JPanel {
                     return;
                 }
 
-                // 将药品信息保存到对应用户的药品文件中
+                // Save medication information to the corresponding user's medication file
                 String medicationFilePath = "src/resources/medications/" + targetUserName + "_medications.csv";
                 File medicationFile = new File(medicationFilePath);
                 try {
-                    // 检查用户的药品文件是否存在
+                    // Check if the user's medication file exists
                     if (!medicationFile.exists()) {
                         medicationFile.createNewFile();
                     }
@@ -135,7 +135,7 @@ public class AddMedicationPopupGUI extends JPanel {
                     BufferedWriter bw = new BufferedWriter(fw);
                     PrintWriter out = new PrintWriter(bw);
 
-                    // 写入药品信息
+                    // Write drug information
                     out.println(medicationName + "," + dosage + "," + quantity + "," + timeToTake + "," + howOften + ","
                             + maximumDaily);
                     out.close();
