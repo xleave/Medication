@@ -3,11 +3,9 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.ArrayList;
 import services.User;
 import services.AdminManage;
-
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -41,29 +39,14 @@ public class AdminManageGUI extends JPanel {
             data[i][0] = userList.get(i)[0];
             data[i][1] = userList.get(i)[2];
 
-            // Create a “Delete” button.
             JButton deleteButton = new JButton("Delete");
             data[i][2] = deleteButton;
 
             String userName = userList.get(i)[0];
 
-            deleteButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Confirmation dialog pops up
-                    int confirm = JOptionPane.showConfirmDialog(null,
-                            "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
-                            JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        // Delete user
-                        adminManage.deleteUser(userName);
-                        refreshInterface();
-                    }
-                }
-            });
+            deleteButton.addActionListener(new DeleteButtonActionListener(userName));
         }
 
-        // Use a customized table model
         UserTableModel model = new UserTableModel(data, columnNames);
         JTable userTable = new JTable(model);
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
@@ -71,6 +54,27 @@ public class AdminManageGUI extends JPanel {
 
         JScrollPane tableScrollPane = new JScrollPane(userTable);
         this.add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private class DeleteButtonActionListener implements ActionListener {
+        private String userName;
+
+        public DeleteButtonActionListener(String userName) {
+            this.userName = userName;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Confirmation dialog pops up
+            int confirm = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Delete user
+                adminManage.deleteUser(userName);
+                refreshInterface();
+            }
+        }
     }
 
     public void refreshInterface() {
@@ -162,8 +166,11 @@ public class AdminManageGUI extends JPanel {
             this.adminManageGUI = adminManageGUI;
             button = new JButton();
             button.setOpaque(true);
+            button.addActionListener(createDeleteButtonActionListener());
+        }
 
-            button.addActionListener(new ActionListener() {
+        private ActionListener createDeleteButtonActionListener() {
+            return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
                     int confirm = JOptionPane.showConfirmDialog(null,
@@ -174,7 +181,7 @@ public class AdminManageGUI extends JPanel {
                         adminManageGUI.refreshInterface();
                     }
                 }
-            });
+            };
         }
 
         public Component getTableCellEditorComponent(JTable table, Object value,
