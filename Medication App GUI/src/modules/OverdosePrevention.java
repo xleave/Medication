@@ -11,6 +11,7 @@ public class OverdosePrevention {
     // Method to check if a medicine dose is safe
     public static boolean isDoseSafe(Medicine medicine) {
         return !medicine.isOverDose();
+
     }
 
     // Method to alert user
