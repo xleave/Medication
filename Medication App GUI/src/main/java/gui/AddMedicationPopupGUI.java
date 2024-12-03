@@ -24,7 +24,7 @@ public class AddMedicationPopupGUI extends JPanel {
 
     private void initializeFont() {
         try {
-            applicationFont = MedicationManage.loadFont("src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf");
+            applicationFont = MedicationManage.loadFont("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf");
         } catch (RuntimeException e) {
             System.out.println("Font could not be found!");
             throw e;

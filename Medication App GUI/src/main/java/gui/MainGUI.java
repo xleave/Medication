@@ -36,7 +36,7 @@ public class MainGUI {
         try {
             applicationFont = Font
                     .createFont(Font.TRUETYPE_FONT,
-                            new File("src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf"))
+                            new File("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf"))
                     .deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
@@ -48,7 +48,7 @@ public class MainGUI {
         // Set up application icon
         BufferedImage applicationImage;
         try {
-            applicationImage = ImageIO.read(new File("src/resources/icons/App Icon.png"));
+            applicationImage = ImageIO.read(new File("src/main/resources/icons/App Icon.png"));
             mainWindow.setIconImage(applicationImage);
         } catch (IOException e) {
             System.out.println("Application icon not found!");

@@ -13,7 +13,7 @@ public class AboutGUI extends JPanel {
         Font applicationFont;
         try {
             applicationFont = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
+                    new File("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
 

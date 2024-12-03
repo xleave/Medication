@@ -19,7 +19,7 @@ public class MedicationManage {
     }
 
     public static void saveMedicationInfo(String targetUserName, JTextField[] textFields, JButton acceptButton, JFrame frame) {
-        String medicationFilePath = "src/resources/medications/" + targetUserName + "_medications.csv";
+        String medicationFilePath = "src/main/resources/medications/" + targetUserName + "_medications.csv";
         File medicationFile = new File(medicationFilePath);
         try {
             if (!medicationFile.exists()) {
@@ -56,7 +56,7 @@ public class MedicationManage {
     public static Object[][] getAdminMedicationData() {
         ArrayList<Object[]> medicationDataList = new ArrayList<>();
 
-        File medicationDir = new File("src/resources/medications");
+        File medicationDir = new File("src/main/resources/medications");
         File[] medicationFiles = medicationDir.listFiles((dir, name) -> name.endsWith("_medications.csv"));
 
         if (medicationFiles != null) {
@@ -71,7 +71,7 @@ public class MedicationManage {
     }
 
     public static Object[][] getUserMedicationData(User currentUser) {
-        String medicationFile = "src/resources/medications/" + currentUser.getName() + "_medications.csv";
+        String medicationFile = "src/main/resources/medications/" + currentUser.getName() + "_medications.csv";
         ArrayList<String> medicationList = new ArrayList<>();
 
         try {

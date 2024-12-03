@@ -16,7 +16,7 @@ public class AdminManage {
     public ArrayList<String[]> getAllUsers() {
         ArrayList<String[]> userList = new ArrayList<>();
         try {
-            File userFile = new File("src/resources/users/users.csv");
+            File userFile = new File("src/main/resources/users/users.csv");
             BufferedReader br = new BufferedReader(new FileReader(userFile));
             String line;
             while ((line = br.readLine()) != null) {
@@ -38,8 +38,8 @@ public class AdminManage {
     public void deleteUser(String userName) {
         try {
             // Remove users from users.csv
-            File userFile = new File("src/resources/users/users.csv");
-            File tempFile = new File("src/resources/users/users_temp.csv");
+            File userFile = new File("src/main/resources/users/users.csv");
+            File tempFile = new File("src/main/resources/users/users_temp.csv");
 
             BufferedReader reader = new BufferedReader(new FileReader(userFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
@@ -64,7 +64,7 @@ public class AdminManage {
             }
 
             // Delete the user's medication file
-            File medicationFile = new File("src/resources/medications/" + userName + "_medications.csv");
+            File medicationFile = new File("src/main/resources/medications/" + userName + "_medications.csv");
             if (medicationFile.exists()) {
                 medicationFile.delete();
             }

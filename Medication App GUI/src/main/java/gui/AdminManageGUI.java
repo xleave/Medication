@@ -11,6 +11,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class AdminManageGUI extends JPanel {
 
+
     private User currentUser;
     private AdminManage adminManage;
 

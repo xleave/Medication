@@ -21,7 +21,7 @@ public class HomeGUI extends JPanel {
         try {
             applicationFont = Font.createFont(
                     Font.TRUETYPE_FONT,
-                    new File("src/resources/fonts/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
+                    new File("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(applicationFont);
         } catch (IOException | FontFormatException e) {
@@ -32,7 +32,7 @@ public class HomeGUI extends JPanel {
         // Set up application icon
         BufferedImage applicationImage;
         try {
-            applicationImage = ImageIO.read(new File("src/resources/icons/App Icon.png"));
+            applicationImage = ImageIO.read(new File("src/main/resources/icons/App Icon.png"));
         } catch (IOException e) {
             System.out.println("Application icon not found!");
             applicationImage = null;

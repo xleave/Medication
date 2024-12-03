@@ -11,8 +11,8 @@ public class Scheduler {
     private List<Medicine> medicines;
     private HistoryTracker historyTracker;
     private String username; // Username associated with this scheduler
-    private String historyDirectory = "Medication App/src/resources/medication_history"; // Default history directory
-    private String overdoseAlertDirectory = "Medication App/src/resources/medications"; // Default overdose alert
+    private String historyDirectory = "src/main/resources/medication_history"; // Default history directory
+    private String overdoseAlertDirectory = "src/main/resources/medications"; // Default overdose alert
                                                                                         // directory
 
     public Scheduler(String username, String historyDirectory) {
