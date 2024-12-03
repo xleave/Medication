@@ -35,7 +35,7 @@ public class User {
         // Initialize scheduler or other components if needed
     }
 
-    public void checkIfUserExists() {
+    public boolean checkIfUserExists() {
         // Check if user exists
         boolean userFound = false;
         try {
@@ -96,6 +96,7 @@ public class User {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        return userFound;
     }
 
     public void userCreate() {
