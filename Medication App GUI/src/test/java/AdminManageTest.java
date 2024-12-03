@@ -122,4 +122,45 @@ public class AdminManageTest {
         // Confirmation that drug files have been deleted
         assertFalse("Drug files have not been deleted", medicationFile.exists());
     }
+    @Test
+    public void testGetAllUsers() {
+        ArrayList<String[]> users = adminManage.getAllUsers();
+        // Confirm that the returned user list does not contain the current user
+        for (String[] userDetails : users) {
+            assertNotEquals("The returned user list contains the current administrator", testUserName, userDetails[0]);
+        }
+    }
+
+    @Test
+    public void testDeleteNonExistentUser() {
+        String nonExistentUser = "nonExistentUser";
+        // Verify that the user file does not contain the user
+        File userFile = new File(usersFilePath);
+        boolean userExists = false;
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith(nonExistentUser + ",")) {
+                    userExists = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertFalse("Unexpected presence of the user in the user file", userExists);
+
+        // Delete user
+        adminManage.deleteUser(nonExistentUser);
+
+        // Verify that the user file has not been modified (except for users that do not exist)
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                assertFalse("Accidentally finding a non-existing user when deleting it", line.startsWith(nonExistentUser + ","));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
