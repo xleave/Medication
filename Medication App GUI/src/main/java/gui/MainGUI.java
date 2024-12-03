@@ -25,6 +25,7 @@ public class MainGUI {
     private CardLayout cardLayout = new CardLayout();
     private JPanel adminManagePanel;// Added: AdminManageGUI panel
     private User currentUser; // Store current logged-in user
+    private SettingGUI settingsPanel;
 
     public MainGUI(User user) {
         this.currentUser = user;
@@ -112,11 +113,11 @@ public class MainGUI {
         buttonPanel.add(historyPanelButton);
         buttonPanel.add(helpPanelButton);
         buttonPanel.add(aboutPanelButton);
+        buttonPanel.add(settingsPanelButton);
         // If the current user is an administrator, add an administrator management button
         if (currentUser.isAdmin()) {
             buttonPanel.add(adminManagePanelButton);
         }
-        buttonPanel.add(settingsPanelButton);
         
         // Add components to the static panel
         staticPanel.add(userInfoTitle);
@@ -135,6 +136,7 @@ public class MainGUI {
         logPanel = new MedicationHistoryGUI(currentUser);
         helpPanel = new HelpGUI();// settingsPanel = new SettingsGUI();
         aboutPanel = new AboutGUI(); // Initialize AboutGUI panel
+        settingsPanel = new SettingGUI(currentUser, mainWindow);
 
         // New: Initialize Administrator Management Panel
         if (currentUser.isAdmin()) {
@@ -147,7 +149,7 @@ public class MainGUI {
         contentPanel.add(logPanel, "3");
         contentPanel.add(helpPanel, "4");
         contentPanel.add(aboutPanel, "5");
-        // contentPanel.add(settingsPanel, "6");
+        contentPanel.add(settingsPanel, "6");
         // If the current user is an administrator, add an administrator admin panel
         if (currentUser.isAdmin()) {
             contentPanel.add(adminManagePanel, "7");
