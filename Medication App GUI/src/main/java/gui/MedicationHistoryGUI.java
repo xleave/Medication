@@ -13,6 +13,10 @@ public class MedicationHistoryGUI extends JPanel {
 
     private User currentUser;
 
+    public JPanel medicationHistoryPanelContents = new JPanel();
+
+    private JScrollPane medicationScrollPane;
+
     public MedicationHistoryGUI(User user) {
         this.currentUser = user;
         initializeGUI();
@@ -31,6 +35,7 @@ public class MedicationHistoryGUI extends JPanel {
         medicationHistoryGUISubheading.setBounds(10, 300, 100,20);
         medicationHistoryPanel.add(medicationHistoryGUISubheading);
 
+        createMedicationListTable(medicationHistoryPanelContents);
         medicationHistoryPanel.add(medicationHistoryPanelContents);
         add(medicationHistoryPanel);
     }
@@ -49,4 +54,22 @@ public class MedicationHistoryGUI extends JPanel {
         }
         return applicationFont;
     }
+
+    private void createMedicationListTable(JPanel panel) {
+
+        String[] medicationListHeaders = {"Medication", "Take"};
+        Object[][] medicationListData = {
+                {"Paracetomol", "Button ?"}
+        };
+
+        JTable medicationListTable = new JTable(medicationListData, medicationListHeaders);
+        medicationListTable.setBounds(10, 100, 100, 400);
+
+        JScrollPane medicationListScrollPane = new JScrollPane(medicationListTable);
+        medicationListScrollPane.setBounds(10, 100, 100, 400);
+        panel.add(medicationListScrollPane);
+    }
+
+
+
 }
