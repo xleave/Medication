@@ -41,7 +41,7 @@ public class AdminManageGUI extends JPanel {
             data[i][1] = userList.get(i)[2];
 
             JButton deleteButton = new JButton("Delete");
-            data[i][2] = deleteButton;
+            data[i][2] = "Delete";
 
             String userName = userList.get(i)[0];
 
