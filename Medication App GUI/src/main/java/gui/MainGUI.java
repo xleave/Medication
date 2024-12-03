@@ -18,6 +18,7 @@ public class MainGUI {
     private JPanel staticPanel = new JPanel();
     private JPanel contentPanel = new JPanel();
     private HomeGUI homePanel;
+
     private JPanel medicationPanel = new JPanel();
     private JPanel logPanel = new JPanel();
     private JPanel helpPanel = new JPanel();
