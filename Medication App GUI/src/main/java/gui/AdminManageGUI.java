@@ -1,16 +1,16 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import services.User;
 import services.AdminManage;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 
 public class AdminManageGUI extends JPanel {
-
 
     private User currentUser;
     private AdminManage adminManage;
@@ -33,49 +33,22 @@ public class AdminManageGUI extends JPanel {
         ArrayList<String[]> userList = adminManage.getAllUsers();
 
         // Create user forms
-        String[] columnNames = {"Username", "Privilege", "Action"};
+        String[] columnNames = { "Username", "Privilege", "Action" };
         Object[][] data = new Object[userList.size()][3];
 
         for (int i = 0; i < userList.size(); i++) {
             data[i][0] = userList.get(i)[0];
             data[i][1] = userList.get(i)[2];
-
-            JButton deleteButton = new JButton("Delete");
-            data[i][2] = "Delete";
-
-            String userName = userList.get(i)[0];
-
-            deleteButton.addActionListener(new DeleteButtonActionListener(userName));
+            data[i][2] = "Delete"; // Action button
         }
 
         UserTableModel model = new UserTableModel(data, columnNames);
         JTable userTable = new JTable(model);
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), adminManage, this));
+        userTable.getColumn("Action").setCellEditor(new ButtonEditor(adminManage, this));
 
         JScrollPane tableScrollPane = new JScrollPane(userTable);
         this.add(tableScrollPane, BorderLayout.CENTER);
-    }
-
-    private class DeleteButtonActionListener implements ActionListener {
-        private String userName;
-
-        public DeleteButtonActionListener(String userName) {
-            this.userName = userName;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Confirmation dialog pops up
-            int confirm = JOptionPane.showConfirmDialog(null,
-                    "Are you sure you want to delete user: " + userName + "?", "Confirm Deletion",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                // Delete user
-                adminManage.deleteUser(userName);
-                refreshInterface();
-            }
-        }
     }
 
     public void refreshInterface() {
@@ -118,17 +91,22 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            return col == 2; // Only the action column is editable
+            return col == 2;
         }
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            data[row][col] = value;
-            fireTableCellUpdated(row, col);
+            if (col != 2) {
+                data[row][col] = value;
+                fireTableCellUpdated(row, col);
+            }
         }
 
         @Override
         public Class<?> getColumnClass(int col) {
+            if (col == 2) {
+                return Object.class;
+            }
             return getValueAt(0, col).getClass();
         }
     }
@@ -141,7 +119,7 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+                boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
@@ -155,23 +133,20 @@ public class AdminManageGUI extends JPanel {
     }
 
     // Button Editor
-    class ButtonEditor extends DefaultCellEditor {
+    class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
         private JButton button;
         private String userName;
         private AdminManage adminManage;
         private AdminManageGUI adminManageGUI;
 
-        public ButtonEditor(JCheckBox checkBox, AdminManage adminManage, AdminManageGUI adminManageGUI) {
-            super(checkBox);
+        public ButtonEditor(AdminManage adminManage, AdminManageGUI adminManageGUI) {
             this.adminManage = adminManage;
             this.adminManageGUI = adminManageGUI;
-            button = new JButton();
+            button = new JButton("Delete");
             button.setOpaque(true);
-            button.addActionListener(createDeleteButtonActionListener());
-        }
 
-        private ActionListener createDeleteButtonActionListener() {
-            return new ActionListener() {
+            button.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
                     int confirm = JOptionPane.showConfirmDialog(null,
@@ -182,14 +157,20 @@ public class AdminManageGUI extends JPanel {
                         adminManageGUI.refreshInterface();
                     }
                 }
-            };
+            });
         }
 
+        @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
+                boolean isSelected, int row, int column) {
             userName = (String) table.getValueAt(row, 0);
-            button.setText((value != null) ? "Delete" : "");
+            button.setText((value != null) ? value.toString() : "Delete");
             return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return "Delete"; 
         }
     }
 }
