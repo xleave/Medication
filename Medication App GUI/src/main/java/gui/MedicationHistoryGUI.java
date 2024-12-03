@@ -35,7 +35,11 @@ public class MedicationHistoryGUI extends JPanel {
         medicationHistoryGUISubheading.setBounds(10, 300, 100,20);
         medicationHistoryPanel.add(medicationHistoryGUISubheading);
 
-        createMedicationListTable(medicationHistoryPanelContents);
+        //createMedicationListTable(medicationHistoryPanelContents);
+
+        drawGraph g = new drawGraph();
+        medicationHistoryPanel.add(g,BorderLayout.CENTER);
+
         medicationHistoryPanel.add(medicationHistoryPanelContents);
         add(medicationHistoryPanel);
     }
@@ -70,6 +74,37 @@ public class MedicationHistoryGUI extends JPanel {
         panel.add(medicationListScrollPane);
     }
 
+    private class drawGraph extends JPanel{
+    int[] testdata ={5,10,15,20,30};
+    String[] testname = {"Para","Ibu","Med3","Med4","Med5"};
 
+        @Override
+        protected void paintComponent(Graphics g){
+            super.paintComponent(g);
 
+                Graphics2D gtd = (Graphics2D) g;
+
+                gtd.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+                gtd.setColor(Color.blue);
+
+                int xs = 50;
+                int ys = 250;
+                int width = 40;
+                int space = 20;
+
+                for(int i = 0; i<testdata.length;i++){
+                    int barheight = testdata[i] * 5;
+                    gtd.fillRect(xs + (i*(width+space)),ys-barheight,width,barheight);
+                    gtd.setColor(Color.black);
+                    gtd.drawString(testname[i],xs+(i*(width+space))+5,ys+15);
+                    gtd.setColor(Color.blue);
+                }
+            }
+            public Dimension getPreferredSize() {
+            return new Dimension(500, 300);
+        }
+    }
 }
+
+
+
