@@ -44,10 +44,10 @@ public class LoginGUI extends JFrame {
                 options,
                 options[0]);
 
-        if (result == 0) { // "Sign In" button clicked
+        if (result == 0) {
             nameFieldContents = usernameField.getText();
             passwordFieldContents = new String(passwordField1.getPassword());
-        } else if (result == 1) { // "Cancel" button clicked
+        } else {
             System.out.println("Login Cancelled");
             System.exit(0);
         }
