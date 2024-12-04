@@ -33,13 +33,15 @@ public class AdminManageGUI extends JPanel {
         ArrayList<String[]> userList = adminManage.getAllUsers();
 
         // Create user forms
-        String[] columnNames = { "Username", "Privilege", "Action" };
-        Object[][] data = new Object[userList.size()][3];
+        String[] columnNames = { "Username", "Privilege", "Consistent", "Action" };
+        Object[][] data = new Object[userList.size()][4];
 
         for (int i = 0; i < userList.size(); i++) {
-            data[i][0] = userList.get(i)[0];
+            String username = userList.get(i)[0];
+            data[i][0] = username;
             data[i][1] = userList.get(i)[2];
-            data[i][2] = "Delete"; // Action button
+            data[i][2] = adminManage.checkUserConsistency(username) ? "Yes" : "No";
+            data[i][3] = "Delete/Edit"; // Action buttons
         }
 
         UserTableModel model = new UserTableModel(data, columnNames);
@@ -91,12 +93,12 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            return col == 2;
+            return col == 3;
         }
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            if (col != 2) {
+            if (col != 3) {
                 data[row][col] = value;
                 fireTableCellUpdated(row, col);
             }
@@ -105,36 +107,37 @@ public class AdminManageGUI extends JPanel {
         @Override
         public Class<?> getColumnClass(int col) {
             if (col == 2) {
-                return Object.class;
+                return String.class;
             }
             return getValueAt(0, col).getClass();
         }
     }
 
     // Button Renderer
-    class ButtonRenderer extends JButton implements TableCellRenderer {
+    class ButtonRenderer extends JPanel implements TableCellRenderer {
+        private JButton deleteButton;
+        private JButton editButton;
+
         public ButtonRenderer() {
-            setOpaque(true);
+            setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+            deleteButton = new JButton("Delete");
+            editButton = new JButton("Edit");
+            add(deleteButton);
+            add(editButton);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-                setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-                setBackground(UIManager.getColor("Button.background"));
-            }
-            setText((value == null) ? "" : value.toString());
             return this;
         }
     }
 
     // Button Editor
     class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
-        private JButton button;
+        private JPanel panel;
+        private JButton deleteButton;
+        private JButton editButton;
         private String userName;
         private AdminManage adminManage;
         private AdminManageGUI adminManageGUI;
@@ -142,10 +145,13 @@ public class AdminManageGUI extends JPanel {
         public ButtonEditor(AdminManage adminManage, AdminManageGUI adminManageGUI) {
             this.adminManage = adminManage;
             this.adminManageGUI = adminManageGUI;
-            button = new JButton("Delete");
-            button.setOpaque(true);
+            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+            deleteButton = new JButton("Delete");
+            editButton = new JButton("Edit");
+            panel.add(deleteButton);
+            panel.add(editButton);
 
-            button.addActionListener(new ActionListener() {
+            deleteButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
@@ -158,19 +164,35 @@ public class AdminManageGUI extends JPanel {
                     }
                 }
             });
+
+            editButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                    String newPassword = JOptionPane.showInputDialog(null,
+                            "Enter new password for user: " + userName, "Edit Password",
+                            JOptionPane.PLAIN_MESSAGE);
+                    if (newPassword != null && !newPassword.trim().isEmpty()) {
+                        adminManage.updateUserPassword(userName, newPassword.trim());
+                        JOptionPane.showMessageDialog(null, "Password updated successfully.");
+                        adminManageGUI.refreshInterface();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Password cannot be empty.");
+                    }
+                }
+            });
         }
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int column) {
             userName = (String) table.getValueAt(row, 0);
-            button.setText((value != null) ? value.toString() : "Delete");
-            return button;
+            return panel;
         }
 
         @Override
         public Object getCellEditorValue() {
-            return "Delete"; 
+            return null;
         }
     }
 }
