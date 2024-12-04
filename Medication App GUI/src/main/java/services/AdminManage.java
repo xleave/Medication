@@ -110,4 +110,44 @@ public class AdminManage {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 更新用户的权限
+     * 
+     * @param userName     用户名
+     * @param newPrivilege 新的权限（"user" 或 "admin"）
+     */
+    public void updateUserPrivilege(String userName, String newPrivilege) {
+        try {
+            File userFile = new File("src/main/resources/users/users.csv");
+            File tempFile = new File("src/main/resources/users/users_temp.csv");
+
+            BufferedReader reader = new BufferedReader(new FileReader(userFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] userDetails = currentLine.split(",");
+                if (userDetails.length >= 3 && userDetails[0].equals(userName)) {
+                    writer.write(userName + "," + userDetails[1] + "," + newPrivilege
+                            + System.getProperty("line.separator"));
+                } else {
+                    writer.write(currentLine + System.getProperty("line.separator"));
+                }
+            }
+            writer.close();
+            reader.close();
+
+            // Replace original file with updated file
+            if (!userFile.delete()) {
+                System.out.println("Failed to delete the original user file.");
+            }
+            if (!tempFile.renameTo(userFile)) {
+                System.out.println("Failed to rename the temp user file.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
