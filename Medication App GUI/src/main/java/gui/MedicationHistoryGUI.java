@@ -63,15 +63,51 @@ public class MedicationHistoryGUI extends JPanel {
         return applicationFont;
     }
 
+    // private void createMedicationListTable(JPanel panel) {
+
+    //     String[] medicationListHeaders = {"Medication", "Take"};
+    //     Object[][] medicationListData = new Object[medicationListHeaders.length][2];
+
+    //     DefaultTableModel medicationListModel = new DefaultTableModel(medicationListData, medicationListHeaders);
+    //     JTable medicationListTable = new JTable(medicationListModel);
+    //     medicationListTable.getColumnModel().getColumn(1).setCellRenderer(new MedicationHistoryGUI.ButtonRenderer());
+    //     medicationListTable.getColumnModel().getColumn(1).setCellEditor(new MedicationHistoryGUI.ButtonEditor(new JTextField()));
+    //     medicationListTable.setBounds(10, 100, 100, 400);
+
+    //     JScrollPane medicationListScrollPane = new JScrollPane(medicationListTable);
+    //     medicationListScrollPane.setBounds(10, 100, 100, 400);
+    //     panel.add(medicationListScrollPane);
+
+    //     String userMedicationFilePath = "src/main/resources/medications/" + currentUser.getName() + "_medications.csv";
+    //     String temporaryLine = "";
+    //     ArrayList<String> medicationNames = new ArrayList<String>();
+    //     int medicationNameIndex = 0;
+    //     try {
+    //         BufferedReader medicationNameReader = new BufferedReader(new FileReader(userMedicationFilePath));
+    //         while ((temporaryLine = medicationNameReader.readLine()) != null) {
+    //             String[] tempArray =  temporaryLine.split(",");
+    //             medicationNames.add(tempArray[0]);
+    //             System.out.println(medicationNames);
+    //             //Putting medicaiton names into table.
+    //             medicationListModel.setValueAt(medicationNames.get(medicationNameIndex),medicationNameIndex, 0);
+
+    //         }
+
+    //     } catch (IOException medicationFileNotReadable) {
+    //         System.out.println("The medication file for this user could not be found! Please try again later.");
+    //         throw new RuntimeException(medicationFileNotReadable);
+    //     }
+    // }
+
     private void createMedicationListTable(JPanel panel) {
 
-        String[] medicationListHeaders = {"Medication", "Take"};
-        Object[][] medicationListData = new Object[medicationListHeaders.length][2];
+        String[] medicationListHeaders = { "Medication", "Take" };
 
-        DefaultTableModel medicationListModel = new DefaultTableModel(medicationListData, medicationListHeaders);
+        DefaultTableModel medicationListModel = new DefaultTableModel(medicationListHeaders, 0);
         JTable medicationListTable = new JTable(medicationListModel);
         medicationListTable.getColumnModel().getColumn(1).setCellRenderer(new MedicationHistoryGUI.ButtonRenderer());
-        medicationListTable.getColumnModel().getColumn(1).setCellEditor(new MedicationHistoryGUI.ButtonEditor(new JTextField()));
+        medicationListTable.getColumnModel().getColumn(1)
+                .setCellEditor(new MedicationHistoryGUI.ButtonEditor(new JTextField()));
         medicationListTable.setBounds(10, 100, 100, 400);
 
         JScrollPane medicationListScrollPane = new JScrollPane(medicationListTable);
@@ -81,27 +117,21 @@ public class MedicationHistoryGUI extends JPanel {
         String userMedicationFilePath = "src/main/resources/medications/" + currentUser.getName() + "_medications.csv";
         String temporaryLine = "";
         ArrayList<String> medicationNames = new ArrayList<String>();
-        int medicationNameIndex = 0;
+
         try {
             BufferedReader medicationNameReader = new BufferedReader(new FileReader(userMedicationFilePath));
             while ((temporaryLine = medicationNameReader.readLine()) != null) {
-                String[] tempArray =  temporaryLine.split(",");
-                medicationNames.add(tempArray[0]);
-                System.out.println(medicationNames);
-
-                //Putting medicaiton names into table.
-                medicationListModel.setValueAt(medicationNames.get(medicationNameIndex),medicationNameIndex, 0);
-
-
+                String[] tempArray = temporaryLine.split(",");
+                if (tempArray.length > 0) {
+                    String medicationName = tempArray[0];
+                    medicationListModel.addRow(new Object[] { medicationName, "Take" });
+                }
             }
-
-
+            medicationNameReader.close();
         } catch (IOException medicationFileNotReadable) {
             System.out.println("The medication file for this user could not be found! Please try again later.");
             throw new RuntimeException(medicationFileNotReadable);
         }
-
-
     }
 
     //This class and methods are used to add a JButton into a JTable.
