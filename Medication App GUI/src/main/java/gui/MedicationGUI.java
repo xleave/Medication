@@ -1,10 +1,13 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import services.User;
 import services.MedicationManage;
 
@@ -104,11 +107,16 @@ public class MedicationGUI extends JPanel {
     }
 
     private void addTableToPanel(JPanel panel, Object[][] tableData, String[] tableHeaders) {
-        JTable medicationTable = new JTable(tableData, tableHeaders);
+        DefaultTableModel medicationTableModel = new DefaultTableModel(tableData, tableHeaders);
+        JTable medicationTable = new JTable(medicationTableModel);
         medicationTable.setBounds(400, 400, 600, 350);
 
         JScrollPane tableScrollPane = new JScrollPane(medicationTable);
         tableScrollPane.setBounds(300, 100, 600, 350);
+
+        //Testing to see if I can get the values in a row in the table.
+        Vector<Vector> tableRowTest = medicationTableModel.getDataVector();
+        System.out.println(tableRowTest);
         panel.add(tableScrollPane);
     }
 
