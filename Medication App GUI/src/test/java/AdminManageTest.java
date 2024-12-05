@@ -1,117 +1,166 @@
-import services.AdminManage;
-import services.User;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.*;
-import java.util.ArrayList;
-import static org.junit.Assert.*;
+import services.AdminManage;
+import services.User;
 
-//Warning: please do not run this test without any need!
-// this unit test will cause user.csv to be completely erased!
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import static org.junit.Assert.*;
 
 public class AdminManageTest {
 
-    private File userFile;
-    private File tempUserFile;
-    private File medicationFile;
-    private User adminUser;
     private AdminManage adminManage;
+    private User testUser;
+    private String testUserName = "testUser";
+    private String testPassword = "testPassword";
+    private String usersFilePath = "src/main/resources/users/users.csv";
+    private String medicationsDirPath = "src/main/resources/medications/";
 
     @Before
-    public void setUp() throws IOException {
-        // Initialize test files
-        userFile = new File("src/main/resources/users/users.csv");
-        tempUserFile = new File("src/main/resources/users/users_temp.csv");
-        medicationFile = new File("src/main/resources/medications/testUser_medications.csv");
+    public void setUp() throws Exception {
+        // Initialize test users
+        testUser = new User(testUserName, testPassword);
+        testUser.userCreate();
+        adminManage = new AdminManage(testUser);
 
-        // Create users.csv with test data
-        BufferedWriter writer = new BufferedWriter(new FileWriter(userFile));
-        writer.write("admin,testPass,admin\n");
-        writer.write("user1,pass1,role1\n");
-        writer.write("user2,pass2,role2\n");
-        writer.close();
+        // Confirm that the user has been created
+        File userFile = new File(usersFilePath);
+        assertTrue("User file does not exist", userFile.exists());
 
-        // Create a medication file for user1
-        BufferedWriter medWriter = new BufferedWriter(new FileWriter(medicationFile));
-        medWriter.write("med1,10mg\n");
-        medWriter.close();
+        boolean userExists = false;
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith(testUserName + ",")) {
+                    userExists = true;
+                    break;
+                }
+            }
+        }
+        assertTrue("Test user not created successfully", userExists);
 
-        // Initialize AdminManage with admin user
-        adminUser = new User("admin", "testPass");
-        adminManage = new AdminManage(adminUser);
+        // Confirmation that a drug file has been created
+        File medicationFile = new File(medicationsDirPath + testUserName + "_medications.csv");
+        assertTrue("Drug file not created", medicationFile.exists());
     }
 
     @After
-    public void tearDown() {
-        // Delete test files
-        if (userFile.exists()) {
-            userFile.delete();
+    public void tearDown() throws Exception {
+        // Clean up user files
+        File userFile = new File(usersFilePath);
+        File tempFile = new File("src/main/resources/users/users_temp.csv");
+
+        try (Scanner scanner = new Scanner(userFile);
+                PrintWriter writer = new PrintWriter(new FileWriter(tempFile))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (!line.startsWith(testUserName + ",")) {
+                    writer.println(line);
+                }
+            }
         }
-        if (tempUserFile.exists()) {
-            tempUserFile.delete();
+
+        if (userFile.exists() && userFile.delete()) {
+            tempFile.renameTo(userFile);
         }
+
+        // Delete drug files
+        File medicationFile = new File(medicationsDirPath + testUserName + "_medications.csv");
         if (medicationFile.exists()) {
             medicationFile.delete();
         }
     }
 
     @Test
+    public void testDeleteUser() {
+        // Confirm that the user exists
+        File userFile = new File(usersFilePath);
+        assertTrue("User file does not exist", userFile.exists());
+
+        boolean userExists = false;
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith(testUserName + ",")) {
+                    userExists = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertTrue("The user does not exist", userExists);
+
+        // Confirmation of the existence of a drug file
+        File medicationFile = new File(medicationsDirPath + testUserName + "_medications.csv");
+        assertTrue("Drug file does not exist", medicationFile.exists());
+
+        // Delete user
+        adminManage.deleteUser(testUserName);
+
+        // Confirm that the user has been deleted
+        userExists = false;
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith(testUserName + ",")) {
+                    userExists = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertFalse("User not deleted", userExists);
+
+        // Confirmation that drug files have been deleted
+        assertFalse("Drug files have not been deleted", medicationFile.exists());
+    }
+    @Test
     public void testGetAllUsers() {
         ArrayList<String[]> users = adminManage.getAllUsers();
-        assertEquals(2, users.size());
-        assertEquals("user1", users.get(0)[0]);
-        assertEquals("user2", users.get(1)[0]);
+        // Confirm that the returned user list does not contain the current user
+        for (String[] userDetails : users) {
+            assertNotEquals("The returned user list contains the current administrator", testUserName, userDetails[0]);
+        }
     }
 
     @Test
-    public void testGetAllUsersEmpty() throws IOException {
-        // Clear users.csv
-        BufferedWriter writer = new BufferedWriter(new FileWriter(userFile));
-        writer.close();
+    public void testDeleteNonExistentUser() {
+        String nonExistentUser = "nonExistentUser";
+        // Verify that the user file does not contain the user
+        File userFile = new File(usersFilePath);
+        boolean userExists = false;
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith(nonExistentUser + ",")) {
+                    userExists = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertFalse("Unexpected presence of the user in the user file", userExists);
 
-        ArrayList<String[]> users = adminManage.getAllUsers();
-        assertTrue(users.isEmpty());
-    }
+        // Delete user
+        adminManage.deleteUser(nonExistentUser);
 
-    @Test
-    public void testGetAllUsersOnlyAdmin() throws IOException {
-        // Modify users.csv to contain only admin
-        BufferedWriter writer = new BufferedWriter(new FileWriter(userFile));
-        writer.write("admin,testPass,admin\n");
-        writer.close();
-
-        ArrayList<String[]> users = adminManage.getAllUsers();
-        assertTrue(users.isEmpty());
-    }
-
-    @Test
-    public void testDeleteUserExists() {
-        adminManage.deleteUser("user1");
-        // Verify user1 is deleted from users.csv
-        ArrayList<String[]> users = adminManage.getAllUsers();
-        assertEquals(1, users.size());
-        assertEquals("user2", users.get(0)[0]);
-        // Verify medication file is deleted
-        assertFalse(medicationFile.exists());
-    }
-
-    @Test
-    public void testDeleteUserDoesNotExist() {
-        adminManage.deleteUser("nonExistingUser");
-        // Verify users.csv remains unchanged
-        ArrayList<String[]> users = adminManage.getAllUsers();
-        assertEquals(2, users.size());
-        // Verify no medication file is deleted
-        assertTrue(medicationFile.exists());
-    }
-
-    @Test
-    public void testDeleteUserFileDeletionFailure() throws IOException {
-        // Make users.csv read-only to simulate deletion failure
-        userFile.setReadOnly();
-        adminManage.deleteUser("user1");
-        // Cleanup: make it writable again for tearDown
-        userFile.setWritable(true);
+        // Verify that the user file has not been modified (except for users that do not exist)
+        try (Scanner scanner = new Scanner(userFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                assertFalse("Accidentally finding a non-existing user when deleting it", line.startsWith(nonExistentUser + ","));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

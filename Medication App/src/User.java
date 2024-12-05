@@ -388,7 +388,7 @@ public class User {
     private void timeToTakeMedicine(Scanner scanner) {
         try {
             // Ensure the output directory exists
-            File directory = new File("Medication App/src/resources/time");
+            File directory = new File("src/resources/time");
             if (!directory.exists()) {
                 directory.mkdirs();
             }

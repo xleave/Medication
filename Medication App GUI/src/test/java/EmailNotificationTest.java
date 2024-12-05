@@ -5,9 +5,8 @@ import services.*;
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.InternetAddress;
-
-
 import static org.mockito.Mockito.*;
+
 
 public class EmailNotificationTest {
     @Test
