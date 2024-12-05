@@ -172,6 +172,7 @@ public class Scheduler {
 
             // Close the transport connection
             ts.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
