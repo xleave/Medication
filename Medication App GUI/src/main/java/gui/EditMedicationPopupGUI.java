@@ -49,9 +49,75 @@ public class EditMedicationPopupGUI extends JPanel {
         newMedicationHeading.setBounds(20, 150, 600, 50);
         editMedicationPanelContents.add(newMedicationHeading);
 
+        //Adding all components from other.
+        addNewDetailLabels(editMedicationPanelContents);
+        addNewDetailFields(editMedicationPanelContents);
+
         //Final rendering
         editMedicationFrame.add(editMedicationPanelContents);
         editMedicationFrame.setVisible(true);
+
+    }
+
+    public void addNewDetailLabels(JPanel panel) {
+
+        JLabel newMedicationNameLabel = new JLabel("New Name");
+        newMedicationNameLabel.setFont(applicationFont);
+        newMedicationNameLabel.setBounds(20, 200, 150, 20);
+        panel.add(newMedicationNameLabel);
+
+        JLabel newMedicationDosageLabel = new JLabel("New Dosage");
+        newMedicationDosageLabel.setFont(applicationFont);
+        newMedicationDosageLabel.setBounds(220, 200, 150, 20);
+        panel.add(newMedicationDosageLabel);
+
+        JLabel newMedicationQuantityLabel = new JLabel("New Quantity");
+        newMedicationQuantityLabel.setFont(applicationFont);
+        newMedicationQuantityLabel.setBounds(420, 200, 150, 20);
+        panel.add(newMedicationQuantityLabel);
+
+        JLabel newMedicationTimeLabel = new JLabel("New Time");
+        newMedicationTimeLabel.setFont(applicationFont);
+        newMedicationTimeLabel.setBounds(20, 250, 150, 20);
+        panel.add(newMedicationTimeLabel);
+
+        JLabel newMedicationFrequencyLabel = new JLabel("New Frequency");
+        newMedicationFrequencyLabel.setFont(applicationFont);
+        newMedicationFrequencyLabel.setBounds(220, 250, 150, 20);
+        panel.add(newMedicationFrequencyLabel);
+
+        JLabel newMedicationMaximumLabel = new JLabel("New Maximum");
+        newMedicationMaximumLabel.setFont(applicationFont);
+        newMedicationMaximumLabel.setBounds(420, 250, 150, 20);
+        panel.add(newMedicationMaximumLabel);
+    }
+
+    public void addNewDetailFields(JPanel panel) {
+
+        JTextField newMedicationNameField = new JTextField();
+        newMedicationNameField.setBounds(20, 220, 100, 20);
+        panel.add(newMedicationNameField);
+
+        JTextField newMedicationDosageField = new JTextField();
+        newMedicationDosageField.setBounds(200, 220, 50, 20);
+        panel.add(newMedicationDosageField);
+
+        JTextField newMedicationQuantityField = new JTextField();
+        newMedicationQuantityField.setBounds(400, 220, 50, 20);
+        panel.add(newMedicationQuantityField);
+
+        JTextField newMedicationTimeField = new JTextField();
+        newMedicationTimeField.setBounds(200, 250, 50, 20);
+        panel.add(newMedicationTimeField);
+
+        JTextField newMedicationFrequencyField = new JTextField();
+        newMedicationFrequencyField.setBounds(200, 250, 50, 20);
+        panel.add(newMedicationFrequencyField);
+
+        JTextField newMedicationMaximumField = new JTextField();
+        newMedicationMaximumField.setBounds(200, 250, 50, 20);
+        panel.add(newMedicationMaximumField);
+
 
     }
 
