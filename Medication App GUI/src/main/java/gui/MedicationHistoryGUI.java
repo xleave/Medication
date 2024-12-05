@@ -2,9 +2,13 @@ package gui;
 import services.User;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
 
 import static java.awt.AWTEventMulticaster.add;
 import static services.MedicationManage.loadFont;
@@ -35,7 +39,7 @@ public class MedicationHistoryGUI extends JPanel {
         medicationHistoryGUISubheading.setBounds(10, 300, 100,20);
         medicationHistoryPanel.add(medicationHistoryGUISubheading);
 
-        //createMedicationListTable(medicationHistoryPanelContents);
+        createMedicationListTable(medicationHistoryPanelContents);
 
         drawGraph g = new drawGraph();
         medicationHistoryPanel.add(g,BorderLayout.CENTER);
@@ -62,16 +66,102 @@ public class MedicationHistoryGUI extends JPanel {
     private void createMedicationListTable(JPanel panel) {
 
         String[] medicationListHeaders = {"Medication", "Take"};
-        Object[][] medicationListData = {
-                {"Paracetomol", "Button ?"}
-        };
+        Object[][] medicationListData = new Object[medicationListHeaders.length][2];
 
-        JTable medicationListTable = new JTable(medicationListData, medicationListHeaders);
+        DefaultTableModel medicationListModel = new DefaultTableModel(medicationListData, medicationListHeaders);
+        JTable medicationListTable = new JTable(medicationListModel);
+        medicationListTable.getColumnModel().getColumn(1).setCellRenderer(new MedicationHistoryGUI.ButtonRenderer());
+        medicationListTable.getColumnModel().getColumn(1).setCellEditor(new MedicationHistoryGUI.ButtonEditor(new JTextField()));
         medicationListTable.setBounds(10, 100, 100, 400);
 
         JScrollPane medicationListScrollPane = new JScrollPane(medicationListTable);
         medicationListScrollPane.setBounds(10, 100, 100, 400);
         panel.add(medicationListScrollPane);
+
+        String userMedicationFilePath = "src/main/resources/medications/" + currentUser.getName() + "_medications.csv";
+        String temporaryLine = "";
+        ArrayList<String> medicationNames = new ArrayList<String>();
+        int medicationNameIndex = 0;
+        try {
+            BufferedReader medicationNameReader = new BufferedReader(new FileReader(userMedicationFilePath));
+            while ((temporaryLine = medicationNameReader.readLine()) != null) {
+                String[] tempArray =  temporaryLine.split(",");
+                medicationNames.add(tempArray[0]);
+                System.out.println(medicationNames);
+
+                //Putting medicaiton names into table.
+                medicationListModel.setValueAt(medicationNames.get(medicationNameIndex),medicationNameIndex, 0);
+
+
+            }
+
+
+        } catch (IOException medicationFileNotReadable) {
+            System.out.println("The medication file for this user could not be found! Please try again later.");
+            throw new RuntimeException(medicationFileNotReadable);
+        }
+
+
+    }
+
+    //This class and methods are used to add a JButton into a JTable.
+    public class ButtonRenderer extends JButton implements TableCellRenderer {
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object obj, boolean selected, boolean focused, int row, int column) {
+            setText((obj == null) ? "":obj.toString());
+            return this;
+        }
+    }
+    class ButtonEditor extends DefaultCellEditor {
+        protected JButton takeMedicineButton;
+        private String buttonLabel;
+        private Boolean buttonHasBeenClicked;
+
+        public ButtonEditor(JTextField textField) {
+            super(textField);
+
+            takeMedicineButton = new JButton();
+            takeMedicineButton.setOpaque(true);
+
+            //Action listener to see if user has clicked corresponding medicine take button.
+            takeMedicineButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent takeMedicineButtonClicked) {
+                    fireEditingStopped();
+                }
+            });
+        }
+        //Overriding method
+        public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int column) {
+
+            buttonLabel = (obj == null) ? "":obj.toString();
+            takeMedicineButton.setText(buttonLabel);
+            buttonHasBeenClicked = true;
+
+            return takeMedicineButton;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            if (buttonHasBeenClicked) {
+                JOptionPane.showMessageDialog(takeMedicineButton, "Do you want to log medication as taken?");
+
+            }
+            buttonHasBeenClicked = false;
+            return new String(buttonLabel);
+        }
+
+        public boolean stopCellEditing() {
+            buttonHasBeenClicked=false;
+            return super.stopCellEditing();
+        }
+        protected void fireEditingStopped() {
+            super.fireEditingStopped();
+        }
     }
 
     private class drawGraph extends JPanel{
