@@ -71,6 +71,7 @@ public class MedicationGUI extends JPanel {
 
         JButton editMedicationButton = new JButton("Edit Medication");
         editMedicationButton.setBounds(20, 250, 200, 50);
+        editMedicationButton.addActionListener(new EditMedicationActionListener());
         panel.add(editMedicationButton);
 
         JButton removeMedicationButton = new JButton("Remove Medication");
@@ -121,5 +122,14 @@ public class MedicationGUI extends JPanel {
         public void actionPerformed(ActionEvent e) {
             AddMedicationPopupGUI addMedicationPopupGUI = new AddMedicationPopupGUI(currentUser);
         }
+
     }
+
+private class EditMedicationActionListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent editButtonClicked) {
+        EditMedicationPopupGUI editMedicationPopupGUI = new EditMedicationPopupGUI(currentUser);
+    }
+
+}
 }
