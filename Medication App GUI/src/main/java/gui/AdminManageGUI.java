@@ -1,12 +1,12 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
-import services.MedicationManage;
 import services.User;
 import services.AdminManage;
 
@@ -14,23 +14,11 @@ public class AdminManageGUI extends JPanel {
 
     private User currentUser;
     private AdminManage adminManage;
-    private Font applicationFont;
 
     public AdminManageGUI(User user) {
         this.currentUser = user;
         this.adminManage = new AdminManage(currentUser);
-        initializeFont();
         initialize();
-    }
-
-    private void initializeFont() {
-        try {
-            applicationFont = MedicationManage
-                    .loadFont("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf");
-        } catch (RuntimeException e) {
-            System.out.println("Font could not be found!");
-            throw e;
-        }
     }
 
     private void initialize() {
@@ -38,51 +26,24 @@ public class AdminManageGUI extends JPanel {
 
         JLabel titleLabel = new JLabel("User Management");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setFont(applicationFont.deriveFont(Font.BOLD, 24f));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         this.add(titleLabel, BorderLayout.NORTH);
 
         // Get a list of all users
         ArrayList<String[]> userList = adminManage.getAllUsers();
 
         // Create user forms
-        String[] columnNames = { "Username", "Privilege", "Consistent", "Action" };
-        Object[][] data = new Object[userList.size()][4];
+        String[] columnNames = { "Username", "Privilege", "Action" };
+        Object[][] data = new Object[userList.size()][3];
 
         for (int i = 0; i < userList.size(); i++) {
-            String username = userList.get(i)[0];
-            String privilege = userList.get(i)[2];
-            data[i][0] = username;
-            data[i][1] = privilege;
-            data[i][2] = adminManage.checkUserConsistency(username) ? "Yes" : "No";
-            data[i][3] = "Actions"; 
+            data[i][0] = userList.get(i)[0];
+            data[i][1] = userList.get(i)[2];
+            data[i][2] = "Delete"; // Action button
         }
 
         UserTableModel model = new UserTableModel(data, columnNames);
         JTable userTable = new JTable(model);
-        userTable.setRowHeight(40); // Set the table not to automatically adjust column widths
-
-        // Set the table not to automatically adjust column widths
-        userTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        // Set the content to be centered
-        TableColumnModel columnModel = userTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(200); // Username
-        columnModel.getColumn(1).setPreferredWidth(150); // Privilege
-        columnModel.getColumn(2).setPreferredWidth(150); // Consistent
-        columnModel.getColumn(3).setPreferredWidth(500); // Action
-
-        // Set the content to be centered
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < columnNames.length - 1; i++) { // Action列不需要居中
-            centerRenderer.setFont(applicationFont.deriveFont(14f));
-            userTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // Set the header font
-        JTableHeader header = userTable.getTableHeader();
-        header.setFont(applicationFont.deriveFont(Font.BOLD, 14f));
-
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
         userTable.getColumn("Action").setCellEditor(new ButtonEditor(adminManage, this));
 
@@ -130,12 +91,12 @@ public class AdminManageGUI extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            return col == 3;
+            return col == 2;
         }
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            if (col != 3) {
+            if (col != 2) {
                 data[row][col] = value;
                 fireTableCellUpdated(row, col);
             }
@@ -144,48 +105,36 @@ public class AdminManageGUI extends JPanel {
         @Override
         public Class<?> getColumnClass(int col) {
             if (col == 2) {
-                return String.class;
+                return Object.class;
             }
             return getValueAt(0, col).getClass();
         }
     }
 
     // Button Renderer
-    class ButtonRenderer extends JPanel implements TableCellRenderer {
-        private JButton deleteButton;
-        private JButton editButton;
-        private JButton changePrivilegeButton;
-
+    class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
-            setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            deleteButton = createButton("Delete");
-            editButton = createButton("Edit");
-            changePrivilegeButton = createButton("Change Privilege");
-            add(deleteButton);
-            add(editButton);
-            add(changePrivilegeButton);
-        }
-
-        private JButton createButton(String text) {
-            JButton button = new JButton(text);
-            button.setPreferredSize(new Dimension(150, 30)); // Uniform button sizes
-            button.setFont(applicationFont.deriveFont(12f));
-            return button;
+            setOpaque(true);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(UIManager.getColor("Button.background"));
+            }
+            setText((value == null) ? "" : value.toString());
             return this;
         }
     }
 
     // Button Editor
     class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
-        private JPanel panel;
-        private JButton deleteButton;
-        private JButton editButton;
-        private JButton changePrivilegeButton;
+        private JButton button;
         private String userName;
         private AdminManage adminManage;
         private AdminManageGUI adminManageGUI;
@@ -193,26 +142,10 @@ public class AdminManageGUI extends JPanel {
         public ButtonEditor(AdminManage adminManage, AdminManageGUI adminManageGUI) {
             this.adminManage = adminManage;
             this.adminManageGUI = adminManageGUI;
-            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            deleteButton = createButton("Delete");
-            editButton = createButton("Edit");
-            changePrivilegeButton = createButton("Change Privilege");
-            addButtons();
-        }
+            button = new JButton("Delete");
+            button.setOpaque(true);
 
-        private JButton createButton(String text) {
-            JButton button = new JButton(text);
-            button.setPreferredSize(new Dimension(110, 30)); // Uniform button sizes
-            button.setFont(applicationFont.deriveFont(12f));
-            return button;
-        }
-
-        private void addButtons() {
-            panel.add(deleteButton);
-            panel.add(editButton);
-            panel.add(changePrivilegeButton);
-
-            deleteButton.addActionListener(new ActionListener() {
+            button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     fireEditingStopped();
@@ -225,72 +158,19 @@ public class AdminManageGUI extends JPanel {
                     }
                 }
             });
-
-            editButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    String newPassword = JOptionPane.showInputDialog(null,
-                            "Enter new password for user: " + userName, "Edit Password",
-                            JOptionPane.PLAIN_MESSAGE);
-                    if (newPassword != null && !newPassword.trim().isEmpty()) {
-                        adminManage.updateUserPassword(userName, newPassword.trim());
-                        JOptionPane.showMessageDialog(null, "Password updated successfully.");
-                        adminManageGUI.refreshInterface();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Password cannot be empty.");
-                    }
-                }
-            });
-
-            changePrivilegeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    String[] options = { "user", "admin" };
-                    String currentPrivilege = getCurrentPrivilege(userName);
-                    String newPrivilege = (String) JOptionPane.showInputDialog(null,
-                            "Select new privilege for user: " + userName,
-                            "Change Privilege",
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            options,
-                            currentPrivilege);
-                    if (newPrivilege != null && !newPrivilege.equals(currentPrivilege)) {
-                        adminManage.updateUserPrivilege(userName, newPrivilege);
-                        JOptionPane.showMessageDialog(null, "Privilege updated successfully.");
-                        adminManageGUI.refreshInterface();
-                    }
-                }
-
-                /**
-                 * Get the current user's permissions
-                 * 
-                 * @param userName User name
-                 * @return Current permissions
-                 */
-                private String getCurrentPrivilege(String userName) {
-                    ArrayList<String[]> users = adminManage.getAllUsers();
-                    for (String[] user : users) {
-                        if (user[0].equals(userName)) {
-                            return user[2];
-                        }
-                    }
-                    return "user"; // Default permissions
-                }
-            });
         }
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int column) {
             userName = (String) table.getValueAt(row, 0);
-            return panel;
+            button.setText((value != null) ? value.toString() : "Delete");
+            return button;
         }
 
         @Override
         public Object getCellEditorValue() {
-            return null;
+            return "Delete"; 
         }
     }
 }

@@ -1,11 +1,17 @@
 // Scheduler.java
 package services;
 
+import com.sun.mail.util.MailSSLSocketFactory;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 public class Scheduler {
     private List<Medicine> medicines;
