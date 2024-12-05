@@ -112,10 +112,10 @@ public class AdminManage {
     }
 
     /**
-     * 更新用户的权限
+     * :: Updating user permissions
      * 
-     * @param userName     用户名
-     * @param newPrivilege 新的权限（"user" 或 "admin"）
+     * @param userName     User name
+     * @param newPrivilege new privilege (“user” or “admin”)
      */
     public void updateUserPrivilege(String userName, String newPrivilege) {
         try {
