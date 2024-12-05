@@ -1,9 +1,7 @@
 package services;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-import javax.swing.*;
 
 public class AdminManage {
 
@@ -67,6 +65,85 @@ public class AdminManage {
             File medicationFile = new File("src/main/resources/medications/" + userName + "_medications.csv");
             if (medicationFile.exists()) {
                 medicationFile.delete();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean checkUserConsistency(String userName) {
+        File medicationFile = new File("src/main/resources/medications/" + userName + "_medications.csv");
+        return medicationFile.exists();
+    }
+
+    public void updateUserPassword(String userName, String newPassword) {
+        try {
+            File userFile = new File("src/main/resources/users/users.csv");
+            File tempFile = new File("src/main/resources/users/users_temp.csv");
+
+            BufferedReader reader = new BufferedReader(new FileReader(userFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] userDetails = currentLine.split(",");
+                if (userDetails.length >= 3 && userDetails[0].equals(userName)) {
+                    writer.write(
+                            userName + "," + newPassword + "," + userDetails[2] + System.getProperty("line.separator"));
+                } else {
+                    writer.write(currentLine + System.getProperty("line.separator"));
+                }
+            }
+            writer.close();
+            reader.close();
+
+            // Replace original file with updated file
+            if (!userFile.delete()) {
+                System.out.println("Failed to delete the original user file.");
+            }
+            if (!tempFile.renameTo(userFile)) {
+                System.out.println("Failed to rename the temp user file.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * :: Updating user permissions
+     * 
+     * @param userName     User name
+     * @param newPrivilege new privilege (“user” or “admin”)
+     */
+    public void updateUserPrivilege(String userName, String newPrivilege) {
+        try {
+            File userFile = new File("src/main/resources/users/users.csv");
+            File tempFile = new File("src/main/resources/users/users_temp.csv");
+
+            BufferedReader reader = new BufferedReader(new FileReader(userFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] userDetails = currentLine.split(",");
+                if (userDetails.length >= 3 && userDetails[0].equals(userName)) {
+                    writer.write(userName + "," + userDetails[1] + "," + newPrivilege
+                            + System.getProperty("line.separator"));
+                } else {
+                    writer.write(currentLine + System.getProperty("line.separator"));
+                }
+            }
+            writer.close();
+            reader.close();
+
+            // Replace original file with updated file
+            if (!userFile.delete()) {
+                System.out.println("Failed to delete the original user file.");
+            }
+            if (!tempFile.renameTo(userFile)) {
+                System.out.println("Failed to rename the temp user file.");
             }
 
         } catch (IOException e) {
