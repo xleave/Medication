@@ -17,6 +17,7 @@ public class EditMedicationPopupGUI extends JPanel {
         initializeFont();
         createAndShowGUI();
     }
+
     private void initializeFont() {
         try {
             applicationFont = MedicationManage.loadFont("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf");
@@ -30,6 +31,7 @@ public class EditMedicationPopupGUI extends JPanel {
 
         JFrame editMedicationFrame = new JFrame("Edit Medication");
         editMedicationFrame.setSize(600, 400);
+        editMedicationFrame.setResizable(false);
 
         JPanel editMedicationPanelContents = new JPanel();
         editMedicationPanelContents.setLayout(null);
@@ -49,9 +51,19 @@ public class EditMedicationPopupGUI extends JPanel {
         newMedicationHeading.setBounds(20, 150, 600, 50);
         editMedicationPanelContents.add(newMedicationHeading);
 
+        JButton cancelEditButton = new JButton("Cancel");
+        cancelEditButton.setFont(applicationFont);
+        cancelEditButton.setBounds(200, 300, 100, 50);
+        editMedicationPanelContents.add(cancelEditButton);
+
+        JButton doEditButton = new JButton("Apply");
+        doEditButton.setFont(applicationFont);
+        doEditButton.setBounds(300, 300, 100, 50);
+        editMedicationPanelContents.add(doEditButton);
+
         //Adding all components from other.
-        addNewDetailLabels(editMedicationPanelContents);
-        addNewDetailFields(editMedicationPanelContents);
+        showCurrentDataTable(editMedicationPanelContents);
+        addNewDetailTable(editMedicationPanelContents);
 
         //Final rendering
         editMedicationFrame.add(editMedicationPanelContents);
@@ -59,67 +71,29 @@ public class EditMedicationPopupGUI extends JPanel {
 
     }
 
-    public void addNewDetailLabels(JPanel panel) {
+    public void showCurrentDataTable(JPanel panel) {
+        String[] currentMedHeader = {"Name", "Dosage", "Quantity", "Time", "Frequency", "Maximum"};
+        Object[][] currentMedData = new Object[1][6];
 
-        JLabel newMedicationNameLabel = new JLabel("New Name");
-        newMedicationNameLabel.setFont(applicationFont);
-        newMedicationNameLabel.setBounds(20, 200, 150, 20);
-        panel.add(newMedicationNameLabel);
+        JTable currentMedicationInformation = new JTable(currentMedData, currentMedHeader);
+        currentMedicationInformation.setBounds(20, 100, 500, 50);
+        JScrollPane currentMedicationScrollPane = new JScrollPane(currentMedicationInformation);
+        currentMedicationScrollPane.setBounds(20, 100, 500, 50);
 
-        JLabel newMedicationDosageLabel = new JLabel("New Dosage");
-        newMedicationDosageLabel.setFont(applicationFont);
-        newMedicationDosageLabel.setBounds(220, 200, 150, 20);
-        panel.add(newMedicationDosageLabel);
-
-        JLabel newMedicationQuantityLabel = new JLabel("New Quantity");
-        newMedicationQuantityLabel.setFont(applicationFont);
-        newMedicationQuantityLabel.setBounds(420, 200, 150, 20);
-        panel.add(newMedicationQuantityLabel);
-
-        JLabel newMedicationTimeLabel = new JLabel("New Time");
-        newMedicationTimeLabel.setFont(applicationFont);
-        newMedicationTimeLabel.setBounds(20, 250, 150, 20);
-        panel.add(newMedicationTimeLabel);
-
-        JLabel newMedicationFrequencyLabel = new JLabel("New Frequency");
-        newMedicationFrequencyLabel.setFont(applicationFont);
-        newMedicationFrequencyLabel.setBounds(220, 250, 150, 20);
-        panel.add(newMedicationFrequencyLabel);
-
-        JLabel newMedicationMaximumLabel = new JLabel("New Maximum");
-        newMedicationMaximumLabel.setFont(applicationFont);
-        newMedicationMaximumLabel.setBounds(420, 250, 150, 20);
-        panel.add(newMedicationMaximumLabel);
+        panel.add(currentMedicationScrollPane);
     }
 
-    public void addNewDetailFields(JPanel panel) {
+    public void addNewDetailTable(JPanel panel) {
+        String[] newMedHeader = {"New Name", "New Dosage", "New Quantity", "New Time", "New Frequency", "New Maximum"};
+        Object[][] newMedData = new Object[1][6];
 
-        JTextField newMedicationNameField = new JTextField();
-        newMedicationNameField.setBounds(20, 220, 100, 20);
-        panel.add(newMedicationNameField);
+        JTable newMedicationInformation = new JTable(newMedData, newMedHeader);
+        newMedicationInformation.setBounds(20, 100, 500, 50);
+        JScrollPane newMedicationScrollPane = new JScrollPane(newMedicationInformation);
+        newMedicationScrollPane.setBounds(20, 200, 500, 50);
 
-        JTextField newMedicationDosageField = new JTextField();
-        newMedicationDosageField.setBounds(200, 220, 50, 20);
-        panel.add(newMedicationDosageField);
-
-        JTextField newMedicationQuantityField = new JTextField();
-        newMedicationQuantityField.setBounds(400, 220, 50, 20);
-        panel.add(newMedicationQuantityField);
-
-        JTextField newMedicationTimeField = new JTextField();
-        newMedicationTimeField.setBounds(200, 250, 50, 20);
-        panel.add(newMedicationTimeField);
-
-        JTextField newMedicationFrequencyField = new JTextField();
-        newMedicationFrequencyField.setBounds(200, 250, 50, 20);
-        panel.add(newMedicationFrequencyField);
-
-        JTextField newMedicationMaximumField = new JTextField();
-        newMedicationMaximumField.setBounds(200, 250, 50, 20);
-        panel.add(newMedicationMaximumField);
+        panel.add(newMedicationScrollPane);
 
 
     }
-
-
 }
