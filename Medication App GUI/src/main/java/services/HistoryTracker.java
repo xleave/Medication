@@ -40,7 +40,7 @@ public class HistoryTracker {
                 String[] medInfo = line.split(",");
                 if (medInfo.length >= 2) {
                     String medName = medInfo[0].trim();
-                    // 获取最后一列作为 dailyLimit
+                    // get the last column as dailyLimit
                     int dailyLimit = Integer.parseInt(medInfo[medInfo.length - 1].trim());
                     medicationDailyLimits.put(medName, dailyLimit);
                 }
@@ -132,4 +132,10 @@ public class HistoryTracker {
         }
         return applicationFont;
     }
+
+    public void reloadMedicationData() {
+        loadMedicationLimits();
+        loadTakenRecords();
+    }
+
 }
