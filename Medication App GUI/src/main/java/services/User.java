@@ -182,7 +182,7 @@ public class User {
                         takeMedicine(scanner);
                         break;
                     case "5":
-                        scheduler.viewHistory();
+//                        scheduler.viewHistory();
                         break;
                     case "6":
                         manageAllUsersMedicines(scanner);
@@ -209,7 +209,7 @@ public class User {
                         takeMedicine(scanner);
                         break;
                     case "5":
-                        scheduler.viewHistory();
+//                        scheduler.viewHistory();
                         break;
                     case "6":
                         isLoggedIn = false;
