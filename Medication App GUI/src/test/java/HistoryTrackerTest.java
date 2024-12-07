@@ -71,5 +71,78 @@ public class HistoryTrackerTest {
         assertEquals("Med5 daily limit should be 2", 2, (int) medicationLimits.get("Med5"));
     }
 
+    @Test
+    public void testLoadTakenRecords() {
+        assertEquals("Para taken count should be 1", 1, historyTracker.getTakenCount("Para"));
+        assertEquals("Ibu taken count should be 2", 2, historyTracker.getTakenCount("Ibu"));
+        assertEquals("Med3 taken count should be 0", 0, historyTracker.getTakenCount("Med3"));
+        assertEquals("Med4 taken count should be 4", 4, historyTracker.getTakenCount("Med4"));
+        assertEquals("Med5 taken count should be 1", 1, historyTracker.getTakenCount("Med5"));
+    }
+
+    @Test
+    public void testIsExceeded() {
+        assertFalse("Para should not have exceeded daily limit", historyTracker.isExceeded("Para"));
+        assertTrue("Ibu should have exceeded daily limit", historyTracker.isExceeded("Ibu"));
+        assertFalse("Med3 should not have exceeded daily limit", historyTracker.isExceeded("Med3"));
+        assertTrue("Med4 should have exceeded daily limit", historyTracker.isExceeded("Med4"));
+        assertFalse("Med5 should not have exceeded daily limit", historyTracker.isExceeded("Med5"));
+    }
+
+    @Test
+    public void testSaveTakenRecord() {
+        // Before saving, Para taken count is 1, limit is 3
+        assertFalse("Para should not have exceeded daily limit", historyTracker.isExceeded("Para"));
+
+        // Save once
+        historyTracker.saveTakenRecord("Para");
+        assertEquals("Para taken count should be 2", 2, historyTracker.getTakenCount("Para"));
+        assertFalse("Para should not have exceeded daily limit", historyTracker.isExceeded("Para"));
+
+        // Save again
+        historyTracker.saveTakenRecord("Para");
+        assertEquals("Para taken count should be 3", 3, historyTracker.getTakenCount("Para"));
+        assertTrue("Para should have exceeded daily limit", historyTracker.isExceeded("Para"));
+    }
+
+    @Test
+    public void testReloadMedicationData() throws IOException {
+        // Modify medications file by adding Med6
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testUserMedicationsFile, true))) {
+            writer.write("Med6,5\n");
+        }
+
+        // Modify taken records file by adding Med6 with 0 taken
+        LocalDate today = LocalDate.now();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testUserTakenRecordsFile, true))) {
+            writer.write("Med6," + today.toString() + ",0\n");
+        }
+
+        // Reload data
+        historyTracker.reloadMedicationData();
+
+        // Check if Med6 is loaded correctly
+        assertEquals("Number of medications should be 6", 6, historyTracker.getMedicationDailyLimits().size());
+        assertEquals("Med6 daily limit should be 5", 5, historyTracker.getDailyLimit("Med6"));
+        assertEquals("Med6 taken count should be 0", 0, historyTracker.getTakenCount("Med6"));
+    }
+
+    @Test
+    public void testGetDailyLimit() {
+        assertEquals("Para daily limit should be 3", 3, historyTracker.getDailyLimit("Para"));
+        assertEquals("Ibu daily limit should be 2", 2, historyTracker.getDailyLimit("Ibu"));
+        assertEquals("Med3 daily limit should be 1", 1, historyTracker.getDailyLimit("Med3"));
+        assertEquals("Med4 daily limit should be 4", 4, historyTracker.getDailyLimit("Med4"));
+        assertEquals("Med5 daily limit should be 2", 2, historyTracker.getDailyLimit("Med5"));
+    }
+
+    @Test
+    public void testGetTakenCount() {
+        assertEquals("Para taken count should be 1", 1, historyTracker.getTakenCount("Para"));
+        assertEquals("Ibu taken count should be 2", 2, historyTracker.getTakenCount("Ibu"));
+        assertEquals("Med3 taken count should be 0", 0, historyTracker.getTakenCount("Med3"));
+        assertEquals("Med4 taken count should be 4", 4, historyTracker.getTakenCount("Med4"));
+        assertEquals("Med5 taken count should be 1", 1, historyTracker.getTakenCount("Med5"));
+    }
 
 }
