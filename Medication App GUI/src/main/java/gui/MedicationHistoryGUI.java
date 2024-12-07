@@ -38,8 +38,27 @@ public class MedicationHistoryGUI extends JPanel {
         medicationHistoryGUISubheading.setFont(applicationFont.deriveFont(Font.BOLD, 20f));
         medicationHistoryPanel.add(medicationHistoryGUISubheading, BorderLayout.NORTH);
 
-        createMedicationListTable(medicationHistoryPanelContents);
-        medicationHistoryPanel.add(medicationHistoryPanelContents, BorderLayout.CENTER);
+        // Create a panel for the table
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new BorderLayout());
+
+        // Create a refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.setPreferredSize(new Dimension(100, 40));
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reloadMedicationList();
+            }
+        });
+
+        // Place the refresh button on the left side of the form
+        tablePanel.add(refreshButton, BorderLayout.WEST);
+
+        JScrollPane medicationListScrollPane = createMedicationListTable();
+        tablePanel.add(medicationListScrollPane, BorderLayout.CENTER);
+
+        medicationHistoryPanel.add(tablePanel, BorderLayout.CENTER);
 
         drawGraph g = new drawGraph();
         medicationHistoryPanel.add(g, BorderLayout.SOUTH);
@@ -47,49 +66,73 @@ public class MedicationHistoryGUI extends JPanel {
         add(medicationHistoryPanel);
     }
 
-    private void createMedicationListTable(JPanel panel) {
-
+    private JScrollPane createMedicationListTable() {
         String[] medicationListHeaders = { "Medication", "Take" };
 
         DefaultTableModel medicationListModel = new DefaultTableModel(medicationListHeaders, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 1; // 只允许"Take"列可编辑
+                return column == 1; // Only the "Take" button is editable
             }
         };
+
         JTable medicationListTable = new JTable(medicationListModel);
         medicationListTable.getColumnModel().getColumn(1).setCellRenderer(new ButtonRenderer());
         medicationListTable.getColumnModel().getColumn(1).setCellEditor(new ButtonEditor());
         medicationListTable.setRowHeight(40);
 
-        JScrollPane medicationListScrollPane = new JScrollPane(medicationListTable);
-        medicationListScrollPane.setPreferredSize(new Dimension(960, 400));
-        panel.add(medicationListScrollPane);
+        // Load drug information into the form
+        loadMedicationsIntoTable(medicationListModel);
+
+        medicationScrollPane = new JScrollPane(medicationListTable);
+        medicationScrollPane.setPreferredSize(new Dimension(860, 400));
+        medicationScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        medicationScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return medicationScrollPane;
+    }
+
+    private void loadMedicationsIntoTable(DefaultTableModel model) {
+        // Empty existing data
+        model.setRowCount(0);
 
         // Load drug information and add to form
         for (Map.Entry<String, Integer> entry : historyTracker.getMedicationDailyLimits().entrySet()) {
             String medicationName = entry.getKey();
-            medicationListModel.addRow(new Object[] { medicationName, "Take" });
+            model.addRow(new Object[] { medicationName, "Take" });
         }
     }
 
-    // The ButtonRenderer class is used to render buttons.
+    private void reloadMedicationList() {
+        // Reload medication data
+        historyTracker.reloadMedicationData();
+
+        // Update the table model
+        DefaultTableModel model = (DefaultTableModel) ((JTable) medicationScrollPane.getViewport().getView()).getModel();
+        loadMedicationsIntoTable(model);
+
+        // Refresh the table view
+        ((JTable) medicationScrollPane.getViewport().getView()).revalidate();
+        ((JTable) medicationScrollPane.getViewport().getView()).repaint();
+
+        JOptionPane.showMessageDialog(this, "Drug information has been refreshed.");
+    }
+
     public class ButtonRenderer extends JButton implements TableCellRenderer {
 
         public ButtonRenderer() {
             setOpaque(true);
-            setMargin(new Insets(5, 15, 5, 15)); // 增加按钮内边距
+            setMargin(new Insets(5, 15, 5, 15));
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object obj, boolean selected,
-                boolean focused, int row, int column) {
+                                                       boolean focused, int row, int column) {
             setText((obj == null) ? "" : obj.toString());
             return this;
         }
     }
 
-    // The ButtonEditor class is used to handle button click events.
     public class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
 
         private JButton takeMedicineButton = new JButton();
@@ -109,11 +152,11 @@ public class MedicationHistoryGUI extends JPanel {
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
+                                                     boolean isSelected, int row, int column) {
             currentMedication = table.getValueAt(row, 0).toString();
             takeMedicineButton.setText((value == null) ? "" : value.toString());
 
-            // Check if the daily limit is exceeded
+            //check if daily limit exceeded
             if (historyTracker.isExceeded(currentMedication)) {
                 takeMedicineButton.setEnabled(false);
             } else {
@@ -130,8 +173,7 @@ public class MedicationHistoryGUI extends JPanel {
 
         private void handleTakeMedicine() {
             if (historyTracker.isExceeded(currentMedication)) {
-                System.out
-                        .println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
+                System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
                 JOptionPane.showMessageDialog(takeMedicineButton,
                         "You have reached the daily limit for " + currentMedication + ".");
                 return;
@@ -147,18 +189,17 @@ public class MedicationHistoryGUI extends JPanel {
                 JOptionPane.showMessageDialog(takeMedicineButton,
                         "Medication " + currentMedication + " has been logged as taken.");
 
-                // Update the table to reflect the new count
+                // check if daily limit exceeded after taking medication
                 if (historyTracker.isExceeded(currentMedication)) {
                     takeMedicineButton.setEnabled(false);
-                    System.out.println(
-                            "Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
+                    System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
                 }
             }
             fireEditingStopped();
         }
     }
 
-    // The drawGraph class is used to draw a bar graph.
+    // Internal class for charting
     private class drawGraph extends JPanel {
         int[] testdata = { 5, 10, 15, 20, 30 };
         String[] testname = { "Para", "Ibu", "Med3", "Med4", "Med5" };
