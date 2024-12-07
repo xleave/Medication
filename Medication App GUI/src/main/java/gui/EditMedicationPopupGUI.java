@@ -4,7 +4,11 @@ import services.MedicationManage;
 import services.User;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class EditMedicationPopupGUI extends JPanel {
 
@@ -12,7 +16,10 @@ public class EditMedicationPopupGUI extends JPanel {
 
     private Font applicationFont;
 
-    public EditMedicationPopupGUI(User user) {
+    public Vector<String> rowValuueVector;
+
+
+    public EditMedicationPopupGUI(User user, Vector vector) {
         this.currentUser = user;
         initializeFont();
         createAndShowGUI();
@@ -54,14 +61,31 @@ public class EditMedicationPopupGUI extends JPanel {
         JButton cancelEditButton = new JButton("Cancel");
         cancelEditButton.setFont(applicationFont);
         cancelEditButton.setBounds(200, 300, 100, 50);
+
+        cancelEditButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent cancelEditButtonClicked) {
+                editMedicationFrame.dispose();
+            }
+        });
+
         editMedicationPanelContents.add(cancelEditButton);
 
         JButton doEditButton = new JButton("Apply");
         doEditButton.setFont(applicationFont);
         doEditButton.setBounds(300, 300, 100, 50);
+
+        doEditButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent doEditButtonClicked) {
+                JOptionPane.showMessageDialog(editMedicationPanelContents, "Medication has been edited.", "Edit Medication",  JOptionPane.INFORMATION_MESSAGE);
+                editMedicationFrame.dispose();
+            }
+        });
+
         editMedicationPanelContents.add(doEditButton);
 
-        //Adding all components from other.
+        //Adding all components from others.
         showCurrentDataTable(editMedicationPanelContents);
         addNewDetailTable(editMedicationPanelContents);
 
@@ -72,14 +96,26 @@ public class EditMedicationPopupGUI extends JPanel {
     }
 
     public void showCurrentDataTable(JPanel panel) {
+        MedicationGUI medicationGUI = new MedicationGUI(currentUser);
+        Vector<String> medicationRowFromTable = medicationGUI.getSelectedRowFromTable();
         String[] currentMedHeader = {"Name", "Dosage", "Quantity", "Time", "Frequency", "Maximum"};
         Object[][] currentMedData = new Object[1][6];
 
-        JTable currentMedicationInformation = new JTable(currentMedData, currentMedHeader);
+        //Testing to see if Vector from other page is being shared accross calls.
+        System.out.println(medicationRowFromTable);
+
+        DefaultTableModel currentMedicationInformationModel = new DefaultTableModel(currentMedData, currentMedHeader);
+        JTable currentMedicationInformation = new JTable(currentMedicationInformationModel);
         currentMedicationInformation.setBounds(20, 100, 500, 50);
+
+        //currentMedicationInformationModel.setValueAt(rowValuueVector.get(i));
+
         JScrollPane currentMedicationScrollPane = new JScrollPane(currentMedicationInformation);
         currentMedicationScrollPane.setBounds(20, 100, 500, 50);
 
+        //Inserting values from main table into edit table.
+        //currentMedicationInformationModel.setValueAt(rowValuueVector.get(0), 0, 0);
+        currentMedicationInformationModel.setValueAt(medicationGUI.getSelectedRowFromTable().get(0), 0, 0);
         panel.add(currentMedicationScrollPane);
     }
 
