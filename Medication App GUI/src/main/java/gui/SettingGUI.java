@@ -126,14 +126,25 @@ public class SettingGUI extends JPanel {
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        logoutButton.addActionListener(e -> {
+        logoutButton.addActionListener(e -> showLogoutConfirmationDialog());
+
+        return panel;
+    }
+
+
+    private void showLogoutConfirmationDialog() {
+        int result = JOptionPane.showConfirmDialog(mainWindow,
+                "Are you sure you want to logout?",
+                "Logout",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (result == JOptionPane.YES_OPTION) {
             mainWindow.dispose();
             SwingUtilities.invokeLater(() -> {
                 LoginGUI loginGUI = new LoginGUI();
                 loginGUI.displayLoginGUI();
             });
-        });
-
-        return panel;
+        }
     }
 }
