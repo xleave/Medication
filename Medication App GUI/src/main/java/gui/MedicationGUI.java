@@ -14,12 +14,13 @@ import services.MedicationManage;
 public class MedicationGUI extends JPanel {
 
     private User currentUser;
-
     public JTable medicationTable = new JTable();
     public DefaultTableModel medicationTableModel = new DefaultTableModel();
     private JScrollPane tableScrollPane; // Add new member variables
 
     public Vector<String> rowValueVector = new Vector<>();
+
+    public int rowIndexFromMedTable;
 
     public MedicationGUI(User user) {
         this.currentUser = user;
@@ -119,21 +120,29 @@ public class MedicationGUI extends JPanel {
         JScrollPane tableScrollPane = new JScrollPane(medicationTable);
         tableScrollPane.setBounds(300, 100, 600, 350);
 
-        getSelectedRowFromTable();
+        medicationTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                getSelectedRowFromTable(getSelectedRowIndex());
+            }
+        });
 
         panel.add(tableScrollPane);
     }
 
-    private void addEmptyTable(JPanel panel, String[] tableHeaders) {
-        Object[][] medicationTableData = new Object[0][6];
-        addTableToPanel(panel, medicationTableData, tableHeaders);
+    public int getSelectedRowIndex() {
+        DefaultTableModel model = (DefaultTableModel)medicationTable.getModel();
+        int rowIndex = medicationTable.getSelectedRow();
+
+        return rowIndex;
     }
 
-    public Vector<String> getSelectedRowFromTable() {
-        int rowIndex = medicationTable.getSelectedRow() + 1;
-        medicationTableModel = (DefaultTableModel)medicationTable.getModel();
+    public Vector<String> getSelectedRowFromTable(int rowIndex) {
+
         //Now get value at each column of given row.
         rowValueVector = new Vector<>();
+
         rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 0));
         rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 1));
         rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 2));
@@ -141,10 +150,9 @@ public class MedicationGUI extends JPanel {
         rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 4));
         rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 5));
 
-        //Testing to see if I can get the value of the index when clicked.
-        System.out.println("Row clicked on " + rowIndex);
-
-
+        //Testing
+//        System.out.println("Row Index in MedicationGUI: " + rowIndex);
+//        System.out.println("Vector contents in MedicationGUI: " + rowValueVector);
         return rowValueVector;
     }
 
@@ -160,6 +168,7 @@ private class EditMedicationActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent editButtonClicked) {
         EditMedicationPopupGUI editMedicationPopupGUI = new EditMedicationPopupGUI(currentUser, rowValueVector);
+        getSelectedRowFromTable(getSelectedRowIndex());
     }
 
 }
