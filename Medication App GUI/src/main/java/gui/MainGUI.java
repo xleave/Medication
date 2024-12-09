@@ -125,7 +125,9 @@ public class MainGUI {
         if (currentUser.isAdmin()) {
             buttonPanel.add(adminManagePanelButton);
         }
-
+        if (currentUser.isAdmin()) {
+            buttonPanel.remove(historyPanelButton);
+        }
         // Add components to the static panel
         staticPanel.add(userInfoTitle);
         staticPanel.add(applicationTitle);
