@@ -46,5 +46,21 @@ public class ChangePasswordTest {
         // Verify that writer.write was called with updated password
     }
 
+    @Test
+    public void testUpdatePasswordUserNotFound() throws IOException {
+        String username = "nonExistentUser";
+        String newPassword = "newPass";
+
+        // Mocking the file content
+        when(mockReader.readLine())
+                .thenReturn("user1,pass1")
+                .thenReturn("user2,pass2")
+                .thenReturn(null);
+
+        boolean result = changePassword.updatePassword(username, newPassword);
+        assertFalse(result);
+
+        // Verify that writer.write was called with unchanged records
+    }
 
 }
