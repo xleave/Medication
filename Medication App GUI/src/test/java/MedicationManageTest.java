@@ -1,69 +1,55 @@
-// // Test Case 1: Successful save
-// @Test
-// public void testSaveMedicationInfo_SuccessfulSave() throws Exception {
-//     // Arrange
-//     String targetUserName = "testUser";
-//     JTextField[] textFields = {
-//         new JTextField("Medication1"),
-//         new JTextField("Dosage1"),
-//         new JTextField("Frequency1"),
-//         new JTextField("Route1"),
-//         new JTextField("Notes1"),
-//         new JTextField("Duration1")
-//     };
-//     JButton acceptButton = new JButton();
-//     JFrame frame = mock(JFrame.class);
+import services.*;
+import javax.swing.*;
+import java.io.*;
+import org.junit.Test;
+import org.mockito.Mockito;
+import static org.junit.Assert.*;
 
-//     // Ensure medications directory exists
-//     File medicationsDir = new File("src/main/resources/medications");
-//     medicationsDir.mkdirs();
+public class MedicationManageTest {
 
-//     // Delete the file if it already exists
-//     File medicationFile = new File(medicationsDir, targetUserName + "_medications.csv");
-//     if (medicationFile.exists()) {
-//         medicationFile.delete();
-//     }
+    @Test
+    public void testLoadFontInvalidPath() {
+        String invalidFontPath = "src/main/resources/fonts/nonexistent.ttf";
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            MedicationManage.loadFont(invalidFontPath);
+        });
+        assertTrue(exception.getMessage().contains("Font could not be loaded"));
+    }
 
-//     // Act
-//     MedicationManage.saveMedicationInfo(targetUserName, textFields, acceptButton, frame);
+    @Test
+    public void testSaveMedicationInfoCreatesNewFile() throws IOException {
+        JTextField[] textFields = {new JTextField("Aspirin")};
+        JButton acceptButton = new JButton();
+        JFrame frame = new JFrame();
 
-//     // Assert
-//     assertTrue("Medication file should be created", medicationFile.exists());
+        MedicationManage.saveMedicationInfo("testUser", textFields, acceptButton, frame);
 
-//     List<String> lines = Files.readAllLines(medicationFile.toPath());
-//     String expectedData = "Medication1,Dosage1,Frequency1,Route1,Notes1,Duration1";
-//     assertEquals("Medication data should match", expectedData, lines.get(lines.size() - 1));
+        File expectedFile = new File("src/main/resources/medications/testUser_medications.csv");
+        assertTrue(expectedFile.exists());
+        // Clean up
+        expectedFile.delete();
+    }
 
-//     // Verify that frame.dispose() is called
-//     verify(frame).dispose();
+    @Test
+    public void testGetAdminMedicationDataHandlesEmptyDirectory() {
+        File medicationDir = new File("src/main/resources/medications");
+        File[] files = medicationDir.listFiles();
 
-//     // Cleanup
-//     medicationFile.delete();
-// }
+        for (File file : files) {
+            file.delete(); // Ensure directory is empty
+        }
 
-// // Test Case 2: IOException handling
-// @Test
-// public void testSaveMedicationInfo_IOException() throws Exception {
-//     // Arrange
-//     String targetUserName = "testUser";
-//     JTextField[] textFields = {
-//         new JTextField("Medication1")
-//     };
-//     JButton acceptButton = new JButton();
-//     JFrame frame = mock(JFrame.class);
+        Object[][] data = MedicationManage.getAdminMedicationData();
+        assertEquals(0, data.length);
+    }
 
-//     // Make the medications directory read-only to simulate IOException
-//     File medicationsDir = new File("src/main/resources/medications");
-//     medicationsDir.mkdirs();
-//     medicationsDir.setWritable(false);
+    @Test
+    public void testGetUserMedicationDataHandlesMissingFile() {
+        User mockUser = Mockito.mock(User.class);
+        Mockito.when(mockUser.getName()).thenReturn("nonexistentUser");
 
-//     // Act
-//     MedicationManage.saveMedicationInfo(targetUserName, textFields, acceptButton, frame);
+        Object[][] data = MedicationManage.getUserMedicationData(mockUser);
+        assertEquals(0, data.length);
+    }
 
-//     // Assert
-//     // Verify that frame.dispose() is not called due to error
-//     verify(frame, never()).dispose();
-
-//     // Cleanup - reset directory permissions
-//     medicationsDir.setWritable(true);
-// }
+}
