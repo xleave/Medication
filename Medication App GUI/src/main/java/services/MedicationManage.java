@@ -18,7 +18,8 @@ public class MedicationManage {
         }
     }
 
-    public static void saveMedicationInfo(String targetUserName, JTextField[] textFields, JButton acceptButton, JFrame frame) {
+    public static void saveMedicationInfo(String targetUserName, JTextField[] textFields, JButton acceptButton,
+            JFrame frame) {
         String medicationFilePath = "src/main/resources/medications/" + targetUserName + "_medications.csv";
         File medicationFile = new File(medicationFilePath);
         try {
@@ -26,18 +27,41 @@ public class MedicationManage {
                 medicationFile.createNewFile();
             }
 
+            // Get the name of the drug
+            String newMedicationName = textFields[0].getText().trim();
+            if (newMedicationName.isEmpty()) {
+                JOptionPane.showMessageDialog(acceptButton, "The drug name cannot be empty.", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Check for identical drug names
+            BufferedReader reader = new BufferedReader(new FileReader(medicationFile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length > 0 && parts[0].equalsIgnoreCase(newMedicationName)) {
+                    JOptionPane.showMessageDialog(acceptButton, "The name of the drug already exists.", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    reader.close();
+                    return;
+                }
+            }
+            reader.close();
+
+            // Add new drugs
             try (FileWriter fw = new FileWriter(medicationFile, true);
-                 BufferedWriter bw = new BufferedWriter(fw);
-                 PrintWriter out = new PrintWriter(bw)) {
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter out = new PrintWriter(bw)) {
                 out.println(getMedicationInfo(textFields));
             }
 
-            JOptionPane.showMessageDialog(acceptButton, "Medication has been added.", "Success",
+            JOptionPane.showMessageDialog(acceptButton, "Drugs have been successfully added.", "successes",
                     JOptionPane.INFORMATION_MESSAGE);
             frame.dispose();
 
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(acceptButton, "An error occurred while saving medication.", "Error",
+            JOptionPane.showMessageDialog(acceptButton, "Error while saving drug information.", "Error",
                     JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }

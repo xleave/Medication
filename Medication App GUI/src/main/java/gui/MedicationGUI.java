@@ -1,17 +1,25 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import services.User;
 import services.MedicationManage;
 
 public class MedicationGUI extends JPanel {
 
     private User currentUser;
+
+    public JTable medicationTable = new JTable();
+    public DefaultTableModel medicationTableModel = new DefaultTableModel();
     private JScrollPane tableScrollPane; // Add new member variables
+
+    public Vector<String> rowValueVector = new Vector<>();
 
     public MedicationGUI(User user) {
         this.currentUser = user;
@@ -71,6 +79,7 @@ public class MedicationGUI extends JPanel {
 
         JButton editMedicationButton = new JButton("Edit Medication");
         editMedicationButton.setBounds(20, 250, 200, 50);
+        editMedicationButton.addActionListener(new EditMedicationActionListener());
         panel.add(editMedicationButton);
 
         JButton removeMedicationButton = new JButton("Remove Medication");
@@ -103,11 +112,15 @@ public class MedicationGUI extends JPanel {
     }
 
     private void addTableToPanel(JPanel panel, Object[][] tableData, String[] tableHeaders) {
-        JTable medicationTable = new JTable(tableData, tableHeaders);
+        medicationTableModel = new DefaultTableModel(tableData, tableHeaders);
+        medicationTable = new JTable(medicationTableModel);
         medicationTable.setBounds(400, 400, 600, 350);
 
         JScrollPane tableScrollPane = new JScrollPane(medicationTable);
         tableScrollPane.setBounds(300, 100, 600, 350);
+
+        getSelectedRowFromTable();
+
         panel.add(tableScrollPane);
     }
 
@@ -116,10 +129,38 @@ public class MedicationGUI extends JPanel {
         addTableToPanel(panel, medicationTableData, tableHeaders);
     }
 
+    public Vector<String> getSelectedRowFromTable() {
+        int rowIndex = medicationTable.getSelectedRow() + 1;
+        medicationTableModel = (DefaultTableModel)medicationTable.getModel();
+        //Now get value at each column of given row.
+        rowValueVector = new Vector<>();
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 0));
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 1));
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 2));
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 3));
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 4));
+        rowValueVector.add((String) medicationTableModel.getValueAt(rowIndex, 5));
+
+        //Testing to see if I can get the value of the index when clicked.
+        System.out.println("Row clicked on " + rowIndex);
+
+
+        return rowValueVector;
+    }
+
     private class AddMedicationActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             AddMedicationPopupGUI addMedicationPopupGUI = new AddMedicationPopupGUI(currentUser);
         }
+
     }
+
+private class EditMedicationActionListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent editButtonClicked) {
+        EditMedicationPopupGUI editMedicationPopupGUI = new EditMedicationPopupGUI(currentUser, rowValueVector);
+    }
+
+}
 }
