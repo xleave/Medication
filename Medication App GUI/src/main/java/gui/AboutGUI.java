@@ -29,17 +29,20 @@ public class AboutGUI extends JPanel {
         // Create heading label
         JLabel aboutSubmenuHeading = new JLabel("ABOUT", SwingConstants.CENTER);
         aboutSubmenuHeading.setFont(applicationFont);
+        aboutSubmenuHeading.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create about text labels
         JLabel aboutText = new JLabel(
                 "<html><div style='text-align: center;'>This application was made by Group 1 - Java for CE320 Large Scale Software Systems and Extreme Programming.<br>The goal of this task was to create a Desktop Application to allow users to log their medications and receive<br>reminders for when to take their medicines.</div></html>",
                 SwingConstants.CENTER);
         aboutText.setFont(applicationFont);
+        aboutText.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel aboutTextXP = new JLabel(
                 "<html><div style='text-align: center;'>Throughout the development of this project, we used Extreme Programming values to work as a team,<br>prioritize tasks, and use pair programming to get it done.</div></html>",
                 SwingConstants.CENTER);
         aboutTextXP.setFont(applicationFont);
+        aboutTextXP.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create a panel to hold labels
         JPanel aboutPanelContents = new JPanel();

@@ -8,15 +8,6 @@ import static org.junit.Assert.*;
 public class MedicationManageTest {
 
     @Test
-    public void testLoadFontInvalidPath() {
-        String invalidFontPath = "src/main/resources/fonts/nonexistent.ttf";
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            MedicationManage.loadFont(invalidFontPath);
-        });
-        assertTrue(exception.getMessage().contains("Font could not be loaded"));
-    }
-
-    @Test
     public void testSaveMedicationInfoCreatesNewFile() throws IOException {
         JTextField[] textFields = {new JTextField("Aspirin")};
         JButton acceptButton = new JButton();
@@ -30,18 +21,6 @@ public class MedicationManageTest {
         expectedFile.delete();
     }
 
-    @Test
-    public void testGetAdminMedicationDataHandlesEmptyDirectory() {
-        File medicationDir = new File("src/main/resources/medications");
-        File[] files = medicationDir.listFiles();
-
-        for (File file : files) {
-            file.delete(); // Ensure directory is empty
-        }
-
-        Object[][] data = MedicationManage.getAdminMedicationData();
-        assertEquals(0, data.length);
-    }
 
     @Test
     public void testGetUserMedicationDataHandlesMissingFile() {

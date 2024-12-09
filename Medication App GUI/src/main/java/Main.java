@@ -1,10 +1,10 @@
 import gui.*;
 import services.MedicationAlert;
-import services.User;
 import services.MedicationScheduler;
 import services.TextToSpeech;
+import services.User;
 
-public class Main {
+public class    Main {
 
     public static void main(String[] args) {
         // Initialize Text-to-Speech and Scheduler

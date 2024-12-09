@@ -3,7 +3,8 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import services.ChangePassword;
 import services.User;
 
@@ -44,6 +45,7 @@ public class SettingGUI extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
+        // Current Label and Field
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -57,6 +59,7 @@ public class SettingGUI extends JPanel {
         currentField.setFont(new Font("Arial", Font.PLAIN, 14));
         inputPanel.add(currentField, gbc);
 
+        // New Label and Field
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
@@ -72,6 +75,7 @@ public class SettingGUI extends JPanel {
 
         panel.add(inputPanel, BorderLayout.CENTER);
 
+        // Action Button
         JButton actionButton = new JButton(buttonText);
         actionButton.setPreferredSize(new Dimension(180, 40));
         actionButton.setFont(new Font("Arial", Font.BOLD, 16));
@@ -80,36 +84,57 @@ public class SettingGUI extends JPanel {
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
+        // Add Action Listener
         actionButton.addActionListener(e -> handleButtonAction(title, currentField, newField));
 
         return panel;
     }
 
+    /**
+     * Handles the action for change password button.
+     * You can extend this method to handle email changes similarly.
+     */
     private void handleButtonAction(String title, JTextField currentField, JTextField newField) {
         if (title.equals("Change Password")) {
-            String currentPassword = currentField.getText();
-            String newPassword = newField.getText();
+            String currentPassword = currentField.getText().trim();
+            String newPassword = newField.getText().trim();
+
             if (currentPassword.isEmpty() || newPassword.isEmpty()) {
-                JOptionPane.showMessageDialog(mainWindow, "Please fill in both fields.");
-            } else if (!currentPassword.equals(currentUser.getPassword())) {
-                JOptionPane.showMessageDialog(mainWindow, "Incorrect current password.");
-            } else if (currentPassword.equals(newPassword)) {
-                JOptionPane.showMessageDialog(mainWindow, "New password cannot be the same as the current password.");
+                JOptionPane.showMessageDialog(this, "Please fill in both fields.", "Input Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!currentPassword.equals(currentUser.getPassword())) {
+                JOptionPane.showMessageDialog(this, "Incorrect current password.", "Authentication Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (currentPassword.equals(newPassword)) {
+                JOptionPane.showMessageDialog(this, "New password cannot be the same as the current password.",
+                        "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            ChangePassword changePassword = new ChangePassword();
+            boolean isUpdated = changePassword.updatePassword(currentUser.getName(), newPassword);
+
+            if (isUpdated) {
+                currentUser.setPassword(newPassword);
+                JOptionPane.showMessageDialog(this, "Password updated successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else {
-
-                ChangePassword changePassword = new ChangePassword();
-                boolean isUpdated = changePassword.updatePassword(currentUser.getName(), newPassword);
-
-                if (isUpdated) {
-                    currentUser.setPassword(newPassword);
-                    JOptionPane.showMessageDialog(mainWindow, "Password updated successfully!");
-                } else {
-                    JOptionPane.showMessageDialog(mainWindow, "Failed to update password.");
-                }
+                JOptionPane.showMessageDialog(this, "Failed to update password.", "Update Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
+        // Add similar blocks for other settings if needed
     }
 
+    /**
+     * Creates the logout panel with a logout button.
+     */
     private JPanel createLogoutPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -126,12 +151,20 @@ public class SettingGUI extends JPanel {
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        logoutButton.addActionListener(e -> showLogoutConfirmationDialog());
+        // Add Action Listener for Logout Button
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showLogoutConfirmationDialog();
+            }
+        });
 
         return panel;
     }
 
-
+    /**
+     * Displays a confirmation dialog for logout and handles the logout process.
+     */
     private void showLogoutConfirmationDialog() {
         int result = JOptionPane.showConfirmDialog(mainWindow,
                 "Are you sure you want to logout?",
@@ -140,10 +173,10 @@ public class SettingGUI extends JPanel {
                 JOptionPane.QUESTION_MESSAGE);
 
         if (result == JOptionPane.YES_OPTION) {
-            mainWindow.dispose();
+            mainWindow.dispose(); // Close Main Window
             SwingUtilities.invokeLater(() -> {
                 LoginGUI loginGUI = new LoginGUI();
-                loginGUI.displayLoginGUI();
+                loginGUI.setVisible(true); // Show Login GUI
             });
         }
     }
