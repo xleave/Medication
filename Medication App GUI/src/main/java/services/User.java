@@ -158,15 +158,15 @@ public class User {
             System.out.println("3. View Medicines");
             System.out.println("4. Take Medicine");
             System.out.println("5. View History");
+            System.out.println("6. Time to Take Medicine");
             if (isAdmin) {
                 System.out.println("6. Manage All Users' Medicines");
                 System.out.println("7. Logout");
             } else {
-                System.out.println("6. Logout");
+                System.out.println("7. Logout");
             }
             System.out.print("Choose an option: ");
             String choice = scanner.next();
-
             if (isAdmin) {
                 switch (choice) {
                     case "1":
@@ -212,6 +212,9 @@ public class User {
 //                        scheduler.viewHistory();
                         break;
                     case "6":
+                        timeToTakeMedicine(scanner);
+                        break;
+                    case "7":
                         isLoggedIn = false;
                         System.out.println("Logged out successfully.");
                         return;
@@ -219,6 +222,7 @@ public class User {
                         System.out.println("Invalid option. Please try again.");
                 }
             }
+
 
             // Check reminders
             scheduler.checkReminders();
@@ -425,6 +429,70 @@ public class User {
             }
         } else {
             System.out.println("Medicine not found in your schedule.");
+        }
+    }
+
+    private void timeToTakeMedicine(Scanner scanner) {
+        try {
+            // Ensure the output directory exists
+            File directory = new File("src/main/resources");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Open the file in append mode
+            FileWriter fw = new FileWriter(new File(directory, name + " TimeToTakeMedicine.csv"), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw);
+
+
+            System.out.print("Enter the name of the medicine you are taking: ");
+            String medName = scanner.next();
+
+            // Check if the user's medicine CSV exists
+            File medFile = new File("src/main/resources/medications" + name + "_medicines.csv");
+            if (!medFile.exists()) {
+                System.out.println("No medicines found for user.");
+                return;
+            }
+
+            // Find the medicine in the user's medicine list
+            Scanner fileScanner = new Scanner(medFile);
+            boolean medicineFound = false;
+
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] data = line.split(",");
+
+                if (data[0].equalsIgnoreCase(medName)) {
+                    medicineFound = true;
+
+                    System.out.print("Enter the times you need to take the medicine (comma-separated, e.g., 10:00,12:00 in 24HR): ");
+                    String timesInput = scanner.next();
+                    String[] times = timesInput.split(",");
+
+                    // Append the medicine name and times to the CSV file
+                    out.print(data[0]);
+                    for (String time : times) {
+                        out.print("," + time); // Add each time as a separate column
+                    }
+                    out.println(); // Move to the next row
+                    System.out.println("Recorded times for taking " + data[0] + ": " + timesInput);
+                    break;
+                }
+            }
+
+            fileScanner.close();
+            out.close();
+            bw.close();
+            fw.close();
+
+            if (!medicineFound) {
+                System.out.println("Medicine \"" + medName + "\" not found in your medication database.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while processing the medicine times.");
+            e.printStackTrace();
         }
     }
 
