@@ -117,9 +117,6 @@ public class LoginGUI extends JFrame {
             MainGUI mainGUI = new MainGUI(user);
             mainGUI.displayMainGUI();
             this.dispose(); // Close the login window
-        } else {
-            JOptionPane.showMessageDialog(this, "Login failed. Incorrect username or password.", "Login Error",
-                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
