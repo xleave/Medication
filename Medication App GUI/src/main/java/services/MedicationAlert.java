@@ -34,7 +34,7 @@ public class MedicationAlert {
                             medicationName, dosage
                     );
                     System.out.println(message);
-                    tts.speak(message);
+                    //tts.speak(message);
                 });
             }
         } catch (IOException e) {

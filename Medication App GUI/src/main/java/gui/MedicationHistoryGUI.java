@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MedicationHistoryGUI extends JPanel {
@@ -212,8 +213,6 @@ public class MedicationHistoryGUI extends JPanel {
 
     // Internal class for charting
     private class drawGraph extends JPanel {
-        int[] testdata = { 5, 10, 15, 20, 30 };
-        String[] testname = { "Para", "Ibu", "Med3", "Med4", "Med5" };
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -221,21 +220,43 @@ public class MedicationHistoryGUI extends JPanel {
 
             Graphics2D gtd = (Graphics2D) g;
             gtd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            gtd.setColor(Color.blue);
+
+            Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
+            Map<String, Integer> medicationTakenCounts = new HashMap<>();
+
+            for (String medication : medicationLimits.keySet()) {
+                medicationTakenCounts.put(medication, historyTracker.getTakenCount(medication));
+            }
+
 
             int xs = 50;
             int ys = 250;
             int width = 40;
-            int space = 20;
+            int space = 5;
+            int index = 0;
 
-            for (int i = 0; i < testdata.length; i++) {
-                int barheight = testdata[i] * 5;
-                gtd.fillRect(xs + (i * (width + space)), ys - barheight, width, barheight);
-                gtd.setColor(Color.black);
-                gtd.drawString(testname[i], xs + (i * (width + space)) + 5, ys + 15);
-                gtd.setColor(Color.blue);
+            for (Map.Entry<String, Integer> entry : medicationLimits.entrySet()) {
+                String medication = entry.getKey();
+                int dailyLimit = entry.getValue();
+                int dosesTaken = medicationTakenCounts.getOrDefault(medication, 0);
+
+                gtd.setColor(dosesTaken > dailyLimit ? Color.RED : Color.BLUE);
+
+                int takenBarHeight = dosesTaken * 10;
+                int limitBarHeight = dailyLimit * 10;
+
+                gtd.fillRect(xs + (index * (width + space)), ys - takenBarHeight, width, takenBarHeight);
+                gtd.setColor(Color.GRAY);
+                gtd.drawRect(xs + (index * (width + space)), ys - limitBarHeight, width, limitBarHeight);
+
+                gtd.setColor(Color.BLACK);
+                gtd.drawString(medication, xs + (index * (width + space)) + 5, ys + 15);
+
+                gtd.drawString(String.valueOf(dosesTaken), xs + (index * (width + space)) + 10, ys - takenBarHeight - 5);
+                index++;
             }
         }
+
 
         @Override
         public Dimension getPreferredSize() {
