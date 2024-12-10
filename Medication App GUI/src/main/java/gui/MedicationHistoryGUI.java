@@ -211,11 +211,11 @@ public class MedicationHistoryGUI extends JPanel {
     }
 
     // Internal class for charting
-    private class drawGraph extends JPanel implements MouseMotionListener, MouseListener {
+    public class drawGraph extends JPanel implements MouseMotionListener, MouseListener {
 
-        private Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
-        private Map<String, Integer> medicationTakenCounts = new HashMap<>();
-        private String hoveredMedication = null;
+        public Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
+        public Map<String, Integer> medicationTakenCounts = new HashMap<>();
+        public String hoveredMedication = null;
 
         public drawGraph() {
             for (String medication : medicationLimits.keySet()) {
@@ -226,7 +226,7 @@ public class MedicationHistoryGUI extends JPanel {
         }
 
         @Override
-        protected void paintComponent(Graphics g) {
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
             Graphics2D gtd = (Graphics2D) g;
