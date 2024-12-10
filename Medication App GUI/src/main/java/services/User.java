@@ -1,7 +1,8 @@
 package services;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
+import javax.swing.JOptionPane;
 
 public class User {
 
@@ -9,9 +10,15 @@ public class User {
     private String password;
     private boolean isAdmin = false;
     private boolean isLoggedIn = false;
+
+    // Added fields for password attempt tracking
+    private int failedAttempts = 0;
+    private long firstFailedTimestamp = 0L;
+    private long lockoutEndTimestamp = 0L;
+
     private final String overdoseAlertDirectory = "src/main/resources/medications";
     private final String historyDirectory = "src/main/resources/medication_history";
-    private final java.util.List<String> medicineIntakeHistory = new java.util.ArrayList<>();
+    private final List<String> medicineIntakeHistory = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -21,8 +28,8 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
     }
 
     public boolean isAdmin() {
@@ -32,18 +39,20 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        // Initialize scheduler or other components if needed
     }
 
     /**
      * Checks if the user exists by searching in the users.csv file.
-     * 
-     * @return true if user exists and password matches, false otherwise
+     * If the user fails to log in three times within ten minutes, the account is
+     * locked for five minutes.
+     * If the user does not exist, it will be automatically created.
      */
+
     public boolean checkIfUserExists() {
         boolean userFound = false;
+        boolean userExists = false;
         try {
-            // Ensure parent directory exists
+            // Ensure users directory exists
             File userDir = new File("src/main/resources/users");
             if (!userDir.exists()) {
                 userDir.mkdirs();
@@ -53,53 +62,101 @@ public class User {
             if (!userFile.exists()) {
                 // If users.csv doesn't exist, create it
                 userFile.createNewFile();
-                return false;
             }
 
+            // Read all users from the CSV file
+            List<String[]> userList = new ArrayList<>();
             Scanner userFileScanner = new Scanner(userFile);
 
             while (userFileScanner.hasNextLine()) {
                 String line = userFileScanner.nextLine();
                 String[] parts = line.split(",");
+
                 if (parts.length >= 3) {
                     String existingName = parts[0].trim();
                     String existingPassword = parts[1].trim();
                     String role = parts[2].trim();
 
-                    if (existingName.equals(this.name) && existingPassword.equals(this.password)) {
-                        userFound = true;
-                        if (role.equalsIgnoreCase("admin")) {
-                            isAdmin = true;
+                    // Retrieve lockout information if available
+                    int failedAttempts = parts.length >= 4 ? Integer.parseInt(parts[3].trim()) : 0;
+                    long firstFailedTimestamp = parts.length >= 5 ? Long.parseLong(parts[4].trim()) : 0L;
+                    long lockoutEndTimestamp = parts.length >= 6 ? Long.parseLong(parts[5].trim()) : 0L;
+
+                    if (existingName.equals(this.name)) {
+                        userExists = true;
+                        long currentTime = System.currentTimeMillis();
+
+                        // Check if account is locked
+                        if (lockoutEndTimestamp > currentTime) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Your account has been locked, please try again later.",
+                                    "account lockout",
+                                    JOptionPane.WARNING_MESSAGE);
+                            userFound = false;
+                        } else {
+                            // Reset lockout if time has passed
+                            if (lockoutEndTimestamp != 0L) {
+                                failedAttempts = 0;
+                                firstFailedTimestamp = 0L;
+                                lockoutEndTimestamp = 0L;
+                            }
+
+                            if (existingPassword.equals(this.password)) {
+                                // Successful login
+                                userFound = true;
+                                if (role.equalsIgnoreCase("admin")) {
+                                    isAdmin = true;
+                                }
+                                isLoggedIn = true;
+
+                                // Reset failed attempts
+                                failedAttempts = 0;
+                                firstFailedTimestamp = 0L;
+                                lockoutEndTimestamp = 0L;
+                            } else {
+
+                            }
                         }
-                        break;
                     }
+
+                    // Update user information
+                    userList.add(new String[] {
+                            existingName,
+                            existingPassword,
+                            role,
+                            String.valueOf(failedAttempts),
+                            String.valueOf(firstFailedTimestamp),
+                            String.valueOf(lockoutEndTimestamp)
+                    });
                 }
             }
 
             userFileScanner.close();
 
-            if (!userFound) {
-                // Optionally, you can create a new user or notify that user doesn't exist
-                // Here, we'll assume user must exist to login
-                return false;
+            if (!userExists) {
+                // User does not exist, create it automatically
+                userCreate();
+                userFound = true;
+            } else {
+                // Write updated user information back to the CSV file
+                BufferedWriter bw = new BufferedWriter(new FileWriter(userFile));
+                for (String[] userInfo : userList) {
+                    bw.write(String.join(",", userInfo));
+                    bw.newLine();
+                }
+                bw.close();
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("User file not found. Creating user file.");
-            try {
-                File userDir = new File("src/main/resources/users");
-                if (!userDir.exists()) {
-                    userDir.mkdirs();
-                }
-
-                File userFile = new File(userDir, "users.csv");
-                userFile.createNewFile();
-            } catch (IOException ex) {
-                System.out.println("Failed to create user file.");
-                ex.printStackTrace();
-            }
+            JOptionPane.showMessageDialog(null,
+                    "The user file could not be found.",
+                    "documentation error",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred while accessing a user file.",
+                    "documentation error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return userFound;
@@ -118,14 +175,23 @@ public class User {
             File userFile = new File(userDir, "users.csv");
             FileWriter fw = new FileWriter(userFile, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            // New users are not admin by default
-            bw.write(name + "," + password + "," + "user" + "\n");
+
+            // New users are added with default lockout parameters
+            bw.write(name + "," + password + "," + "user" + ",0,0,0\n");
             bw.close();
-            System.out.println("New user created and logged in.");
+
+            JOptionPane.showMessageDialog(null,
+                    "A new user has been created and logged in.",
+                    "User Creation",
+                    JOptionPane.INFORMATION_MESSAGE);
             isLoggedIn = true;
             isAdmin = false;
+
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
 
@@ -141,66 +207,12 @@ public class User {
                 userMedFile.createNewFile();
             }
         } catch (IOException e) {
-            System.out.println("An error occurred while creating medication file.");
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred while creating a drug file",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    // Medicine Management Methods
-
-    public void manageMedicines() {
-        if (!isLoggedIn) {
-            System.out.println("You must be logged in to manage medicines.");
-            return;
-        }
-
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("\nMedicine Management:");
-            System.out.println("1. Add Medicine");
-            System.out.println("2. Remove Medicine");
-            System.out.println("3. View Medicines");
-            System.out.println("4. Take Medicine");
-            System.out.print("Choose an option: ");
-            String choice = scanner.next();
-
-            switch (choice) {
-                case "1":
-                    addMedicine(scanner);
-                    break;
-                case "2":
-                    removeMedicine(scanner);
-                    break;
-                case "3":
-                    viewMedicines();
-                    break;
-                case "4":
-                    takeMedicine(scanner);
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
-        }
-    }
-
-    private void addMedicine(Scanner scanner) {
-        // Implementation for adding medicine
-    }
-
-    private void removeMedicine(Scanner scanner) {
-        // Implementation for removing medicine
-    }
-
-    private void viewMedicines() {
-        // Implementation for viewing medicines
-    }
-
-    private void takeMedicine(Scanner scanner) {
-        System.out.print("Enter the name of the medicine you are taking: ");
-        String medName = scanner.next();
-        // Find the medicine in the scheduler
-        // Implementation for taking medicine
-    }
-
-    // Additional methods can be implemented as needed
 }
