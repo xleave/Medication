@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="cmu_time_awb">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/cmu_time_awb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/cmu_us_kal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/en_us.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/freetts.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/freetts-jsapi10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/javax.activation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/javax.mail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/jsapi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/jar_files/mbrola.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

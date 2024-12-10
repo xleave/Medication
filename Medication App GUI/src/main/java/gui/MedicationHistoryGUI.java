@@ -8,9 +8,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MedicationHistoryGUI extends JPanel {
@@ -173,9 +173,12 @@ public class MedicationHistoryGUI extends JPanel {
 
         private void handleTakeMedicine() {
             if (historyTracker.isExceeded(currentMedication)) {
-                System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
-                JOptionPane.showMessageDialog(takeMedicineButton,
-                        "You have reached the daily limit for " + currentMedication + ".");
+                JOptionPane.showMessageDialog(
+                        takeMedicineButton,
+                        "You cannot take more of this medication as you have already reached the maximum daily dosage for " + currentMedication + ".",
+                        "Dosage Limit Reached",
+                        JOptionPane.WARNING_MESSAGE
+                );
                 return;
             }
 
@@ -186,13 +189,21 @@ public class MedicationHistoryGUI extends JPanel {
 
             if (response == JOptionPane.YES_OPTION) {
                 historyTracker.saveTakenRecord(currentMedication);
-                JOptionPane.showMessageDialog(takeMedicineButton,
-                        "Medication " + currentMedication + " has been logged as taken.");
+                JOptionPane.showMessageDialog(
+                        takeMedicineButton,
+                        "Medication " + currentMedication + " has been logged as taken.",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
 
                 // check if daily limit exceeded after taking medication
                 if (historyTracker.isExceeded(currentMedication)) {
-                    takeMedicineButton.setEnabled(false);
-                    System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
+                    JOptionPane.showMessageDialog(
+                            takeMedicineButton,
+                            "Overdose warning: You have exceeded the daily limit for " + currentMedication + ".",
+                            "Overdose Warning",
+                            JOptionPane.WARNING_MESSAGE
+                    );
                 }
             }
             fireEditingStopped();
@@ -200,9 +211,19 @@ public class MedicationHistoryGUI extends JPanel {
     }
 
     // Internal class for charting
-    private class drawGraph extends JPanel {
-        int[] testdata = { 5, 10, 15, 20, 30 };
-        String[] testname = { "Para", "Ibu", "Med3", "Med4", "Med5" };
+    private class drawGraph extends JPanel implements MouseMotionListener, MouseListener {
+
+        private Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
+        private Map<String, Integer> medicationTakenCounts = new HashMap<>();
+        private String hoveredMedication = null;
+
+        public drawGraph() {
+            for (String medication : medicationLimits.keySet()) {
+                medicationTakenCounts.put(medication, historyTracker.getTakenCount(medication));
+            }
+            addMouseMotionListener(this);
+            addMouseListener(this);
+        }
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -210,25 +231,118 @@ public class MedicationHistoryGUI extends JPanel {
 
             Graphics2D gtd = (Graphics2D) g;
             gtd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            gtd.setColor(Color.blue);
 
             int xs = 50;
             int ys = 250;
             int width = 40;
-            int space = 20;
+            int space = 10;
+            int index = 0;
 
-            for (int i = 0; i < testdata.length; i++) {
-                int barheight = testdata[i] * 5;
-                gtd.fillRect(xs + (i * (width + space)), ys - barheight, width, barheight);
-                gtd.setColor(Color.black);
-                gtd.drawString(testname[i], xs + (i * (width + space)) + 5, ys + 15);
-                gtd.setColor(Color.blue);
+            for (Map.Entry<String, Integer> entry : medicationLimits.entrySet()) {
+                String medication = entry.getKey();
+                int dailyLimit = entry.getValue();
+                int dosesTaken = medicationTakenCounts.getOrDefault(medication, 0);
+
+                gtd.setColor(dosesTaken > dailyLimit ? Color.RED : Color.BLUE);
+
+                int takenBarHeight = dosesTaken * 10;
+                int limitBarHeight = dailyLimit * 10;
+
+                gtd.fillRect(xs + (index * (width + space)), ys - takenBarHeight, width, takenBarHeight);
+                gtd.setColor(Color.GRAY);
+                gtd.drawRect(xs + (index * (width + space)), ys - limitBarHeight, width, limitBarHeight);
+
+                gtd.setColor(Color.BLACK);
+                gtd.drawString(medication, xs + (index * (width + space)) + 5, ys + 15);
+
+                if (hoveredMedication != null && hoveredMedication.equals(medication)) {
+                    gtd.drawString(
+                            "Taken: " + dosesTaken + ", Limit: " + dailyLimit,
+                            xs + (index * (width + space)) + 5,
+                            ys - takenBarHeight - 20
+                    );
+                }
+
+                gtd.drawString(String.valueOf(dosesTaken), xs + (index * (width + space)) + 10, ys - takenBarHeight - 5);
+                index++;
             }
         }
+
 
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(500, 300);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (hoveredMedication != null) {
+                int dosesTaken = medicationTakenCounts.getOrDefault(hoveredMedication, 0);
+                int dailyLimit = medicationLimits.get(hoveredMedication);
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Medication: " + hoveredMedication + "\nDoses Taken: " + dosesTaken + "\nDaily Limit: " + dailyLimit,
+                        "Medication Details",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+            hoveredMedication = null;
+            repaint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            int xs = 50;
+            int ys = 250;
+            int width = 40;
+            int space = 5;
+
+            int mouseX = e.getX();
+            int mouseY = e.getY();
+
+            int index = 0;
+            boolean found = false;
+            for (String medication : medicationLimits.keySet()) {
+                // Get the height of the bar for this medication
+                int dosesTaken = medicationTakenCounts.getOrDefault(medication, 0);
+                int barHeight = dosesTaken * 10;
+
+                // Calculate the position and bounds of the bar
+                int barX = xs + (index * (width + space));
+                int barY = ys - barHeight;
+                int barBottomY = ys;
+
+                if (mouseX >= barX && mouseX <= barX + width && mouseY >= barY && mouseY <= barBottomY) {
+                    hoveredMedication = medication;
+                    found = true;
+                    break;
+                }
+                index++;
+            }
+
+            if (!found) {
+                hoveredMedication = null;
+            }
+            repaint();
+
         }
     }
 }

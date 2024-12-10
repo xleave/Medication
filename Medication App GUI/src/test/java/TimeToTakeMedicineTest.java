@@ -1,5 +1,5 @@
 import org.junit.Test;
-import services.User;
+import services.User_old;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -14,7 +14,7 @@ public class TimeToTakeMedicineTest {
         try {
 
             // Create the User instance
-            User user = new User("testUser", "testPassword");
+            User_old user = new User_old("testUser", "testPassword");
 
             // Create the medications CSV file with valid medicine
             File medsFile = new File("src/main/resources/medications" + user.getName() + "_medicines.csv");
@@ -26,7 +26,7 @@ public class TimeToTakeMedicineTest {
             }
 
             // Access the private method using reflection
-            Method timeToTakeMedicineMethod = User.class.getDeclaredMethod("timeToTakeMedicine", Scanner.class);
+            Method timeToTakeMedicineMethod = User_old.class.getDeclaredMethod("timeToTakeMedicine", Scanner.class);
             timeToTakeMedicineMethod.setAccessible(true);
 
             // Simulate user input (medicine name and times)
@@ -58,7 +58,7 @@ public class TimeToTakeMedicineTest {
     public void testTimeToTakeMedicineInvalidMedicine() {
         try {
             // Create a User instance
-            User user = new User("testUser", "testPassword");
+            User_old user = new User_old("testUser", "testPassword");
 
             // Create medications CSV file without the valid medicine
             File medsFile = new File("src/main/resources/medications" + user.getName() + "_medicines.csv");
@@ -70,7 +70,7 @@ public class TimeToTakeMedicineTest {
             }
 
             // Access the private method using reflection
-            Method timeToTakeMedicineMethod = User.class.getDeclaredMethod("timeToTakeMedicine", Scanner.class);
+            Method timeToTakeMedicineMethod = User_old.class.getDeclaredMethod("timeToTakeMedicine", Scanner.class);
             timeToTakeMedicineMethod.setAccessible(true);
 
             // Simulate user input for an invalid medicine

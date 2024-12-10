@@ -85,6 +85,7 @@ public class MedicationGUI extends JPanel {
 
         JButton removeMedicationButton = new JButton("Remove Medication");
         removeMedicationButton.setBounds(20, 350, 200, 50);
+        removeMedicationButton.addActionListener(new RemoveMedicationActionListener());
         panel.add(removeMedicationButton);
     }
 
@@ -172,4 +173,84 @@ private class EditMedicationActionListener implements ActionListener {
     }
 
 }
+    private class RemoveMedicationActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int selectedRow = medicationTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Please select a medication first!");
+                return;
+            }
+
+            String medicationName;
+            String targetUserName;
+
+            if (currentUser.isAdmin()) {
+                targetUserName = (String) medicationTableModel.getValueAt(selectedRow, 0); // Get username from the first column
+                medicationName = (String) medicationTableModel.getValueAt(selectedRow, 1); // Get medication name from the second column
+            } else {
+                targetUserName = currentUser.getName(); // Use current user's name
+                medicationName = (String) medicationTableModel.getValueAt(selectedRow, 0); // Get medication name from the first column
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Are you sure you want to remove the medication: " + medicationName + "?",
+                    "Remove Confirmation",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                String filePath = "src/main/resources/medications/" + targetUserName + "_medications.csv";
+                File originalFile = new File(filePath);
+
+                if (!originalFile.exists()) {
+                    JOptionPane.showMessageDialog(null, "The medication file for this user does not exist! Unable to remove.");
+                    return;
+                }
+
+                File tempFile = new File(filePath + ".tmp");
+                boolean medicationFound = false;
+
+                try (
+                        BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))
+                ) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split(",");
+                        if (parts.length > 0 && parts[0].equalsIgnoreCase(medicationName)) {
+                            medicationFound = true; // Found the target medication, skip writing it
+                            continue;
+                        }
+                        writer.write(line);
+                        writer.newLine();
+                    }
+
+                    writer.flush();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "An error occurred while removing the medication. Please try again later!");
+                    ex.printStackTrace();
+                    return;
+                }
+
+                if (medicationFound) {
+                    if (originalFile.delete()) {
+                        if (tempFile.renameTo(originalFile)) {
+                            medicationTableModel.removeRow(selectedRow);
+                            JOptionPane.showMessageDialog(null, "Medication " + medicationName + " has been successfully removed!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed to rename the temp file. Medication removal unsuccessful!");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to delete the original file. Medication removal unsuccessful!");
+                    }
+                } else {
+                    tempFile.delete();
+                    JOptionPane.showMessageDialog(null, "Medication " + medicationName + " was not found in the user's data.");
+                }
+            }
+        }
+    }
+
 }
