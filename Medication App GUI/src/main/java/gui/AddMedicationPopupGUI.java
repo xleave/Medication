@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+
 import services.User;
 import services.MedicationManage;
 
@@ -22,7 +22,7 @@ public class AddMedicationPopupGUI extends JPanel {
         createAndShowGUI();
     }
 
-    private void initializeFont() {
+    public void initializeFont() {
         try {
             applicationFont = MedicationManage.loadFont("src/main/resources/fonts/RobotoCondensed-VariableFont_wght.ttf");
         } catch (RuntimeException e) {
@@ -31,7 +31,7 @@ public class AddMedicationPopupGUI extends JPanel {
         }
     }
 
-    private void createAndShowGUI() {
+    public void createAndShowGUI() {
         JFrame addMedicationFrame = new JFrame("Add Medication");
         addMedicationFrame.setSize(400, 650);
 
@@ -52,14 +52,14 @@ public class AddMedicationPopupGUI extends JPanel {
         addMedicationFrame.setVisible(true);
     }
 
-    private void addTitleLabel(JPanel panel) {
+    public void addTitleLabel(JPanel panel) {
         JLabel addMedicationTitle = new JLabel("Add New Medication");
         addMedicationTitle.setFont(applicationFont);
         addMedicationTitle.setBounds(125, 10, 200, 30);
         panel.add(addMedicationTitle);
     }
 
-    private int addUserNameField(JPanel panel, int yPosition) {
+    public int addUserNameField(JPanel panel, int yPosition) {
         JLabel userNameLabel = new JLabel("Username");
         userNameLabel.setBounds(20, yPosition, 250, 20);
         panel.add(userNameLabel);
@@ -73,7 +73,7 @@ public class AddMedicationPopupGUI extends JPanel {
         return yPosition + 35;
     }
 
-    private int addMedicationFields(JPanel panel, int yPosition) {
+    public int addMedicationFields(JPanel panel, int yPosition) {
         String[] inputFieldHeaders = {"Medication Name", "Dosage", "Quantity", "Time to be taken at", "How often?",
                 "Maximum daily"};
         textFields = new JTextField[inputFieldHeaders.length];
@@ -96,7 +96,7 @@ public class AddMedicationPopupGUI extends JPanel {
         return yPosition;
     }
 
-    private void addButtons(JPanel panel, int yPosition, JFrame frame) {
+    public void addButtons(JPanel panel, int yPosition, JFrame frame) {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setFont(applicationFont);
         cancelButton.setBounds(80, yPosition, 100, 30);
@@ -110,7 +110,7 @@ public class AddMedicationPopupGUI extends JPanel {
         addActionListeners(acceptButton, cancelButton, frame);
     }
 
-    private void addActionListeners(JButton acceptButton, JButton cancelButton, JFrame frame) {
+    public void addActionListeners(JButton acceptButton, JButton cancelButton, JFrame frame) {
         acceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,7 +126,7 @@ public class AddMedicationPopupGUI extends JPanel {
         });
     }
 
-    private void handleAddMedication(JButton acceptButton, JFrame frame) {
+    public void handleAddMedication(JButton acceptButton, JFrame frame) {
         String targetUserName = currentUser.getName();
 
         if (currentUser.isAdmin()) {
@@ -151,7 +151,7 @@ public class AddMedicationPopupGUI extends JPanel {
         MedicationManage.saveMedicationInfo(targetUserName, textFields, acceptButton, frame);
     }
 
-    private boolean validateFields(JButton acceptButton) {
+    public boolean validateFields(JButton acceptButton) {
         for (JTextField textField : textFields) {
             if (textField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(acceptButton, "Please fill in all fields.", "Error",
@@ -161,4 +161,14 @@ public class AddMedicationPopupGUI extends JPanel {
         }
         return true;
     }
+
+    public String getUserNameTextBox() {
+        return this.userNameTextBox.getText();
+    }
+
+    private void updateTextBoxState() {
+        this.userNameTextBox.setEnabled(currentUser != null);
+    }
+
+
 }
