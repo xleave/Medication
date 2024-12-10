@@ -251,8 +251,6 @@ private class EditMedicationActionListener implements ActionListener {
                 }
             }
         }
-
     }
-
 
 }
