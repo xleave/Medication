@@ -8,10 +8,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+
+import services.MedicationAlert;
+import services.MedicationScheduler;
+import services.TextToSpeech;
 import services.User;
 
 public class MainGUI {
 
+    private TextToSpeech tts;
+
+    private MedicationAlert medicationAlert;
+
+    private MedicationScheduler medicationScheduler;
     // Main window frame
     private JFrame mainWindow = new JFrame("Medication Reminder App");
 
@@ -31,6 +40,9 @@ public class MainGUI {
 
     public MainGUI(User user) {
         this.currentUser = user;
+        this.tts = new TextToSpeech();
+        this.medicationScheduler = new MedicationScheduler();
+        this.medicationAlert = new MedicationAlert(user.getName(), medicationScheduler, tts);
     }
 
     public void displayMainGUI() {
