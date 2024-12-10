@@ -27,6 +27,5 @@ public class MedicationScheduler {
 
     public void shutdown() {
         scheduler.shutdown();
-        System.out.println("Scheduler shut down.");
     }
 }
