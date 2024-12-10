@@ -173,9 +173,12 @@ public class MedicationHistoryGUI extends JPanel {
 
         private void handleTakeMedicine() {
             if (historyTracker.isExceeded(currentMedication)) {
-                System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
-                JOptionPane.showMessageDialog(takeMedicineButton,
-                        "You have reached the daily limit for " + currentMedication + ".");
+                JOptionPane.showMessageDialog(
+                        takeMedicineButton,
+                        "You cannot take more of this medication as you have already reached the maximum daily dosage for " + currentMedication + ".",
+                        "Dosage Limit Reached",
+                        JOptionPane.WARNING_MESSAGE
+                );
                 return;
             }
 
@@ -186,13 +189,21 @@ public class MedicationHistoryGUI extends JPanel {
 
             if (response == JOptionPane.YES_OPTION) {
                 historyTracker.saveTakenRecord(currentMedication);
-                JOptionPane.showMessageDialog(takeMedicineButton,
-                        "Medication " + currentMedication + " has been logged as taken.");
+                JOptionPane.showMessageDialog(
+                        takeMedicineButton,
+                        "Medication " + currentMedication + " has been logged as taken.",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
 
                 // check if daily limit exceeded after taking medication
                 if (historyTracker.isExceeded(currentMedication)) {
-                    takeMedicineButton.setEnabled(false);
-                    System.out.println("Overdose warning: You have exceeded the daily limit for " + currentMedication + ".");
+                    JOptionPane.showMessageDialog(
+                            takeMedicineButton,
+                            "Overdose warning: You have exceeded the daily limit for " + currentMedication + ".",
+                            "Overdose Warning",
+                            JOptionPane.WARNING_MESSAGE
+                    );
                 }
             }
             fireEditingStopped();

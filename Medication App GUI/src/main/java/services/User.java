@@ -9,9 +9,9 @@ public class User {
     private String password;
     private boolean isAdmin = false;
     private boolean isLoggedIn = false;
-    private String overdoseAlertDirectory = "src/main/resources/medications";
-    private String historyDirectory = "src/main/resources/medication_history";
-    private java.util.List<String> medicineIntakeHistory = new java.util.ArrayList<>();
+    private final String overdoseAlertDirectory = "src/main/resources/medications";
+    private final String historyDirectory = "src/main/resources/medication_history";
+    private final java.util.List<String> medicineIntakeHistory = new java.util.ArrayList<>();
 
     public String getName() {
         return name;
