@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MedicationAlert {
 
-    private final String csvFilePath;
+    private String csvFilePath;
     private final MedicationScheduler scheduler;
     private final TextToSpeech tts;
 
@@ -19,7 +19,7 @@ public class MedicationAlert {
         loadMedicationsAndSchedule();
     }
 
-    private void loadMedicationsAndSchedule() {
+    public void loadMedicationsAndSchedule() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(csvFilePath));
             for (String line : lines) {
@@ -40,5 +40,9 @@ public class MedicationAlert {
         } catch (IOException e) {
             System.err.println("Error reading medication file: " + e.getMessage());
         }
+    }
+
+    public void setCsvFilePath(String csvFilePath) {
+        this.csvFilePath = csvFilePath;
     }
 }
