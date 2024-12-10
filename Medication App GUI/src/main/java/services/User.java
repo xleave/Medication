@@ -114,7 +114,32 @@ public class User {
                                 firstFailedTimestamp = 0L;
                                 lockoutEndTimestamp = 0L;
                             } else {
+                                // Incorrect password
+                                if (failedAttempts == 0) {
+                                    firstFailedTimestamp = currentTime;
+                                }
+                                failedAttempts++;
 
+                                if (failedAttempts >= 3 && (currentTime - firstFailedTimestamp <= 10 * 60 * 1000)) {
+                                    lockoutEndTimestamp = currentTime + 5 * 60 * 1000;
+                                    JOptionPane.showMessageDialog(null,
+                                            "Too many failures and your account has been locked for 5 minutes.",
+                                            "account lockout",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else if (currentTime - firstFailedTimestamp > 10 * 60 * 1000) {
+                                    // Reset failed attempts after 10 minutes
+                                    failedAttempts = 1;
+                                    firstFailedTimestamp = currentTime;
+                                    JOptionPane.showMessageDialog(null,
+                                            "Password error. You have 1 failed attempt.",
+                                            "Login Failure",
+                                            JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null,
+                                            "Password error. You have failed " + failedAttempts + " Times。",
+                                            "Login Failure",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         }
                     }
