@@ -182,13 +182,17 @@ private class EditMedicationActionListener implements ActionListener {
                 return;
             }
 
-            String medicationName = (String) medicationTableModel.getValueAt(selectedRow, 0);
+            String medicationName;
+            String targetUserName;
 
-            String targetUserName = currentUser.isAdmin()
-                    ? (String) medicationTableModel.getValueAt(selectedRow, 0)
-                    : currentUser.getName();
+            if (currentUser.isAdmin()) {
+                targetUserName = (String) medicationTableModel.getValueAt(selectedRow, 0); // Get username from the first column
+                medicationName = (String) medicationTableModel.getValueAt(selectedRow, 1); // Get medication name from the second column
+            } else {
+                targetUserName = currentUser.getName(); // Use current user's name
+                medicationName = (String) medicationTableModel.getValueAt(selectedRow, 0); // Get medication name from the first column
+            }
 
-            // Confirm removal
             int confirm = JOptionPane.showConfirmDialog(
                     null,
                     "Are you sure you want to remove the medication: " + medicationName + "?",
@@ -233,7 +237,6 @@ private class EditMedicationActionListener implements ActionListener {
                 if (medicationFound) {
                     if (originalFile.delete()) {
                         if (tempFile.renameTo(originalFile)) {
-                            // Remove the row from the table
                             medicationTableModel.removeRow(selectedRow);
                             JOptionPane.showMessageDialog(null, "Medication " + medicationName + " has been successfully removed!");
                         } else {
@@ -249,8 +252,5 @@ private class EditMedicationActionListener implements ActionListener {
             }
         }
     }
-
-
-
 
 }
