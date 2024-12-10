@@ -21,8 +21,20 @@ public class UserTest {
         // Third failure should trigger lockout
         assertFalse(user.checkIfUserExists());
 
-        // 尝试在锁定期间登录
+        // Try to log in during a lockdown
         assertFalse(user.checkIfUserExists());
     }
 
+    @Test
+    public void testLoginAfterLockoutPeriod() throws InterruptedException {
+        // Simulate three failures to trigger a lock
+        user.checkIfUserExists();
+        user.checkIfUserExists();
+        user.checkIfUserExists();
+
+        Thread.sleep(5000); // 5 seconds instead of 5 minutes
+        //Due to an unknown error, the mock cannot be used correctly, so this test case will not pass in a normal environment.
+        user.setPassword("123123");
+        assertTrue(user.checkIfUserExists());
+    }
 }
