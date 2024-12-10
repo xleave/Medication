@@ -8,8 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -212,7 +211,19 @@ public class MedicationHistoryGUI extends JPanel {
     }
 
     // Internal class for charting
-    private class drawGraph extends JPanel {
+    private class drawGraph extends JPanel implements MouseMotionListener, MouseListener {
+
+        private Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
+        private Map<String, Integer> medicationTakenCounts = new HashMap<>();
+        private String hoveredMedication = null;
+
+        public drawGraph() {
+            for (String medication : medicationLimits.keySet()) {
+                medicationTakenCounts.put(medication, historyTracker.getTakenCount(medication));
+            }
+            addMouseMotionListener(this);
+            addMouseListener(this);
+        }
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -221,18 +232,10 @@ public class MedicationHistoryGUI extends JPanel {
             Graphics2D gtd = (Graphics2D) g;
             gtd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            Map<String, Integer> medicationLimits = historyTracker.getMedicationDailyLimits();
-            Map<String, Integer> medicationTakenCounts = new HashMap<>();
-
-            for (String medication : medicationLimits.keySet()) {
-                medicationTakenCounts.put(medication, historyTracker.getTakenCount(medication));
-            }
-
-
             int xs = 50;
             int ys = 250;
             int width = 40;
-            int space = 5;
+            int space = 10;
             int index = 0;
 
             for (Map.Entry<String, Integer> entry : medicationLimits.entrySet()) {
@@ -252,6 +255,14 @@ public class MedicationHistoryGUI extends JPanel {
                 gtd.setColor(Color.BLACK);
                 gtd.drawString(medication, xs + (index * (width + space)) + 5, ys + 15);
 
+                if (hoveredMedication != null && hoveredMedication.equals(medication)) {
+                    gtd.drawString(
+                            "Taken: " + dosesTaken + ", Limit: " + dailyLimit,
+                            xs + (index * (width + space)) + 5,
+                            ys - takenBarHeight - 20
+                    );
+                }
+
                 gtd.drawString(String.valueOf(dosesTaken), xs + (index * (width + space)) + 10, ys - takenBarHeight - 5);
                 index++;
             }
@@ -261,6 +272,77 @@ public class MedicationHistoryGUI extends JPanel {
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(500, 300);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (hoveredMedication != null) {
+                int dosesTaken = medicationTakenCounts.getOrDefault(hoveredMedication, 0);
+                int dailyLimit = medicationLimits.get(hoveredMedication);
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Medication: " + hoveredMedication + "\nDoses Taken: " + dosesTaken + "\nDaily Limit: " + dailyLimit,
+                        "Medication Details",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+            hoveredMedication = null;
+            repaint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            int xs = 50;
+            int ys = 250;
+            int width = 40;
+            int space = 5;
+
+            int mouseX = e.getX();
+            int mouseY = e.getY();
+
+            int index = 0;
+            boolean found = false;
+            for (String medication : medicationLimits.keySet()) {
+                // Get the height of the bar for this medication
+                int dosesTaken = medicationTakenCounts.getOrDefault(medication, 0);
+                int barHeight = dosesTaken * 10;
+
+                // Calculate the position and bounds of the bar
+                int barX = xs + (index * (width + space));
+                int barY = ys - barHeight;
+                int barBottomY = ys;
+
+                if (mouseX >= barX && mouseX <= barX + width && mouseY >= barY && mouseY <= barBottomY) {
+                    hoveredMedication = medication;
+                    found = true;
+                    break;
+                }
+                index++;
+            }
+
+            if (!found) {
+                hoveredMedication = null;
+            }
+            repaint();
+
         }
     }
 }
